@@ -2,20 +2,14 @@
 <html>
   <head>
     <title>DVID API Console</title>
-
-    <link rel="stylesheet" href="/raml/styles/app.css"/>
-
-    <meta charset="utf-8">
+    <link rel="stylesheet" href="/raml/styles/app.css" type="text/css" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
   </head>
   <body ng-app="ramlConsoleApp" ng-cloak id="raml-console-unembedded">
-    <div style="position:relative; height: 100vh; overflow: auto;">
-      <raml-console with-root-documentation src="/raml/dvid.raml"></raml-console>
-    </div>
-
     <script src="/raml/scripts/vendor.js"></script>
     <script src="/raml/scripts/app.js"></script>
+	<raml-console src="/interface/raw" />
   </body>
 </html>
