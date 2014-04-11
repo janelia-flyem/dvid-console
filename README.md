@@ -8,5 +8,6 @@ as an automated API help system using [RAML](http://www.raml.org).
 This code can be used with DVID in two ways:
 * Specify the repo location using the `-webclient=/path/to/repo` option with the DVID `serve`
 command.
-* Compile the entire repository into gzipped data that is included in standard Go files.  This
-allows a single DVID executable to have an embedded console.
+* Compile the entire repository into gzipped data that is included in dvid executable.  This
+allows a single DVID executable to have an embedded console and is the default way that DVID
+is built.

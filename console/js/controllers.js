@@ -36,7 +36,7 @@ function printResolution(vector3d, units) {
 function MainCtrl($scope, $http) {
     UpdateMenu("Main");
     console.log("MainCtrl...");
-    $http({method: 'GET', url: '/api/datasets/info'}).success( function(data, status) {
+    $http({method: 'GET', url: '/api/v1/' + 'datasets/info'}).success( function(data, status) {
         DVID.datasets = $scope.datasets = data["Datasets"];
         DVID.nodeStats = $scope.nodeStats = getNodeStats($scope.datasets);
         $scope.numVersions = 0;
@@ -52,7 +52,7 @@ function MainCtrl($scope, $http) {
         }
     });
     $scope.server = {}
-    $http({method: 'GET', url: '/api/server/info'}).success( function(data, status) {
+    $http({method: 'GET', url: '/api/v1/' + 'server/info'}).success( function(data, status) {
         $scope.server.info = data;
         var parts = data['Server uptime'].split("m");
         if (parts.length > 1) {
@@ -77,7 +77,7 @@ function MainCtrl($scope, $http) {
             $scope.server.updays = "< 1d";
         }
     });
-    $http({method: 'GET', url: '/api/server/types'}).success( function(data, status) {
+    $http({method: 'GET', url: '/api/v1/' + 'server/types'}).success( function(data, status) {
         $scope.server.datatypes = data;
     });
 }
@@ -245,7 +245,7 @@ function MonitorController($scope, $http) {
 
     $scope.getLoadStats = function() {
         if ($scope.maximized && ("#realtimechart").length) {
-            $.get("/api/load", function(response) {
+            $.get('/api/v1/load', function(response) {
                 for (var dataset in response) {
                     if (dataset in datasetYScale) {
                         if (!$scope.loadStats.hasOwnProperty(dataset) || Object.prototype.toString.call($scope.loadStats[dataset]) !== '[object Array]') {
