@@ -1,0 +1,142 @@
+<!-- Prefer ng-bind properties to double curly brace expressions since this view might be rendered before any
+     javascript is run. -->
+
+<div>
+    <ul class="breadcrumb">
+        <li>
+            <a href="#">Home</a> <span class="divider">/</span>
+        </li>
+        <li>
+            Dashboard
+        </li>
+    </ul>
+</div>
+
+<div class="sortable row-fluid">
+    <div data-rel="tooltip" title="cores" class="well span3 top-block">
+        <div class="header">DVID CPU Cores</div>
+        <div class="data">
+            Hardware CPU Cores: {{ server.info["Maximum Cores"] }}
+        </div>
+        <span class="notification green" ng-bind="server.info.Cores"></span>
+    </div>
+
+    <div data-rel="tooltip" title="datasets" class="well span3 top-block">
+        <div class="header">Datasets</div>
+        <div class="data">
+            Version Nodes: {{ numVersions }}
+        </div>
+        <span class="notification green" ng-bind="datasets.length"></span>
+    </div>
+
+    <div data-rel="tooltip" title="datasets" class="well span3 top-block">
+        <div class="header">Server Uptime</div>
+        <div class="data">
+            {{ server.uptime }}
+        </div>
+        <span class="notification green" ng-bind="server.updays"></span>
+    </div>
+
+    <a data-rel="tooltip" title="open" class="well span3 top-block" href="#">
+        <span class="icon32 icon-sitemap"></span>
+        <div>Open Nodes</div>
+        <div ng-bind="num_open"></div>
+        <span class="notification green" ng-bind="nodeStats.unlocked"></span>
+    </a>
+</div>
+
+<div class="row-fluid sortable">
+    <div class="box span6" ng-controller="DatasetInfoController">
+        <div class="box-header well" data-original-title>
+            <h2><i class="icon-sitemap"></i> Dataset Information</h2>
+            <div class="box-icon">
+                <button ng-click="minimize()" class="btn btn-minimize btn-round">
+                    <i class="icon-chevron-up" ng-show="maximized"></i>
+                    <i class="icon-chevron-down" ng-hide="maximized"></i>
+                </button>
+            </div>
+        </div>
+        <div class="box-content" ng-show="maximized">
+            <div class="box-content">
+                <ul class="dashboard-list">
+                    <li ng-repeat="dataset in datasets">
+                        <strong>UUID:</strong> <a href="#">{{ dataset.Root }}</a><br />
+                        <strong>Version Nodes:</strong> {{ dataset.numVersions }}<br />
+                        <strong>Last Update:</strong> {{ dataset.Nodes[dataset.Root].Updated | date }}<br />
+                        <a href="/browser3d?uuid={{ dataset.Root }}" target="_blank"><i class="icon-eye-open"></i><strong> 3d Browser</strong></a>
+                        <br />
+                        <!--
+                        <span class="label label-important" ng-show="version.Locked">Locked</span>
+                        <span class="label label-success" ng-hide="version.Locked">Open</span> -->
+                            <span ng-repeat="data in dataset.DataMap">
+                                <em>{{ data.Name }}</em>
+                                <span class="label label-important">{{ data.TypeService.Name }}</span>
+                                <span class="label label-success" ng-hide="data.Unversioned">versioned</span>
+                                <span class="label label-success" ng-show="data.Unversioned">unversioned</span>
+                                <a href="/quadtree/index.html?uuid={{ dataset.Root }}&name={{ data.Name }}"
+                                   ng-show="isQuadtree(data)" target="_blank">
+                                    <i class="icon-eye-open"></i><strong> Quadtree Browser</strong>
+                                </a>
+                                <br />
+                            </span>
+                        <br />
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div><!--/span-->
+
+    <div class="box span6" ng-controller="MonitorController">
+        <div class="box-header well" data-original-title>
+            <h2><i class="icon-list-alt"></i> Server Monitoring</h2>
+            <div class="box-icon">
+                <button ng-click="minimize()" class="btn btn-minimize btn-round">
+                    <i class="icon-chevron-up" ng-show="maximized"></i>
+                    <i class="icon-chevron-down" ng-hide="maximized"></i>
+                </button>
+                <button ng-click="setting()" class="btn btn-setting btn-round">
+                    <i class="icon-cog"></i>
+                </button>
+                <button ng-click="close()" class="btn btn-close btn-round">
+                    <i class="icon-remove"></i>
+                </button>
+            </div>
+        </div>
+        <div class="box-content" ng-show="maximized">
+            <div id="realtimechart" style="height:190px;"></div>
+        </div>
+    </div><!--/span-->
+</div>
+<div class="row-fluid sortable">
+    <div class="box span6" ng-controller="ComponentsInfoController">
+        <div class="box-header well" data-original-title>
+            <h2><i class="icon-info-sign"></i> DVID Components</h2>
+            <div class="box-icon">
+                <button ng-click="toggleSize()" class="btn btn-minimize btn-round">
+                    <i class="icon-chevron-up" ng-show="maximized"></i>
+                    <i class="icon-chevron-down" ng-hide="maximized"></i>
+                </button>
+            </div>
+        </div>
+        <div class="box-content" ng-show="maximized">
+            <div class="box-content">
+                <strong>Server Configuration:</strong><br />
+                <ul>
+                <li ng-repeat="(key, value) in server.info">
+                    <em>{{ key }}:</em> {{ value }}
+                </li>
+                </ul>
+                <strong>Server Data Types:</strong><br />
+                <ul>
+                 <li ng-repeat="(key, value) in server.datatypes">
+                    <em>{{ key }}:</em> {{ value }}
+                </li>
+                </ul>
+            </div>
+        </div>
+    </div><!--/span-->
+
+</div>
+<div class="row-fluid sortable">
+
+</div><!--/row-->
