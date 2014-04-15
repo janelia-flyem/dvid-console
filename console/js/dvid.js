@@ -9,8 +9,8 @@ Object.size = function(obj) {
 
 var DVID = {
     REVISION: '1',
-	API_VERSION: 'v1',
-	apiURL: '/api/v1/',
+	API_VERSION: 'v0',
+	apiURL: '/api/',
 
     // Loaded on initialization of MainCtrl controller.
     datasets: {},
@@ -148,37 +148,37 @@ var DVID = {
         // Make sure this is within current dataset bounds.
 
         var offsetStr = Math.round(pos.x) + '_' + Math.round(pos.y) + '_' + Math.round(pos.z);
-        var url = '/api/v1/' + 'node/' + uuid + '/' + name + '/isotropic/' + sliceType + '/' + sizeStr + '/' + offsetStr;
+        var url = '/api/' + 'node/' + uuid + '/' + name + '/isotropic/' + sliceType + '/' + sizeStr + '/' + offsetStr;
         return url;
     },
 
     // Returns a URL to retrieve a subvolume given a coordinate.
     surfaceByLabelUrl: function(dataname, label) {
-        return '/api/v1/' + 'node/' + this.dataset.uuid + '/' + 'bodies' + '/surface/' + label;
+        return '/api/' + 'node/' + this.dataset.uuid + '/' + 'bodies' + '/surface/' + label;
     },
 
     // Returns a URL to retrieve a subvolume given a coordinate.
     surfaceByCoordUrl: function(dataname, pt) {
         var coord = Math.round(pt.x) + '_' + Math.round(pt.y) + '_' + Math.round(pt.z);
-        return '/api/v1/' + 'node/' + this.dataset.uuid + '/' + 'bodies' + '/surface-by-point/' + coord;
+        return '/api/' + 'node/' + this.dataset.uuid + '/' + 'bodies' + '/surface-by-point/' + coord;
     },
 
     // Returns a URL to retrieve a subvolume given a coordinate.
     sparseVolByLabelUrl: function(dataname, label) {
-        return '/api/v1/' + 'node/' + this.dataset.uuid + '/' + 'bodies' + '/sparsevol/' + label;
+        return '/api/' + 'node/' + this.dataset.uuid + '/' + 'bodies' + '/sparsevol/' + label;
     },
 
     // Returns a URL to retrieve a subvolume given a coordinate.
     sparseVolByCoordUrl: function(dataname, pt) {
         var coord = Math.round(pt.x) + '_' + Math.round(pt.y) + '_' + Math.round(pt.z);
-        return '/api/v1/' + 'node/' + this.dataset.uuid + '/' + 'bodies' + '/sparsevol-by-point/' + coord;
+        return '/api/' + 'node/' + this.dataset.uuid + '/' + 'bodies' + '/sparsevol-by-point/' + coord;
     },
 
     // Returns a URL to retrieve a swc file for the given bodyid assuming it's been saved in
     // a 'skeletons' keyvalue data in DVID with .swc ending.
     swcUrl: function(bodyid) {
         var swcfile = bodyid + '.swc';
-        return '/api/v1/' + 'node/' + this.dataset.uuid + '/skeletons/' + swcfile;
+        return '/api/' + 'node/' + this.dataset.uuid + '/skeletons/' + swcfile;
     },
 
     /*
