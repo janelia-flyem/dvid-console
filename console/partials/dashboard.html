@@ -62,7 +62,7 @@
                     <li ng-repeat="dataset in datasets">
                         <strong>UUID:</strong> <a href="#">{{ dataset.Root }}</a><br />
                         <strong>Version Nodes:</strong> {{ dataset.numVersions }}<br />
-                        <strong>Last Update:</strong> {{ dataset.Nodes[dataset.Root].Updated | date }}<br />
+                        <strong>Last Update:</strong> {{ dataset.Nodes[dataset.Root].Updated }}<br />
                         <a href="/browser3d?uuid={{ dataset.Root }}" target="_blank"><i class="icon-eye-open"></i><strong> 3d Browser</strong></a>
                         <br />
                         <!--
