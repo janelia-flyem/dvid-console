@@ -1,6 +1,6 @@
 'use strict';
 
-var dvidApp = angular.module('dvidApp', []).
+var dvidApp = angular.module('dvidApp', ['ngRoute']).
     config(['$routeProvider', function($routeProvider) {
         $routeProvider.
             when('/dashboard', {

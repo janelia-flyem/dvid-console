@@ -9,8 +9,6 @@ Object.size = function(obj) {
 
 var DVID = {
     REVISION: '1',
-	API_VERSION: 'v0',
-	apiURL: '/api/',
 
     // Loaded on initialization of MainCtrl controller.
     datasets: {},
@@ -71,10 +69,10 @@ var DVID = {
         if (DVID.uuids.length > datasetNum) {
             DVID.dataset.uuid = DVID.uuids[datasetNum];
             var dataset = DVID.datasets[datasetNum];
-            this.dataset.availVoxels = DVID.getAvailData(dataset, ['grayscale8', 'rgba8', 'grayscale16']);
+            this.dataset.availVoxels = DVID.getAvailData(dataset, ['grayscale8', 'rgba8', 'grayscale16', 'multiscale2d']);
             this.dataset.availLabels = DVID.getAvailData(dataset, ['labels32', 'labels64']);
             this.dataset.availLabelmaps = DVID.getAvailData(dataset, ['labelmap'])
-            this.dataset.availQuadtrees = DVID.getAvailData(dataset, ['quadtree'])
+            this.dataset.availQuadtrees = DVID.getAvailData(dataset, ['multiscale2d'])
             if (this.dataset.availVoxels.length > 0) {
                 this.dataset.imageName = this.dataset.availVoxels[0];
                 this.changeDataImage(dataset, this.dataset.imageName);
@@ -128,7 +126,7 @@ var DVID = {
         var sizeStr = Math.round(viewRadius * 2) + '_' + Math.round(viewRadius * 2);
         var pos = offset[sliceType].position.clone();
         var name = dataname;
-        console.log("Get URL: slice", sliceType, ":", pos, "  center:", center);
+        //console.log("Get URL: slice", sliceType, ":", pos, "  center:", center);
         switch (sliceType) {
             case 'xy':
                 pos.x -= viewRadius;
@@ -148,37 +146,37 @@ var DVID = {
         // Make sure this is within current dataset bounds.
 
         var offsetStr = Math.round(pos.x) + '_' + Math.round(pos.y) + '_' + Math.round(pos.z);
-        var url = '/api/' + 'node/' + uuid + '/' + name + '/isotropic/' + sliceType + '/' + sizeStr + '/' + offsetStr;
+        var url = '/api/node/' + uuid + '/' + name + '/raw/' + sliceType + '/' + sizeStr + '/' + offsetStr;
         return url;
     },
 
     // Returns a URL to retrieve a subvolume given a coordinate.
     surfaceByLabelUrl: function(dataname, label) {
-        return '/api/' + 'node/' + this.dataset.uuid + '/' + 'bodies' + '/surface/' + label;
+        return '/api/node/' + this.dataset.uuid + '/' + 'neurons' + '/surface/' + label;
     },
 
     // Returns a URL to retrieve a subvolume given a coordinate.
     surfaceByCoordUrl: function(dataname, pt) {
         var coord = Math.round(pt.x) + '_' + Math.round(pt.y) + '_' + Math.round(pt.z);
-        return '/api/' + 'node/' + this.dataset.uuid + '/' + 'bodies' + '/surface-by-point/' + coord;
+        return '/api/node/' + this.dataset.uuid + '/' + 'groundtruth' + '/surface-by-point/' + coord;
     },
 
     // Returns a URL to retrieve a subvolume given a coordinate.
     sparseVolByLabelUrl: function(dataname, label) {
-        return '/api/' + 'node/' + this.dataset.uuid + '/' + 'bodies' + '/sparsevol/' + label;
+        return '/api/node/' + this.dataset.uuid + '/' + 'neurons' + '/sparsevol/' + label;
     },
 
     // Returns a URL to retrieve a subvolume given a coordinate.
     sparseVolByCoordUrl: function(dataname, pt) {
         var coord = Math.round(pt.x) + '_' + Math.round(pt.y) + '_' + Math.round(pt.z);
-        return '/api/' + 'node/' + this.dataset.uuid + '/' + 'bodies' + '/sparsevol-by-point/' + coord;
+        return '/api/node/' + this.dataset.uuid + '/' + 'neurons' + '/sparsevol-by-point/' + coord;
     },
 
     // Returns a URL to retrieve a swc file for the given bodyid assuming it's been saved in
     // a 'skeletons' keyvalue data in DVID with .swc ending.
     swcUrl: function(bodyid) {
         var swcfile = bodyid + '.swc';
-        return '/api/' + 'node/' + this.dataset.uuid + '/skeletons/' + swcfile;
+        return '/api/node/' + this.dataset.uuid + '/skeletons/' + swcfile;
     },
 
     /*
