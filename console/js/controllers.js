@@ -36,16 +36,22 @@ function printResolution(vector3d, units) {
 function MainCtrl($scope, $http) {
     UpdateMenu("Main");
     console.log("MainCtrl...");
-    $http({method: 'GET', url: '/api/' + 'datasets/info'}).success( function(data, status) {
-        DVID.datasets = $scope.datasets = data["Datasets"];
+    $http({method: 'GET', url: '/api/' + 'repos/info'}).success( function(data, status) {
+        DVID.datasets = $scope.datasets = data;
         DVID.nodeStats = $scope.nodeStats = getNodeStats($scope.datasets);
         $scope.numVersions = 0;
+        $scope.numRepos = 0;
         DVID.uuids = [];
-        for (var i in $scope.datasets) {
-            var numVersions = Object.size($scope.datasets[i].VersionMap);
-            $scope.datasets[i].numVersions = numVersions;
+        for (var uuid in data) {
+            var numVersions = Object.size(data[uuid].DAG.Nodes);
+            $scope.datasets[uuid].numVersions = numVersions;
+            var updated = moment(data[uuid].Updated)
+            var created = moment(data[uuid].Created)
+            $scope.datasets[uuid].updatedStr = updated.format("MMMM D YYYY, h:mm:ss a")
+            $scope.datasets[uuid].createdStr = created.format("MMMM D YYYY, h:mm:ss a")
             $scope.numVersions += numVersions;
-            DVID.uuids.push($scope.datasets[i].Root);
+            $scope.numRepos++;
+            DVID.uuids.push(uuid);
         }
         if (DVID.uuids.length > 0) {
             DVID.changeDataset(0);

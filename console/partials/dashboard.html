@@ -21,15 +21,15 @@
         <span class="notification green" ng-bind="server.info.Cores"></span>
     </div>
 
-    <div data-rel="tooltip" title="datasets" class="well span3 top-block">
-        <div class="header">Datasets</div>
+    <div data-rel="tooltip" title="repos" class="well span3 top-block">
+        <div class="header">Repos</div>
         <div class="data">
             Version Nodes: {{ numVersions }}
         </div>
-        <span class="notification green" ng-bind="datasets.length"></span>
+        <span class="notification green" ng-bind="numRepos"></span>
     </div>
 
-    <div data-rel="tooltip" title="datasets" class="well span3 top-block">
+    <div data-rel="tooltip" title="server uptime" class="well span3 top-block">
         <div class="header">Server Uptime</div>
         <div class="data">
             {{ server.uptime }}
@@ -48,7 +48,7 @@
 <div class="row-fluid sortable">
     <div class="box span6" ng-controller="DatasetInfoController">
         <div class="box-header well" data-original-title>
-            <h2><i class="icon-sitemap"></i> Dataset Information</h2>
+            <h2><i class="icon-sitemap"></i> Repositories in Server</h2>
             <div class="box-icon">
                 <button ng-click="minimize()" class="btn btn-minimize btn-round">
                     <i class="icon-chevron-up" ng-show="maximized"></i>
@@ -60,23 +60,24 @@
             <div class="box-content">
                 <ul class="dashboard-list">
                     <li ng-repeat="dataset in datasets">
+                        <strong>Alias:</strong> {{ dataset.Alias }}<br />
+                        <strong>Description:</strong> {{ dataset.Description }}<br />
                         <strong>UUID:</strong> <a href="#">{{ dataset.Root }}</a><br />
-                        <strong>Version Nodes:</strong> {{ dataset.numVersions }}<br />
-                        <strong>Last Update:</strong> {{ dataset.Nodes[dataset.Root].Updated }}<br />
-                        <a href="/browser3d?uuid={{ dataset.Root }}" target="_blank"><i class="icon-eye-open"></i><strong> 3d Browser</strong></a>
+                        <strong>Updated:</strong> {{ dataset.updatedStr }}<br />
+                        <strong>Created:</strong> {{ dataset.createdStr }}<br />
                         <br />
                         <!--
                         <span class="label label-important" ng-show="version.Locked">Locked</span>
                         <span class="label label-success" ng-hide="version.Locked">Open</span> -->
-                            <span ng-repeat="data in dataset.DataMap">
-                                <em>{{ data.Name }}</em>
-                                <span class="label label-important">{{ data.TypeService.Name }}</span>
-                                <span class="label label-success" ng-hide="data.Unversioned">versioned</span>
-                                <span class="label label-success" ng-show="data.Unversioned">unversioned</span>
-                                <a href="/quadtree/index.html?uuid={{ dataset.Root }}&name={{ data.Name }}"
+                            <span ng-repeat="instance in dataset.DataInstances">
+                                <em>{{ instance.Base.Name }}</em>
+                                <span class="label label-important">{{ instance.Base.TypeName }}</span>
+                                <span class="label label-success" ng-show="instance.Base.Versioned">versioned</span>
+                                <span class="label label-success" ng-hide="instance.Base.Versioned">unversioned</span>
+                                <!-- <a href="/quadtree/index.html?uuid={{ dataset.Root }}&name={{ data.Name }}"
                                    ng-show="isQuadtree(data)" target="_blank">
-                                    <i class="icon-eye-open"></i><strong> Quadtree Browser</strong>
-                                </a>
+                                    <i class="icon-eye-open"></i><strong> Quadtree Browser</strong> 
+                                </a>  -->
                                 <br />
                             </span>
                         <br />

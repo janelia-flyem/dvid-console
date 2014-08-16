@@ -34,8 +34,8 @@ var DVID = {
 
     // Returns true if a name matches one of the names in the list.
     allowedType: function(data, typenames) {
-        if (data.hasOwnProperty('TypeService')) {
-            var typename = data.TypeService.Name;
+        if (data.hasOwnProperty('Base')) {
+            var typename = data.Base.TypeName;
             for (var i = 0; i < typenames.length; i += 1) {
                 if (typename === typenames[i]) {
                     return true;
@@ -58,8 +58,8 @@ var DVID = {
 
     // Returns an array of data names for this dataset index and with an optional data type (list of strings).
     getAvailData: function(dataset, typenames) {
-        if (dataset.hasOwnProperty('Root') && dataset.DataMap) {
-            return this.getDataNames(dataset.DataMap, typenames);
+        if (dataset.hasOwnProperty('Root') && dataset.DataInstances) {
+            return this.getDataNames(dataset.DataInstances, typenames);
         }
         return [];
     },
@@ -67,8 +67,9 @@ var DVID = {
     changeDataset: function(datasetNum) {
         console.log("Changing dataset to ", datasetNum, " of ", DVID.uuids.length);
         if (DVID.uuids.length > datasetNum) {
-            DVID.dataset.uuid = DVID.uuids[datasetNum];
-            var dataset = DVID.datasets[datasetNum];
+            var uuid = DVID.uuids[datasetNum];
+            DVID.dataset.uuid = uuid;
+            var dataset = DVID.datasets[uuid];
             this.dataset.availVoxels = DVID.getAvailData(dataset, ['grayscale8', 'rgba8', 'grayscale16', 'multiscale2d']);
             this.dataset.availLabels = DVID.getAvailData(dataset, ['labels32', 'labels64']);
             this.dataset.availLabelmaps = DVID.getAvailData(dataset, ['labelmap'])
@@ -92,7 +93,7 @@ var DVID = {
 
     changeDataImage: function(dataset, dataname) {
         console.log("changeDataImage: ", dataset, dataname);
-        var data = dataset.DataMap[dataname];
+        var data = dataset.DataInstances[dataname].Extended;
         if (data !== undefined) {
             var minPt = new THREE.Vector3(data.MinPoint[0], data.MinPoint[1], data.MinPoint[2]);
             var maxPt = new THREE.Vector3(data.MaxPoint[0], data.MaxPoint[1], data.MaxPoint[2]);
