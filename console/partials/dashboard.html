@@ -69,17 +69,12 @@
                         <!--
                         <span class="label label-important" ng-show="version.Locked">Locked</span>
                         <span class="label label-success" ng-hide="version.Locked">Open</span> -->
-                            <span ng-repeat="instance in dataset.DataInstances">
+                            <div ng-repeat="instance in dataset.DataInstances">
                                 <em>{{ instance.Base.Name }}</em>
                                 <span class="label label-important">{{ instance.Base.TypeName }}</span>
                                 <span class="label label-success" ng-show="instance.Base.Versioned">versioned</span>
                                 <span class="label label-success" ng-hide="instance.Base.Versioned">unversioned</span>
-                                <!-- <a href="/quadtree/index.html?uuid={{ dataset.Root }}&name={{ data.Name }}"
-                                   ng-show="isQuadtree(data)" target="_blank">
-                                    <i class="icon-eye-open"></i><strong> Quadtree Browser</strong> 
-                                </a>  -->
-                                <br />
-                            </span>
+                            </div>
                         <br />
                     </li>
                 </ul>
