@@ -72,8 +72,6 @@
                             <div ng-repeat="instance in dataset.DataInstances">
                                 <em>{{ instance.Base.Name }}</em>
                                 <span class="label label-important">{{ instance.Base.TypeName }}</span>
-                                <span class="label label-success" ng-show="instance.Base.Versioned">versioned</span>
-                                <span class="label label-success" ng-hide="instance.Base.Versioned">unversioned</span>
                             </div>
                         <br />
                     </li>
