@@ -1,11 +1,8 @@
 var React = require('react'),
   Router = require('react-router'),
-  Link   = Router.Link,
-  ServerStatus = require('./ServerStatus.react');
-  ServerStats = require('./ServerStats.react');
+  Link   = Router.Link;
 
-
-var Admin = React.createClass({
+var ServerStats = React.createClass({
   getInitialState: function() {
     return {
     };
@@ -13,6 +10,7 @@ var Admin = React.createClass({
 
   // this gets called after the fist time the component is loaded into the page.
   componentDidMount: function () {
+
     return;
   },
 
@@ -22,13 +20,14 @@ var Admin = React.createClass({
 
   render: function () {
     return (
-      <div>
-        <h1>Admin</h1>
-        <ServerStats/>
-        <ServerStatus/>
+      <div className="serverstats">
+        <p>Cores: </p>
+        <p>Repos: </p>
+        <p>Uptime: </p>
+        <p>Open Nodes: </p>
       </div>
     );
   }
 });
 
-module.exports = Admin;
+module.exports = ServerStats;
