@@ -1,3 +1,0 @@
-[submodule "tileviewer"]
-	path = tileviewer
-	url = https://github.com/janelia-flyem/dvid-tileviewer.git

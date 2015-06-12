@@ -1,0 +1,26 @@
+var React = require('react'),
+  Router = require('react-router'),
+  Link   = Router.Link;
+
+
+var Home = React.createClass({
+  getInitialState: function() {
+    return {
+    };
+  },
+
+  // this gets called after the fist time the component is loaded into the page.
+  componentDidMount: function () {
+    return;
+  },
+
+  render: function () {
+    return (
+      <div>
+        <h1>Repositories</h1>
+      </div>
+    );
+  }
+});
+
+module.exports = Home;
