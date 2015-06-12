@@ -6,6 +6,7 @@ var React = require('react'),
   totalPoints = 300,
   loadInterval = 1000,
   updateTimeout = null,
+  statsTimeout  = null,
   getTimeout = null;
 
 // Determine the scale for each type of monitoring on y-axis.
@@ -102,12 +103,14 @@ var getLoadStats = function () {
     }
     setLoadData();
   });
-  setTimeout(getLoadStats, loadInterval);
+  // stop the proliferation of timeouts each time we load the admin page.
+  window.clearTimeout(statsTimeout);
+  statsTimeout = setTimeout(getLoadStats, loadInterval);
 }
 
 var updateLoadStats = function() {
   $.plot($('.usageChart'), loadData, chartOptions).draw();
-  setTimeout(updateLoadStats, loadInterval);
+  updateTimeout = setTimeout(updateLoadStats, loadInterval);
 }
 
 var ServerStatus = React.createClass({
@@ -125,6 +128,7 @@ var ServerStatus = React.createClass({
   },
 
   componentWillUnmount: function () {
+    // this stops the plot from updating while no one is looking at the page.
     window.clearTimeout(updateTimeout);
   },
 
