@@ -10,8 +10,12 @@ var Navigation = React.createClass({
   <div className="container-fluid">
     <div className="navbar-header">
       <Link to="consoleapp" className="navbar-brand">DVID</Link>
-      <Link to="admin" className="navbar-brand"><span className="glyphicon glyphicon-cog" aria-hidden="true"></span></Link>
-      <Link to="about" className="navbar-brand"><span className="glyphicon glyphicon-question-sign" aria-hidden="true"></span></Link>
+    </div>
+    <div>
+      <ul className="nav navbar-nav navbar-right">
+        <li><Link to="admin" className="navbar-brand"><span className="glyphicon glyphicon-cog" aria-hidden="true"></span></Link></li>
+        <li><Link to="about" className="navbar-brand"><span className="glyphicon glyphicon-question-sign" aria-hidden="true"></span></Link></li>
+      </ul>
     </div>
   </div>
 </nav>
