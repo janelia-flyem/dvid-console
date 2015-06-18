@@ -24,8 +24,8 @@ var Admin = React.createClass({
     return (
       <div>
         <h1>Admin</h1>
-        <ServerStats/>
-        <ServerStatus/>
+        <ServerStats dvid={this.props.dvid}/>
+        <ServerStatus dvid={this.props.dvid}/>
       </div>
     );
   }

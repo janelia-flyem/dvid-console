@@ -89,7 +89,7 @@ var setLoadData = function() {
 }
 
 var getLoadStats = function () {
-  $.get('/api/load', function(response) {
+  $.get('http://emdata1.int.janelia.org:8500/api/load', function(response) {
     for (var dataset in response) {
       if (dataset in datasetYScale) {
         if (!loadStats.hasOwnProperty(dataset) || Object.prototype.toString.call(loadStats[dataset]) !== '[object Array]') {
