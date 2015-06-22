@@ -88,24 +88,29 @@ var setLoadData = function() {
   }
 }
 
-var getLoadStats = function () {
-  $.get('/api/load', function(response) {
-    for (var dataset in response) {
-      if (dataset in datasetYScale) {
-        if (!loadStats.hasOwnProperty(dataset) || Object.prototype.toString.call(loadStats[dataset]) !== '[object Array]') {
-          loadStats[dataset] = [];
+var startLoadingStats = function(dvid) {
+
+  var getLoadStats = function () {
+    dvid.load(function(response) {
+      for (var dataset in response) {
+        if (dataset in datasetYScale) {
+          if (!loadStats.hasOwnProperty(dataset) || Object.prototype.toString.call(loadStats[dataset]) !== '[object Array]') {
+            loadStats[dataset] = [];
+          }
+          if (loadStats[dataset].length >= totalPoints) {
+            loadStats[dataset] = loadStats[dataset].slice(1);
+          }
+          loadStats[dataset].push(response[dataset]);
         }
-        if (loadStats[dataset].length >= totalPoints) {
-          loadStats[dataset] = loadStats[dataset].slice(1);
-        }
-        loadStats[dataset].push(response[dataset]);
       }
-    }
-    setLoadData();
-  });
-  // stop the proliferation of timeouts each time we load the admin page.
-  window.clearTimeout(statsTimeout);
-  statsTimeout = setTimeout(getLoadStats, loadInterval);
+      setLoadData();
+    });
+    // stop the proliferation of timeouts each time we load the admin page.
+    window.clearTimeout(statsTimeout);
+    statsTimeout = setTimeout(getLoadStats, loadInterval);
+  }
+
+  getLoadStats();
 }
 
 var updateLoadStats = function() {
@@ -122,7 +127,7 @@ var ServerStatus = React.createClass({
   // this gets called after the fist time the component is loaded into the page.
   componentDidMount: function () {
 
-    getLoadStats();
+    startLoadingStats(this.props.dvid);
     updateLoadStats();
     return;
   },
