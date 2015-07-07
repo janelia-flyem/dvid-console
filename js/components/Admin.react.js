@@ -1,26 +1,23 @@
-var React = require('react'),
-  Router = require('react-router'),
-  Link   = Router.Link,
-  ServerStatus = require('./ServerStatus.react');
-  ServerStats = require('./ServerStats.react');
+import React from 'react';
+import ServerStatus from './ServerStatus.react';
+import ServerStats from './ServerStats.react';
 
-
-var Admin = React.createClass({
-  getInitialState: function() {
-    return {
-    };
-  },
+class Admin extends React.Component {
+  constructor() {
+    super();
+    this.state = {};
+  }
 
   // this gets called after the fist time the component is loaded into the page.
-  componentDidMount: function () {
+  componentDidMount() {
     return;
-  },
+  }
 
-  componentWillUnmount: function () {
+  componentWillUnmount() {
     return;
-  },
+  }
 
-  render: function () {
+  render() {
     return (
       <div>
         <h1>Admin</h1>
@@ -29,6 +26,6 @@ var Admin = React.createClass({
       </div>
     );
   }
-});
+};
 
 module.exports = Admin;
