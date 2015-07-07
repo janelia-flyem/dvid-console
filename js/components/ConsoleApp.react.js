@@ -10,22 +10,22 @@ var React       = require('react'),
   Nav           = require('./Navigation.react'),
   Admin         = require('./Admin.react'),
   About         = require('./About.react'),
+  Error         = require('./Error.react'),
   dvid          = require('dvid');
-
-  dvid.connect();
 
 var ConsoleApp = React.createClass({
   getInitialState: function () {
     return {
-      dvid: dvid
+      //dvid: dvid.connect({"host": "emdata1.int.janelia.org", "port": 8500})
+      dvid: dvid.connect({host: 'emdata1', port: 65534})
     }
   },
   render: function () {
     return (
       <div>
         <Nav />
-
         <div className="container-fluid">
+          <Error/>
           {/* this is the important part for route handling */}
           <RouteHandler dvid={this.state.dvid}/>
         </div>

@@ -91,19 +91,24 @@ var setLoadData = function() {
 var startLoadingStats = function(dvid) {
 
   var getLoadStats = function () {
-    dvid.load(function(response) {
-      for (var dataset in response) {
-        if (dataset in datasetYScale) {
-          if (!loadStats.hasOwnProperty(dataset) || Object.prototype.toString.call(loadStats[dataset]) !== '[object Array]') {
-            loadStats[dataset] = [];
+    dvid.load({
+      callback: function(response) {
+        for (var dataset in response) {
+          if (dataset in datasetYScale) {
+            if (!loadStats.hasOwnProperty(dataset) || Object.prototype.toString.call(loadStats[dataset]) !== '[object Array]') {
+              loadStats[dataset] = [];
+            }
+            if (loadStats[dataset].length >= totalPoints) {
+              loadStats[dataset] = loadStats[dataset].slice(1);
+            }
+            loadStats[dataset].push(response[dataset]);
           }
-          if (loadStats[dataset].length >= totalPoints) {
-            loadStats[dataset] = loadStats[dataset].slice(1);
-          }
-          loadStats[dataset].push(response[dataset]);
         }
+        setLoadData();
+      },
+      error: function (err) {
+        console.log(err);
       }
-      setLoadData();
     });
     // stop the proliferation of timeouts each time we load the admin page.
     window.clearTimeout(statsTimeout);

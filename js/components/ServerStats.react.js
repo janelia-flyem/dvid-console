@@ -13,13 +13,18 @@ var ServerStats = React.createClass({
   componentDidMount: function () {
     var self = this;
     // fetch the stats
-    this.props.dvid.serverInfo(function(data) {
-      if (self.isMounted()) {
-        self.setState({
-          serverInfo: data
-        });
+    this.props.dvid.serverInfo({
+      callback: function(data) {
+        if (self.isMounted()) {
+          self.setState({
+            serverInfo: data
+          });
+        }
+      }.bind(this),
+      error: function (err) {
+        console.log(err);
       }
-    }.bind(this));
+    });
     return;
   },
 
