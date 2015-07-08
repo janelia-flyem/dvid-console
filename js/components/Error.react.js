@@ -28,11 +28,9 @@ class ErrorMessage extends React.Component {
 class Error extends React.Component {
   render() {
     return (
-      <div>
-        <AltContainer store={ErrorStore}>
-          <ErrorMessage />
-        </AltContainer>
-      </div>
+      <AltContainer store={ErrorStore}>
+        <ErrorMessage />
+      </AltContainer>
     );
   }
 
