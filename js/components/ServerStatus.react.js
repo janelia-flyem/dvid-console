@@ -1,3 +1,6 @@
+import ErrorActions from '../actions/ErrorActions';
+
+
 var React = require('react'),
   Router = require('react-router'),
   Link   = Router.Link,
@@ -107,7 +110,7 @@ var startLoadingStats = function(dvid) {
         setLoadData();
       },
       error: function (err) {
-        console.log(err);
+        ErrorActions.update(err.message);
       }
     });
     // stop the proliferation of timeouts each time we load the admin page.

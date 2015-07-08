@@ -1,18 +1,16 @@
 import React from 'react';
 import {Alert} from 'react-bootstrap';
+import ErrorStore from '../stores/ErrorStore';
+import ErrorActions from '../actions/ErrorActions';
+import AltContainer from 'alt/AltContainer';
 
-class Error extends React.Component {
-  constructor() {
-    super();
-    this.state = {"visible": true};
-  }
-
+class ErrorMessage extends React.Component {
   render() {
-    if (this.state.visible) {
+    if (this.props.errors.length) {
       return (
         <Alert bsStyle='danger' onDismiss={this.handleDismiss.bind(this)}>
           <h4>Error Message</h4>
-          <p>More information about the error</p>
+          <p>{this.props.errors[0]}</p>
         </Alert>
       );
     }
@@ -20,12 +18,24 @@ class Error extends React.Component {
     return (
       <div></div>
     );
-
   }
 
   handleDismiss() {
-    this.setState({"visible": false});
+    ErrorActions.clear();
   }
+}
+
+class Error extends React.Component {
+  render() {
+    return (
+      <div>
+        <AltContainer store={ErrorStore}>
+          <ErrorMessage />
+        </AltContainer>
+      </div>
+    );
+  }
+
 };
 
 module.exports = Error;
