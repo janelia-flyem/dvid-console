@@ -16,8 +16,7 @@ var React       = require('react'),
 var ConsoleApp = React.createClass({
   getInitialState: function () {
     return {
-      //dvid: dvid.connect({"host": "emdata1.int.janelia.org", "port": 8500})
-      dvid: dvid.connect({host: 'emdata1', port: 65534})
+      dvid: dvid.connect()
     }
   },
   render: function () {
