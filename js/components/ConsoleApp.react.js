@@ -13,6 +13,8 @@ var React       = require('react'),
   Error         = require('./Error.react'),
   dvid          = require('dvid');
 
+import Repo from './Repo.react';
+
 var ConsoleApp = React.createClass({
   getInitialState: function () {
     return {
@@ -38,6 +40,7 @@ var routes = (
     <DefaultRoute handler={Home}/>
     <Route name="admin" path="admin" handler={Admin}/>
     <Route name="about" path="about" handler={About}/>
+    <Route name="repo"  path="repo/:uuid"  handler={Repo}/>
     <NotFoundRoute handler={NotFound}/>
   </Route>
 );
