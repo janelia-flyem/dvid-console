@@ -22,13 +22,12 @@ class LogEntry extends React.Component {
 class RepoLog extends React.Component {
 
   render(){
-    console.log(this.props);
     return (
       <div className="log">
         <table>
           <tbody>
-            {this.props.log.map(function(entry) {
-              return <LogEntry entry={entry}/>
+            {this.props.log.map(function(entry, i) {
+              return <LogEntry key={i} entry={entry}/>
             })}
           </tbody>
         </table>
