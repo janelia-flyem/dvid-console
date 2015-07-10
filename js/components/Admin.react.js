@@ -21,7 +21,7 @@ class Admin extends React.Component {
     return (
       <div>
         <h1>Admin</h1>
-        <ServerStats dvid={this.props.dvid}/>
+        <ServerStats/>
         <ServerStatus dvid={this.props.dvid}/>
       </div>
     );

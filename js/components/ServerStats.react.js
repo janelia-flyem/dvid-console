@@ -1,47 +1,45 @@
-var React = require('react'),
-  Router = require('react-router'),
-  Link   = Router.Link;
+import React from 'react';
+import Router from 'react-router';
+import ServerActions from '../actions/ServerActions';
+import ServerStore from '../stores/ServerStore';
+import AltContainer from 'alt/AltContainer';
 
-var ServerStats = React.createClass({
-  getInitialState: function() {
-    return {
-      serverInfo: {}
-    };
-  },
 
-  // this gets called after the first time the component is loaded into the page.
-  componentDidMount: function () {
-    var self = this;
-    // fetch the stats
-    this.props.dvid.serverInfo({
-      callback: function(data) {
-        if (self.isMounted()) {
-          self.setState({
-            serverInfo: data
-          });
-        }
-      }.bind(this),
-      error: function (err) {
-        console.log(err);
-      }
-    });
-    return;
-  },
+class StatsDisplay extends React.Component {
+  render() {
+    console.log(this.props);
+    if (this.props.stats && this.props.repos) {
+      return (
+        <div className="serverstats">
+          <p>Cores: {this.props.stats.Cores}</p>
+          <p>Repos: {Object.keys(this.props.repos).length}</p>
+          <p>Uptime: {this.props.stats['Server uptime']}</p>
+          <p>Version Nodes: </p>
+        </div>
+      );
+    }
 
-  componentWillUnmount: function () {
-    return;
-  },
-
-  render: function () {
     return (
-      <div className="serverstats">
-        <p>Cores: {this.state.serverInfo.Cores}</p>
-        <p>Repos: </p>
-        <p>Uptime: {this.state.serverInfo["Server uptime"]}</p>
-        <p>Open Nodes: </p>
-      </div>
+      <div className="serverstats"></div>
     );
   }
-});
+}
+
+
+class ServerStats extends React.Component {
+
+  componentDidMount() {
+    ServerActions.fetch();
+    ServerActions.fetchStats();
+  }
+
+  render() {
+    return (
+      <AltContainer store={ServerStore}>
+        <StatsDisplay/>
+      </AltContainer>
+    );
+  }
+};
 
 module.exports = ServerStats;

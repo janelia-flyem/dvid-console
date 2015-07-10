@@ -6,7 +6,7 @@ class ServerStore {
   constructor() {
     this.bindActions(ServerActions);
     this.repos = null;
-    this.stats = {};
+    this.stats = null;
     this.api = dvid.connect();
 
    this.exportPublicMethods({
@@ -16,7 +16,16 @@ class ServerStore {
   }
 
   onFetchStats() {
-
+    var self = this;
+    self.api.serverInfo({
+      callback: function(data) {
+        self.stats = data;
+        self.emitChange();
+      },
+      error: function (err) {
+        console.log(err);
+      }
+    });
   }
 
   onFetch(msg) {
