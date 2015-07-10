@@ -5,9 +5,14 @@ import dvid from 'dvid';
 class ServerStore {
   constructor() {
     this.bindActions(ServerActions);
-    this.repos = [];
+    this.repos = null;
     this.stats = {};
     this.api = dvid.connect();
+
+   this.exportPublicMethods({
+     getRepoById: this.getRepoById
+   });
+
   }
 
   onFetchStats() {
@@ -18,12 +23,7 @@ class ServerStore {
     var self = this;
     self.api.reposInfo({
       callback: function(data) {
-        self.repos = [];
-        for (var key in data) {
-          if (data.hasOwnProperty(key)) {
-            self.repos.push(data[key]);
-          }
-        }
+        self.repos = data;
         self.emitChange();
       },
       error: function (err) {
@@ -31,6 +31,10 @@ class ServerStore {
       }
     });
   }
+
+  getRepoById(id) {
+  }
+
 }
 
 module.exports = (alt.createStore(ServerStore));

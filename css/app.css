@@ -17,3 +17,7 @@
   border-bottom-left-radius: 2px;
   border-bottom-right-radius: 2px;
 }
+
+.log .timestamp {
+  width: 14em;
+}
