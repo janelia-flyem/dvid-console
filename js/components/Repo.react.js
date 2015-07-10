@@ -44,9 +44,9 @@ class RepoDetails extends React.Component {
       return (
         <div>
           <h3>{repo.Root}</h3>
-          <p>Created: {moment(repo.Created).format("MMM Do YYYY, h:mm:ss a")}</p>
-          <p>Updated: {moment(repo.Updated).format("MMM Do YYYY, h:mm:ss a")}</p>
-          <p>Log:</p>
+          <p><b>Created:</b> {moment(repo.Created).format("MMM Do YYYY, h:mm:ss a")}</p>
+          <p><b>Updated:</b> {moment(repo.Updated).format("MMM Do YYYY, h:mm:ss a")}</p>
+          <p><b>Log:</b></p>
 
           <RepoLog log={repo.Log}/>
 

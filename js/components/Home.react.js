@@ -3,6 +3,7 @@ import {Router, Link} from 'react-router';
 import ServerActions from '../actions/ServerActions';
 import ServerStore from '../stores/ServerStore';
 import AltContainer from 'alt/AltContainer';
+import moment from 'moment';
 
 class RepoList extends React.Component {
   render() {
@@ -18,7 +19,7 @@ class RepoList extends React.Component {
         <ul>
           {repo_list.map((repo, i) => {
             return (
-              <li key={i}><Link to="repo" params={{uuid: repo.Root}}>{repo.Root}</Link> - {repo.Updated}</li>
+              <li key={i}><Link to="repo" params={{uuid: repo.Root}}>{repo.Root}</Link> - {moment(repo.Updated).format("MMM Do YYYY, h:mm:ss a")}</li>
             );
           })}
         </ul>
