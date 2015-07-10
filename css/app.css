@@ -21,3 +21,8 @@
 .log .timestamp {
   width: 14em;
 }
+
+.log {
+  overflow: auto;
+  height: 10em;
+}
