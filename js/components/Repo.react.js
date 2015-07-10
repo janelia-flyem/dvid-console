@@ -3,6 +3,7 @@ import Router from 'react-router';
 import ServerStore from '../stores/ServerStore';
 import ServerActions from '../actions/ServerActions';
 import AltContainer from 'alt/AltContainer';
+import moment from 'moment';
 
 
 class LogEntry extends React.Component {
@@ -10,7 +11,7 @@ class LogEntry extends React.Component {
     var entry = this.props.entry.split(/\s(.+)/);
     return (
       <tr>
-        <td className="timestamp">{entry[0]}</td>
+        <td className="timestamp">{moment(entry[0]).format("MMM Do YYYY, h:mm:ss a")}</td>
         <td>{entry[1]}</td>
       </tr>
     );
@@ -41,12 +42,11 @@ class RepoDetails extends React.Component {
   render() {
     if (this.props.repos && this.props.repos.hasOwnProperty(this.props.uuid)) {
       var repo = this.props.repos[this.props.uuid];
-      console.log(repo);
       return (
         <div>
           <h3>{repo.Root}</h3>
-          <p>Created: {repo.Created}</p>
-          <p>Updated: {repo.Updated}</p>
+          <p>Created: {moment(repo.Created).format("MMM Do YYYY, h:mm:ss a")}</p>
+          <p>Updated: {moment(repo.Updated).format("MMM Do YYYY, h:mm:ss a")}</p>
           <p>Log:</p>
 
           <RepoLog log={repo.Log}/>
