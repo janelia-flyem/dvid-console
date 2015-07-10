@@ -4,6 +4,7 @@ import ServerStore from '../stores/ServerStore';
 import ServerActions from '../actions/ServerActions';
 import AltContainer from 'alt/AltContainer';
 import moment from 'moment';
+import RepoDAG from './RepoDAG.react.js';
 
 
 class LogEntry extends React.Component {
@@ -22,6 +23,7 @@ class LogEntry extends React.Component {
 class RepoLog extends React.Component {
 
   render(){
+    this.props.log.reverse();
     return (
       <div className="log">
         <table>
@@ -41,17 +43,41 @@ class RepoDetails extends React.Component {
   render() {
     if (this.props.repos && this.props.repos.hasOwnProperty(this.props.uuid)) {
       var repo = this.props.repos[this.props.uuid];
+      var oldest = moment(repo.Log[0].split(' ', 1)[0]);
+      var newest = moment(repo.Log[repo.Log.length -1].split(' ', 1)[0]);
+      var span = moment.duration(newest.diff(oldest)).humanize();
+
       return (
         <div>
-          <h3>{repo.Root}</h3>
-          <p><b>Created:</b> {moment(repo.Created).format("MMM Do YYYY, h:mm:ss a")}</p>
-          <p><b>Updated:</b> {moment(repo.Updated).format("MMM Do YYYY, h:mm:ss a")}</p>
-          <p><b>Log:</b></p>
-
-          <RepoLog log={repo.Log}/>
-
-          <div className="dag">
+          <div className="repometa row">
+            <div className="col-sm-6">
+              <h3>{repo.Alias}</h3>
+              <p>{repo.Description}</p>
+            </div>
+            <div className="col-sm-6 text-right">
+              <p><b>UUID:</b> {repo.Root}</p>
+              <p><b>Created:</b> {moment(repo.Created).format("MMM Do YYYY, h:mm:ss a")}</p>
+              <p><b>Updated:</b> {moment(repo.Updated).format("MMM Do YYYY, h:mm:ss a")}</p>
+            </div>
           </div>
+
+          <div className="row">
+            <div className="col-sm-6">
+              <p><b>Log:</b></p>
+            </div>
+            <div className="col-sm-6 text-right">
+              <p>{repo.Log.length} entries covering {span}</p>
+            </div>
+          </div>
+
+          <div className="row">
+            <div className="col-sm-12">
+              <RepoLog log={repo.Log}/>
+            </div>
+          </div>
+
+            <RepoDAG dag={repo.DAG}/>
+
         </div>
       );
     }
@@ -70,12 +96,9 @@ class Repo extends React.Component {
 
   render() {
     return (
-      <div>
-        <h2>Repo</h2>
-        <AltContainer store={ServerStore} >
-          <RepoDetails uuid={this.props.params.uuid}/>
-        </AltContainer>
-      </div>
+      <AltContainer store={ServerStore} >
+        <RepoDetails uuid={this.props.params.uuid}/>
+      </AltContainer>
     );
   }
 }
