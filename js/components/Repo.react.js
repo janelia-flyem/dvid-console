@@ -51,7 +51,7 @@ class RepoDetails extends React.Component {
         <div>
           <div className="repometa row">
             <div className="col-sm-6">
-              <h3>{repo.Alias}</h3>
+              <h3>{repo.Alias || "<Nameless Repo>"}</h3>
               <p>{repo.Description}</p>
             </div>
             <div className="col-sm-6 text-right">
