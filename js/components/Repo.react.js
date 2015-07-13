@@ -5,6 +5,7 @@ import ServerActions from '../actions/ServerActions';
 import AltContainer from 'alt/AltContainer';
 import moment from 'moment';
 import RepoDAG from './RepoDAG.react.js';
+import DataInstances from './DataInstances.react.js';
 
 
 class LogEntry extends React.Component {
@@ -85,7 +86,13 @@ class RepoDetails extends React.Component {
             </div>
           </div>
 
-            <RepoDAG dag={repo.DAG}/>
+          <RepoDAG dag={repo.DAG}/>
+
+          <div className="row">
+            <div className="col-sm-12">
+              <DataInstances repo={repo}/>
+            </div>
+          </div>
 
         </div>
       );
