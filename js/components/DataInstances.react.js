@@ -21,7 +21,6 @@ class DataInstances extends React.Component {
           <tr>
             <td>Data Instance</td>
             <td>Type</td>
-            <td>Versioned</td>
             <td>Tile Source</td>
             <td>Label Source</td>
           </tr>
@@ -41,6 +40,7 @@ class DataInstance extends React.Component {
     var tile_input = '';
     var label_input = '';
     var type = this.props.instance.Base.TypeName;
+    var label_class = 'label lbl-' + type;
     var name = this.props.instance.Base.Name;
 
     if (type === 'grayscale8' || type === 'multiscale2d' || type === 'uint8blk' || type === 'imagetile' ) {
@@ -54,8 +54,7 @@ class DataInstance extends React.Component {
     return (
       <tr>
         <td><a href={url}>{name}</a></td>
-        <td><span className="label label-danger">{type}</span></td>
-        <td><span className="label label-success">{this.props.instance.Base.Versioned ? 'versioned' : 'unversioned'}</span></td>
+        <td><span className={label_class}>{type}</span></td>
         <td>{tile_input}</td>
         <td>{label_input}</td>
       </tr>
