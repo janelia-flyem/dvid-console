@@ -2,7 +2,6 @@ import React from 'react';
 
 class DataInstances extends React.Component {
   render() {
-    console.log(this.props.repo);
 
     var rows = [];
     if (this.props && this.props.repo.DataInstances) {
