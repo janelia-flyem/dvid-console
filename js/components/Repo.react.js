@@ -43,9 +43,13 @@ class RepoDetails extends React.Component {
   render() {
     if (this.props.repos && this.props.repos.hasOwnProperty(this.props.uuid)) {
       var repo = this.props.repos[this.props.uuid];
-      var oldest = moment(repo.Log[0].split(' ', 1)[0]);
-      var newest = moment(repo.Log[repo.Log.length -1].split(' ', 1)[0]);
-      var span = moment.duration(newest.diff(oldest)).humanize();
+      var span = null;
+
+      if (repo.Log.length > 1) {
+        var oldest = moment(repo.Log[0].split(' ', 1)[0]);
+        var newest = moment(repo.Log[repo.Log.length -1].split(' ', 1)[0]);
+        var span = 'covering ' + moment.duration(newest.diff(oldest)).humanize();
+      }
 
       return (
         <div>
@@ -66,7 +70,7 @@ class RepoDetails extends React.Component {
               <p><b>Log:</b></p>
             </div>
             <div className="col-sm-6 text-right">
-              <p>{repo.Log.length} entries covering {span}</p>
+              <p>{repo.Log.length} entries {span}</p>
             </div>
           </div>
 
