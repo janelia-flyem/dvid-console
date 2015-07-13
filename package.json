@@ -27,6 +27,7 @@
   "dependencies": {
     "alt": "^0.17.0",
     "bootstrap": "^3.3.4",
+    "dvid": "^0.2.2",
     "moment": "^2.10.3",
     "react": "^0.13.3",
     "react-bootstrap": "^0.23.7",
