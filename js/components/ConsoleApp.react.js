@@ -10,17 +10,11 @@ var React       = require('react'),
   Nav           = require('./Navigation.react'),
   Admin         = require('./Admin.react'),
   About         = require('./About.react'),
-  Error         = require('./Error.react'),
-  dvid          = require('dvid');
+  Error         = require('./Error.react');
 
 import Repo from './Repo.react';
 
 var ConsoleApp = React.createClass({
-  getInitialState: function () {
-    return {
-      dvid: dvid.connect()
-    }
-  },
   render: function () {
     return (
       <div>
@@ -28,7 +22,7 @@ var ConsoleApp = React.createClass({
         <div className="container-fluid">
           <Error/>
           {/* this is the important part for route handling */}
-          <RouteHandler dvid={this.state.dvid}/>
+          <RouteHandler/>
         </div>
       </div>
     );
