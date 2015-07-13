@@ -7,6 +7,7 @@ import moment from 'moment';
 import RepoDAG from './RepoDAG.react.js';
 import DataInstances from './DataInstances.react.js';
 import RepoLog from './RepoLog.react.js';
+import RepoMeta from './RepoMeta.react.js';
 
 
 class RepoDetails extends React.Component {
@@ -23,17 +24,7 @@ class RepoDetails extends React.Component {
 
       return (
         <div>
-          <div className="repometa row">
-            <div className="col-sm-6">
-              <h3>{repo.Alias || "<Nameless Repo>"}</h3>
-              <p>{repo.Description}</p>
-            </div>
-            <div className="col-sm-6 text-right">
-              <p><b>UUID:</b> {repo.Root}</p>
-              <p><b>Created:</b> {moment(repo.Created).format("MMM Do YYYY, h:mm:ss a")}</p>
-              <p><b>Updated:</b> {moment(repo.Updated).format("MMM Do YYYY, h:mm:ss a")}</p>
-            </div>
-          </div>
+          <RepoMeta repo={repo}/>
 
           <div className="row">
             <div className="col-sm-6">
