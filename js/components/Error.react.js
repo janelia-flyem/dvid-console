@@ -9,7 +9,6 @@ class ErrorMessage extends React.Component {
     if (this.props.errors.length) {
       return (
         <Alert bsStyle='danger' onDismiss={this.handleDismiss.bind(this)}>
-          <h4>Error Message</h4>
           <p>{this.props.errors[0]}</p>
         </Alert>
       );

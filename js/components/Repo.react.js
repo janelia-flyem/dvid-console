@@ -4,10 +4,10 @@ import ServerStore from '../stores/ServerStore';
 import ServerActions from '../actions/ServerActions';
 import AltContainer from 'alt/AltContainer';
 import moment from 'moment';
-import RepoDAG from './RepoDAG.react.js';
-import DataInstances from './DataInstances.react.js';
-import RepoLog from './RepoLog.react.js';
-import RepoMeta from './RepoMeta.react.js';
+import RepoDAG from './RepoDAG.react';
+import InstanceSelect from './InstanceSelect.react';
+import RepoLog from './RepoLog.react';
+import RepoMeta from './RepoMeta.react';
 
 
 class RepoDetails extends React.Component {
@@ -49,7 +49,7 @@ class RepoDetails extends React.Component {
 
           <div className="row">
             <div className="col-sm-12">
-              <DataInstances repo={repo}/>
+              <InstanceSelect repo={repo}/>
             </div>
           </div>
 
