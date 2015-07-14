@@ -14,8 +14,14 @@ var React       = require('react'),
 
 import Repo from './Repo.react';
 import TileMap from './TileMap.react';
+import ErrorActions from '../actions/ErrorActions';
 
 class ConsoleApp extends React.Component {
+
+  componentWillReceiveProps() {
+    ErrorActions.clear();
+  }
+
   render() {
     return (
       <div>
