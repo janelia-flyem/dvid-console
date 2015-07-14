@@ -5,6 +5,7 @@ class ErrorStore {
   constructor() {
     this.bindActions(ErrorActions);
     this.errors = [];
+    this.persist = false;
   }
   onUpdate(error) {
     this.errors.push(error);
