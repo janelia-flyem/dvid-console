@@ -1,4 +1,5 @@
 import ErrorActions from '../actions/ErrorActions';
+import ServerStore from '../stores/ServerStore';
 
 
 var React = require('react'),
@@ -91,27 +92,22 @@ var setLoadData = function() {
   }
 }
 
-var startLoadingStats = function(dvid) {
+var startLoadingStats = function() {
 
   var getLoadStats = function () {
-    dvid.load({
-      callback: function(response) {
-        for (var dataset in response) {
-          if (dataset in datasetYScale) {
-            if (!loadStats.hasOwnProperty(dataset) || Object.prototype.toString.call(loadStats[dataset]) !== '[object Array]') {
-              loadStats[dataset] = [];
-            }
-            if (loadStats[dataset].length >= totalPoints) {
-              loadStats[dataset] = loadStats[dataset].slice(1);
-            }
-            loadStats[dataset].push(response[dataset]);
+    ServerStore.getLoad(function(response) {
+      for (var dataset in response) {
+        if (dataset in datasetYScale) {
+          if (!loadStats.hasOwnProperty(dataset) || Object.prototype.toString.call(loadStats[dataset]) !== '[object Array]') {
+            loadStats[dataset] = [];
           }
+          if (loadStats[dataset].length >= totalPoints) {
+            loadStats[dataset] = loadStats[dataset].slice(1);
+          }
+          loadStats[dataset].push(response[dataset]);
         }
-        setLoadData();
-      },
-      error: function (err) {
-        ErrorActions.update(err.message);
       }
+      setLoadData();
     });
     // stop the proliferation of timeouts each time we load the admin page.
     window.clearTimeout(statsTimeout);
@@ -126,30 +122,25 @@ var updateLoadStats = function() {
   updateTimeout = setTimeout(updateLoadStats, loadInterval);
 }
 
-var ServerStatus = React.createClass({
-  getInitialState: function() {
-    return {
-    };
-  },
-
+class ServerStatus extends React.Component {
   // this gets called after the fist time the component is loaded into the page.
-  componentDidMount: function () {
+  componentDidMount() {
 
-    startLoadingStats(this.props.dvid);
+    startLoadingStats();
     updateLoadStats();
     return;
-  },
+  }
 
-  componentWillUnmount: function () {
+  componentWillUnmount() {
     // this stops the plot from updating while no one is looking at the page.
     window.clearTimeout(updateTimeout);
-  },
+  }
 
-  render: function () {
+  render() {
     return (
       <div className="usageChart"></div>
     );
   }
-});
+}
 
 module.exports = ServerStatus;

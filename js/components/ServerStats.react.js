@@ -7,7 +7,6 @@ import AltContainer from 'alt/AltContainer';
 
 class StatsDisplay extends React.Component {
   render() {
-    console.log(this.props);
     if (this.props.stats && this.props.repos) {
       return (
         <div className="serverstats">

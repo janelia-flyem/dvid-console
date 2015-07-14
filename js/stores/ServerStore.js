@@ -1,5 +1,6 @@
 import alt from '../alt';
 import ServerActions from '../actions/ServerActions';
+import ErrorActions from '../actions/ErrorActions';
 import dvid from 'dvid';
 
 class ServerStore {
@@ -10,7 +11,7 @@ class ServerStore {
     this.api = dvid.connect({host:'emdata1', port: 8500});
 
    this.exportPublicMethods({
-     getRepoById: this.getRepoById
+     getLoad: this.getLoad
    });
 
   }
@@ -23,7 +24,7 @@ class ServerStore {
         self.emitChange();
       },
       error: function (err) {
-        console.log(err);
+        ErrorActions.update(err);
       }
     });
   }
@@ -36,12 +37,19 @@ class ServerStore {
         self.emitChange();
       },
       error: function (err) {
-        console.log(err);
+        ErrorActions.update(err);
       }
     });
   }
 
-  getRepoById(id) {
+  getLoad(callback) {
+    var self = this;
+    self.state.api.load({
+      callback: callback,
+      error: function(err) {
+        ErrorActions.update(err);
+      }
+    });
   }
 
 }
