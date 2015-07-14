@@ -34,6 +34,14 @@
   margin-bottom: 1em;
 }
 
+.repometa h3 {
+  margin-top: 0;
+}
+
+.dataselect {
+  margin-top: 1em;
+}
+
 table.datainstances {
   border-collapse: collapse;
   margin: 5px 0 5px 0;
