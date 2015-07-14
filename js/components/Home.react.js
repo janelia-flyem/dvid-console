@@ -4,6 +4,7 @@ import ServerActions from '../actions/ServerActions';
 import ServerStore from '../stores/ServerStore';
 import AltContainer from 'alt/AltContainer';
 import moment from 'moment';
+import {Table} from 'react-bootstrap';
 
 class RepoList extends React.Component {
   render() {
@@ -16,13 +17,26 @@ class RepoList extends React.Component {
       }
 
       return (
-        <ul>
+        <Table striped bordered condensed>
+          <thead>
+            <tr>
+            <th>Alias</th>
+            <th>UUID</th>
+            <th>Last Updated</th>
+            </tr>
+          </thead>
+          <tbody>
           {repo_list.map((repo, i) => {
             return (
-              <li key={i}>{repo.Alias} <Link to="repo" params={{uuid: repo.Root}}>{repo.Root}</Link> - {moment(repo.Updated).format("MMM Do YYYY, h:mm:ss a")}</li>
+              <tr key={i}>
+                <td>{repo.Alias}</td>
+                <td><Link to="repo" params={{uuid: repo.Root}}>{repo.Root}</Link></td>
+                <td>{moment(repo.Updated).format("MMM Do YYYY, h:mm:ss a")}</td>
+              </tr>
             );
           })}
-        </ul>
+          </tbody>
+        </Table>
       );
     }
 

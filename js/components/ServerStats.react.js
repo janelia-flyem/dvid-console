@@ -12,7 +12,7 @@ class StatsDisplay extends React.Component {
         <div className="serverstats">
           <p>Cores: {this.props.stats.Cores}</p>
           <p>Repos: {Object.keys(this.props.repos).length}</p>
-          <p>Uptime: {this.props.stats['Server uptime']}</p>
+          <p>Uptime: {this.props.stats['Server uptime'].split('.', 1) + 's'}</p>
           <p>Version Nodes: </p>
         </div>
       );
