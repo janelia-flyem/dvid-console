@@ -21,6 +21,7 @@ class RepoList extends React.Component {
           <thead>
             <tr>
             <th>Alias</th>
+            <th>Description</th>
             <th>UUID</th>
             <th>Last Updated</th>
             </tr>
@@ -30,6 +31,7 @@ class RepoList extends React.Component {
             return (
               <tr key={i}>
                 <td>{repo.Alias}</td>
+                <td>{repo.Description}</td>
                 <td><Link to="repo" params={{uuid: repo.Root}}>{repo.Root}</Link></td>
                 <td>{moment(repo.Updated).format("MMM Do YYYY, h:mm:ss a")}</td>
               </tr>
