@@ -41,6 +41,16 @@ class DataInstance extends React.Component {
     var type = this.props.instance.Base.TypeName;
     var label_class = 'label lbl-' + type;
     var name = this.props.instance.Base.Name;
+    var name_url = '/api/node/' + this.props.instance.Base.RepoUUID + '/' + name + '/';
+    if (type == 'keyvalue')
+      name_url += 'keys/0/z';
+    else if (type == 'labels64')
+      name_url += 'metadata';
+    else if (type == 'roi')
+      name_url += 'roi';
+    else
+      name_url += 'info';
+    var type_url = '/api/node/' + this.props.instance.Base.RepoUUID + '/' + name + '/help';
 
     if (type === 'grayscale8' || type === 'multiscale2d' || type === 'uint8blk' || type === 'imagetile' ) {
       tile_input = <TileInput name={name}/>;
@@ -52,8 +62,8 @@ class DataInstance extends React.Component {
 
     return (
       <tr>
-        <td><a href={url}>{name}</a></td>
-        <td><span className={label_class}>{type}</span></td>
+        <th><a href={name_url} target="_blank">{name}</a></th>
+        <th><a href={type_url} target="_blank"><span className={label_class}>{type}</span></a></th>
         <td>{tile_input}</td>
         <td>{label_input}</td>
       </tr>

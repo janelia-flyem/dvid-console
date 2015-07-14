@@ -34,20 +34,20 @@
   margin-bottom: 1em;
 }
 
-.repometa h3 {
-  margin-top: 0;
-}
-
-.dataselect {
-  margin-top: 1em;
-}
-
 table.datainstances {
   border-collapse: collapse;
+  margin: 5px 0 5px 0;
 }
 
-.datainstances td, .datainstances th {
-  padding: 0.3em 1em;
+.datainstances th {
+  padding: 3px 15px 0 0;
+  text-align: left;
+  font-weight: normal;
+}
+
+.datainstances td {
+  padding: 3px 15px 0 0;
+  text-align: center;
 }
 
 /* Overrides of bootstrap */
