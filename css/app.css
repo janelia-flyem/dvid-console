@@ -113,3 +113,33 @@ table.datainstances {
   color: #fff;
 }
 
+/* dagre-d3 */
+
+g.type-locked > rect {
+  fill: #f77;
+}
+
+text {
+  font-weight: 300;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serf;
+  font-size: 14px;
+}
+
+.node rect {
+  stroke: #333;
+  stroke-width: 1.5px;
+  fill: #fff;
+}
+
+.edgeLabel rect {
+  fill: #fff;
+}
+
+.edgePath {
+  stroke: #333;
+  stroke-width: 1.5px;
+  fill: none;
+}
+.Edge {
+  lineInterpolate: 'basis';
+}
