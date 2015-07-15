@@ -15,6 +15,7 @@ var React       = require('react'),
 import Repo from './Repo.react';
 import TileMap from './TileMap.react';
 import ErrorActions from '../actions/ErrorActions';
+import ServerStore from '../stores/ServerStore';
 
 class ConsoleApp extends React.Component {
 
@@ -29,7 +30,7 @@ class ConsoleApp extends React.Component {
         <div className="container-fluid">
           <Error/>
           {/* this is the important part for route handling */}
-          <RouteHandler/>
+          <RouteHandler dvid={ServerStore.state.api}/>
         </div>
       </div>
     );

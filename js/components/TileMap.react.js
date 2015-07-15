@@ -1,38 +1,64 @@
-import React from 'react';
-import ServerStore from '../stores/ServerStore';
-import ServerActions from '../actions/ServerActions';
-import AltContainer from 'alt/AltContainer';
-import RepoMeta from './RepoMeta.react';
+var React = require('react'),
+  Router = require('react-router'),
+  TileMapArea = require('./TileMapArea.react'),
+  DataInstances = require('./DataInstances.react'),
+  RepoMeta = require('./RepoMeta.react'),
+  config = require('../utils/config');
+
+var TileMap = React.createClass({
+  mixins: [Router.State],
+
+  getInitialState: function() {
+    return {
+      uuid: this.getParams().uuid,
+      plane: this.getParams().plane,
+      tileSource: this.getParams().tileSource,
+      labelSource: this.getParams().labelSource,
+      coordinateString: this.getParams().coordinates,
+      repo: {
+        Root: this.getParams().uuid,
+        DataInstances: {}
+      }
+    };
+  },
+
+  componentWillReceiveProps: function (props) {
+    var self = this;
+    this.setState({
+      plane: this.getParams().plane,
+      coordinateString: this.getParams().coordinates
+    });
+
+  },
+
+  componentDidMount: function () {
+    this.props.dvid.get({
+      uuid: this.state.uuid,
+      endpoint: 'info',
+      callback: function(result) {
+        var repo = result;
+        if (this.isMounted()) {
+          this.setState({
+            repo: repo
+          });
+        }
+      }.bind(this)
+    });
+  },
 
 
-class TileMap extends React.Component {
-  componentDidMount() {
-    ServerActions.fetch();
-  }
-
-  render() {
+  render: function () {
     return (
-      <AltContainer store={ServerStore} >
-        <TileMapDetails uuid={this.props.params.uuid}/>
-      </AltContainer>
+      <div>
+        <RepoMeta repo={this.state.repo} uuid={this.state.uuid}/>
+        <div className="row">
+          <div className="col-sm-12">
+            <TileMapArea dvid={this.props.dvid} instances={this.state.repo.DataInstances} uuid={this.state.uuid} coordinateString={this.state.coordinateString} plane={this.state.plane} tileSource={this.state.tileSource} labelSource={this.state.labelSource} />
+          </div>
+        </div>
+      </div>
     );
   }
-}
-
-class TileMapDetails extends React.Component {
-  render() {
-    if (this.props.repos && this.props.repos.hasOwnProperty(this.props.uuid)) {
-      var repo = this.props.repos[this.props.uuid];
-      return (
-        <div>
-          <RepoMeta repo={repo}/>
-          <p>Tile viewer is in here.</p>
-        </div>
-      );
-    }
-    return ( <div></div> );
-  }
-}
-
+});
 
 module.exports = TileMap;

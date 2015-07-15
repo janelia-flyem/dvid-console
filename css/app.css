@@ -57,6 +57,71 @@ table.datainstances {
   text-align: center;
 }
 
+/*** tileviewer styling ***/
+
+.openseadragon, .data-missing {
+  background: #000;
+  width:800px;
+  height:800px;
+  margin: 0.3em 0;
+}
+
+.data-missing {
+  padding-top:45%;
+  text-align:center;
+  color:#fff;
+}
+
+.subtle {
+  color:#999;
+}
+
+.btn {
+  margin: 0 0.3em 0.3em 0;
+}
+
+.cut_plane {
+  margin-top: -4px;
+}
+
+#slider-container {
+  width: 750px;
+}
+
+#depth {
+  width: 70px;
+}
+
+.btn:focus,
+.btn:active:focus,
+.btn.active:focus,
+.btn.focus,
+.btn:active.focus,
+.btn.active.focus {
+  outline: none;
+}
+
+#volume_viewer {
+  position: absolute;
+  height: 535px;
+  width: 535px;
+  background: #000;
+  z-index: 3;
+  border: 1px solid #FF0;
+  color: #FF0;
+}
+
+.closelink {
+  float:right;
+}
+
+.bodymeta {
+  float: left;
+}
+
+/*** end tileviewer ***/
+
+
 /* Overrides of bootstrap */
 
 .label {
