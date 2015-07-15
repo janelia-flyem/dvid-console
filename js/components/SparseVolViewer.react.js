@@ -5,7 +5,7 @@ var React    = require('react'),
   dataSource = config.baseUrl();
 
  // variables for THREE
- var camera, scene, renderer;
+ var camera, scene, renderer, controls;
 
  // used to store the sparse blocks handle, so we can remove it if needed
  var blocks;
@@ -162,7 +162,7 @@ function init(state, props) {
   var plane = {};
 
 
-  for (key in state) {
+  for (var key in state) {
     if (state.hasOwnProperty(key)) {
       plane[key] = state[key];
     }
@@ -284,7 +284,7 @@ function add_sparse(uuid, scene, label, plane, color, props) {
     geometry.computeBoundingSphere();
 
     var material = new THREE.PointCloudMaterial( { size: 2, vertexColors: THREE.VertexColors } );
-    particleSystem = new THREE.PointCloud( geometry, material );
+    var particleSystem = new THREE.PointCloud( geometry, material );
 
     particleSystem.translateX(-plane.x);
     particleSystem.translateY(-plane.y);
@@ -317,7 +317,7 @@ function add_sparse_blocks(uuid, scene, label, plane, color, props) {
     var geometry        = new THREE.BoxGeometry( cube_size, cube_size, cube_size);
     color = color ? color : 0xffff00;
     var mesh            = new THREE.MeshBasicMaterial({ color: color, transparent: true, opacity: 0.4 } );
-    group               = new THREE.Object3D();
+    var group           = new THREE.Object3D();
 
     // loop over the spans and work out the dimensions
     for (var i = 0; i < spans; i++) {
