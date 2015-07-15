@@ -1,5 +1,6 @@
 import React from 'react';
 import moment from 'moment';
+import {Table} from 'react-bootstrap';
 
 class LogEntry extends React.Component {
   render(){
@@ -25,13 +26,13 @@ class RepoLog extends React.Component {
     this.props.log.reverse();
     return (
       <div className="log">
-        <table>
+        <Table striped>
           <tbody>
             {this.props.log.map(function(entry, i) {
               return <LogEntry key={i} entry={entry}/>
             })}
           </tbody>
-        </table>
+        </Table>
       </div>
     );
   }
