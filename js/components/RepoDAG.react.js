@@ -37,7 +37,7 @@ class RepoDAG extends React.Component {
     render(inner, g);
     inner.selectAll("g.node")
       .attr("title", function(v) { return g.node(v).fullname })
-      .on("mouseover",function(v) { console.log(g.node(v).log); });
+      .on("mouseenter",function(v) { console.log(g.node(v).log); });
     // Center the graph
 //    var initialScale = 0.55;
 //    zoom
