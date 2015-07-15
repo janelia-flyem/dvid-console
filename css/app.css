@@ -115,6 +115,10 @@ table.datainstances {
 
 /* dagre-d3 */
 
+svg {
+  overflow: scroll;
+}
+
 g.type-locked > rect {
   fill: #f77;
 }

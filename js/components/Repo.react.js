@@ -43,7 +43,7 @@ class RepoDetails extends React.Component {
 
           <div className="row">
             <div className="col-sm-12">
-              <RepoDAG dag={repo.DAG}/>
+              <RepoDAG repo={repo}/>
             </div>
           </div>
 

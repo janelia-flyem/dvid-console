@@ -1,48 +1,8 @@
 import React from 'react';
 import {OverlayTrigger} from 'react-bootstrap';
 import {Tooltip} from 'react-bootstrap';
-import d3 from 'd3';
-import dagreD3 from 'dagre-d3';
 
 class DataInstances extends React.Component {
-  // Dagre graph
-  componentDidMount() {
-    var g = new dagreD3.graphlib.Graph()
-      .setGraph({})
-      .setDefaultEdgeLabel(function() { return {}; });
-    g.setNode(0, { label: "Tasty",   class: "" });
-    g.setNode(1, { label: "Cow",     class: "" });
-    g.setNode(2, { label: "Burgers", class: "type-locked" });
-    g.setNode(3, { label: "Steak",   class: "type-locked" });
-    g.setNode(4, { label: "Ribs",    class: "type-locked" });
-    g.setNode(5, { label: "Pig",     class: "" });
-    g.setNode(6, { label: "Ham",     class: "type-locked" });
-    g.setNode(7, { label: "Bacon",   class: "type-locked" });
-    g.nodes().forEach(function(v) {
-      var node = g.node(v);
-      node.rx = node.ry = 5;
-    });
-    g.setEdge(0, 1)
-    g.setEdge(0, 5)
-    g.setEdge(1, 2);
-    g.setEdge(1, 3);
-    g.setEdge(1, 4);
-    g.setEdge(5, 6);
-    g.setEdge(5, 7);
-    g.setEdge(5, 4);
-    g.edges().forEach(function(v) {
-      g.setEdge(v,{lineInterpolate: 'basis',
-                   arrowheadStyle: "fill: #000"});
-    });
-    var render = new dagreD3.render();
-    var svg = d3.select("svg"),
-    svgGroup = svg.append("g");
-    render(d3.select("svg g"), g);
-    var xCenterOffset = (svg.attr("width") - g.graph().width) / 2;
-    svgGroup.attr("transform", "translate(" + xCenterOffset + ", 20)");
-    svg.attr("height", g.graph().height + 40);
-  }
-
   render() {
     var rows = [];
     if (this.props && this.props.repo.DataInstances) {
@@ -56,8 +16,6 @@ class DataInstances extends React.Component {
     }
 
     return (
-      <div>
-      <div><svg width="100%"><g/></svg></div>
       <table className="datainstances">
         <thead>
           <tr>
@@ -71,15 +29,12 @@ class DataInstances extends React.Component {
           {rows}
         </tbody>
       </table>
-      </div>
     );
   }
 }
 
 class DataInstance extends React.Component {
   render() {
-    var url = ''//config.datatypeInfoUrl(this.props.uuid, this.props.name);
-
     var tile_input = '';
     var label_input = '';
     var type = this.props.instance.Base.TypeName;
@@ -105,13 +60,10 @@ class DataInstance extends React.Component {
     var type_url = '/api/node/' + this.props.instance.Base.RepoUUID + '/' + name + '/help';
     var type_tooltip = <Tooltip placement="right">Display {type} help</Tooltip>;
 
-    if (type === 'grayscale8' || type === 'multiscale2d' || type === 'uint8blk' || type === 'imagetile' ) {
+    if (type === 'grayscale8' || type === 'multiscale2d' || type === 'uint8blk' || type === 'imagetile' )
       tile_input = <TileInput name={name}/>;
-    }
-
-    if (type === 'labels64' || type === 'labelblk') {
+    else if (type === 'labels64' || type === 'labelblk')
       label_input = <LabelInput name={name}/>;
-    }
 
     return (
       <tr>
