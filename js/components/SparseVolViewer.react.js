@@ -61,7 +61,6 @@ var SparseVolViewer = React.createClass({
         new_state['bodies'] = labelInfo.Base.Syncs[0];
         // trigger an update to the canvas if any of the properties are different
         if (update > 0) {
-          console.log(new_state);
           self.setState(new_state, function() {
             init(self.state, self.props);
             animate();
