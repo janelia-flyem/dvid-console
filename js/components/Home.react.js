@@ -22,7 +22,7 @@ class RepoList extends React.Component {
             <tr>
             <th>Alias</th>
             <th>Description</th>
-            <th>UUID</th>
+            <th>Root UUID</th>
             <th>Last Updated</th>
             </tr>
           </thead>
