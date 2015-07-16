@@ -1,6 +1,9 @@
 import React from 'react';
 import moment from 'moment';
 import {Table} from 'react-bootstrap';
+import LogStore from '../stores/LogStore';
+import LogActions from '../actions/LogActions';
+import AltContainer from 'alt/AltContainer';
 
 class LogEntry extends React.Component {
   render(){
@@ -19,24 +22,38 @@ class LogEntry extends React.Component {
   }
 }
 
-
-class RepoLog extends React.Component {
-
-  render(){
-    this.props.log.reverse();
-    return (
-      <div className="log">
+class LogTable extends React.Component {
+  render() {
+    if (this.props.current) {
+      return (
         <Table striped>
           <tbody>
-            {this.props.log.map(function(entry, i) {
+            {this.props.current.map(function(entry, i) {
               return <LogEntry key={i} entry={entry}/>
             })}
           </tbody>
         </Table>
+      );
+    }
+  }
+}
+
+
+class RepoLog extends React.Component {
+  componentDidMount() {
+    this.props.log.reverse();
+    LogActions.init(this.props.log);
+  }
+
+  render(){
+    return (
+      <div className="log">
+        <AltContainer store={LogStore}>
+          <LogTable />
+        </AltContainer>
       </div>
     );
   }
-
 }
 
 module.exports = RepoLog;

@@ -3,6 +3,7 @@ import {OverlayTrigger} from 'react-bootstrap';
 import {Tooltip} from 'react-bootstrap';
 import d3 from 'd3';
 import dagreD3 from 'dagre-d3';
+import LogActions from '../actions/LogActions';
 
 class RepoDAG extends React.Component {
   // Dagre graph
@@ -37,7 +38,8 @@ class RepoDAG extends React.Component {
     render(inner, g);
     inner.selectAll("g.node")
       .attr("title", function(v) { return g.node(v).fullname })
-      .on("mouseenter",function(v) { console.log(g.node(v).log); });
+      .on("mouseenter", function(v) { LogActions.update(g.node(v).log); })
+      .on("mouseleave", function(v) { LogActions.revert() });
     // Center the graph
 //    var initialScale = 0.55;
 //    zoom
