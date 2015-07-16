@@ -47,14 +47,16 @@ class RepoDAG extends React.Component {
 //      .scale(initialScale)
 //      .event(svg);
 //    svg.attr('height', g.graph().height * initialScale + 40);
-    svg.attr('width', g.graph().width * .75);
-    svg.attr('height', g.graph().height * .75);
+    svg.attr('width', g.graph().width * 1);
+    svg.attr('height', g.graph().height * 1);
   }
 
   render() {
+    var smallStyle = { fontSize: '10pt' };
     return (
       <div>
-      <h4>Version DAG</h4>
+      <h4>Version DAG <span style={smallStyle}> (nodes in red are locked)</span></h4>
+      Mouse over a node to view the log
       <div className="dag"><svg width="100%"><g/></svg></div>
       </div>
     );
