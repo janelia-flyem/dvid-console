@@ -23,16 +23,38 @@ class LogEntry extends React.Component {
 }
 
 class LogTable extends React.Component {
+
   render() {
+
     if (this.props.current) {
+      var log = this.props.current;
+      var span = null;
+
+      if (log.length > 1) {
+        var oldest = moment(log[0].split(' ', 1)[0]);
+        var newest = moment(log[log.length -1].split(' ', 1)[0]);
+        var span = 'covering ' + moment.duration(newest.diff(oldest)).humanize();
+      }
       return (
-        <Table striped>
-          <tbody>
-            {this.props.current.map(function(entry, i) {
-              return <LogEntry key={i} entry={entry}/>
-            })}
-          </tbody>
-        </Table>
+        <div>
+          <div className="row">
+            <div className="col-sm-6">
+              <p><b>Log:</b></p>
+            </div>
+            <div className="col-sm-6 text-right">
+              <p>{log.length} {log.length > 1 ? 'entries':' entry'} {span}</p>
+            </div>
+          </div>
+          <div className="log">
+            <Table striped>
+              <tbody>
+                {log.map(function(entry, i) {
+                  return <LogEntry key={i} entry={entry}/>
+                })}
+              </tbody>
+            </Table>
+          </div>
+        </div>
       );
     }
   }
@@ -47,11 +69,9 @@ class RepoLog extends React.Component {
 
   render(){
     return (
-      <div className="log">
-        <AltContainer store={LogStore}>
-          <LogTable />
-        </AltContainer>
-      </div>
+      <AltContainer store={LogStore}>
+        <LogTable />
+      </AltContainer>
     );
   }
 }
