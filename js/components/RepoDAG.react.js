@@ -47,6 +47,8 @@ class RepoDAG extends React.Component {
 //      .scale(initialScale)
 //      .event(svg);
 //    svg.attr('height', g.graph().height * initialScale + 40);
+    svg.attr('width', g.graph().width * .75);
+    svg.attr('height', g.graph().height * .75);
   }
 
   render() {
