@@ -48,15 +48,10 @@ var TileMapArea = React.createClass({
     var self = this;
     var dataIsTiled = false;
 
+    /* This checks to see if we already have a tile viewer in the page.
+     * If we do, then the work here is done, so return.
+     */
     if (viewer && viewer.xy) {
-      if (props.coordinateString && self.state.url_update) {
-        var coordinates = props.coordinateString.split('_');
-        var dataPoint = new OpenSeadragon.Point(parseInt(coordinates[0]),parseInt(coordinates[1]));
-        var logicalPoint = img_helper.dataToLogicalPoint(dataPoint);
-        img_helper.centerAboutLogicalPoint(logicalPoint, true);
-        self.setState({layer: coordinates[2]});
-        self.handleLayerChange(coordinates[2]);
-      }
       return;
     }
 
