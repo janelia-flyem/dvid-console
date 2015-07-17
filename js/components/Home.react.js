@@ -30,9 +30,9 @@ class RepoList extends React.Component {
           {repo_list.map((repo, i) => {
             return (
               <tr key={i}>
-                <td>{repo.Alias}</td>
+                <td><Link to="repo" params={{uuid: repo.Root}}>{repo.Alias}</Link></td>
                 <td>{repo.Description}</td>
-                <td><Link to="repo" params={{uuid: repo.Root}}>{repo.Root}</Link></td>
+                <td>{repo.Root}</td>
                 <td>{moment(repo.Updated).format("MMM Do YYYY, h:mm:ss a")}</td>
               </tr>
             );
