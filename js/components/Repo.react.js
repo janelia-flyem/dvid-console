@@ -3,7 +3,6 @@ import Router from 'react-router';
 import ServerStore from '../stores/ServerStore';
 import ServerActions from '../actions/ServerActions';
 import AltContainer from 'alt/AltContainer';
-import moment from 'moment';
 import RepoDAG from './RepoDAG.react';
 import InstanceSelect from './InstanceSelect.react';
 import RepoLog from './RepoLog.react';

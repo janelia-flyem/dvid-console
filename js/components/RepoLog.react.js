@@ -1,6 +1,6 @@
 import React from 'react';
 import moment from 'moment';
-import {Table} from 'react-bootstrap';
+import {Table, Button} from 'react-bootstrap';
 import LogStore from '../stores/LogStore';
 import LogActions from '../actions/LogActions';
 import AltContainer from 'alt/AltContainer';
@@ -24,22 +24,33 @@ class LogEntry extends React.Component {
 
 class LogTable extends React.Component {
 
+  handleLogRestore(e) {
+    LogActions.revert();
+    e.preventDefault();
+  }
+
   render() {
 
     if (this.props.current) {
       var log = this.props.current;
-      var span = null;
+      var span = null,
+        restore = null;
 
       if (log.length > 1) {
         var oldest = moment(log[0].split(' ', 1)[0]);
         var newest = moment(log[log.length -1].split(' ', 1)[0]);
         var span = 'covering ' + moment.duration(newest.diff(oldest)).humanize();
       }
+
+      if (this.props.current[0] !== this.props.orig[0] ) {
+        restore = <a className="" href="" onClick={this.handleLogRestore}><small>restore full log</small></a>;
+      }
+
       return (
         <div>
-          <div className="row">
+          <div className="row log-meta">
             <div className="col-sm-6">
-              <p><b>Log:</b></p>
+              <p><b>Log:</b> {restore}</p>
             </div>
             <div className="col-sm-6 text-right">
               <p>{log.length} {log.length > 1 ? 'entries':' entry'} {span}</p>
