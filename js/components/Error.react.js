@@ -6,10 +6,10 @@ import AltContainer from 'alt/AltContainer';
 
 class ErrorMessage extends React.Component {
   render() {
-    if (this.props.errors.length) {
+    if (this.props.errors) {
       return (
         <Alert bsStyle='danger' onDismiss={this.handleDismiss.bind(this)}>
-          <p>{this.props.errors[0]}</p>
+          <p>{this.props.errors}</p>
         </Alert>
       );
     }

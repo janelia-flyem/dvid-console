@@ -4,7 +4,7 @@ import ServerActions from '../actions/ServerActions';
 import ServerStore from '../stores/ServerStore';
 import AltContainer from 'alt/AltContainer';
 import moment from 'moment';
-import {Table} from 'react-bootstrap';
+import {Table, Button, Glyphicon} from 'react-bootstrap';
 
 class RepoList extends React.Component {
   render() {
@@ -32,7 +32,7 @@ class RepoList extends React.Component {
               <tr key={i}>
                 <td><Link to="repo" params={{uuid: repo.Root}}>{repo.Alias}</Link></td>
                 <td>{repo.Description}</td>
-                <td>{repo.Root}</td>
+                <td><Link to="repo" params={{uuid: repo.Root}}>{repo.Root}</Link></td>
                 <td>{moment(repo.Updated).format("MMM Do YYYY, h:mm:ss a")}</td>
               </tr>
             );
@@ -58,10 +58,23 @@ class Home extends React.Component {
 
   render() {
     return (
-      <AltContainer store={ServerStore}>
-        <h1>Repositories</h1>
-        <RepoList/>
-      </AltContainer>
+      <div className="homepage">
+        <div className="row">
+          <div className="col-sm-6">
+            <h1>Repositories</h1>
+          </div>
+          <div className="col-sm-6 text-right newrepo">
+            <Button bsStyle="primary" href="/#/repo"><Glyphicon glyph="plus" /> New Repository</Button>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-sm-12">
+            <AltContainer store={ServerStore}>
+              <RepoList/>
+            </AltContainer>
+          </div>
+        </div>
+      </div>
     );
   }
 }

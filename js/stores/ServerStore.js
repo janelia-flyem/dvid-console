@@ -8,7 +8,7 @@ class ServerStore {
     this.bindActions(ServerActions);
     this.repos = null;
     this.stats = null;
-    this.api = dvid.connect({host:'emdata1', port: 8500});
+    this.api = dvid.connect();
 
    this.exportPublicMethods({
      getLoad: this.getLoad

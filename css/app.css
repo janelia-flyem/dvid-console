@@ -46,6 +46,10 @@
   margin-top: 1em;
 }
 
+.newrepo {
+  padding-top: 1em;
+}
+
 table.datainstances {
   border-collapse: collapse;
   margin: 5px 0 5px 0;

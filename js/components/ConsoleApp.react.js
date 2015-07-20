@@ -13,6 +13,7 @@ var React       = require('react'),
   Error         = require('./Error.react');
 
 import Repo from './Repo.react';
+import NewRepo from './NewRepo.react';
 import TileMap from './TileMap.react';
 import ErrorActions from '../actions/ErrorActions';
 import ServerStore from '../stores/ServerStore';
@@ -42,6 +43,7 @@ var routes = (
     <DefaultRoute handler={Home}/>
     <Route name="admin" path="admin" handler={Admin}/>
     <Route name="about" path="about" handler={About}/>
+    <Route name="newrepo"  path="repo"  handler={NewRepo}/>
     <Route name="repo"  path="repo/:uuid"  handler={Repo}/>
     <Route name="tilemap" path="/repo/:uuid/ts/:tileSource/ls/:labelSource" handler={TileMap}/>
     <Route name="tilemapwithcoords" path="/repo/:uuid/ts/:tileSource/ls/:labelSource/:plane/:coordinates" handler={TileMap}/>

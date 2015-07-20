@@ -4,14 +4,14 @@ import ErrorActions from '../actions/ErrorActions';
 class ErrorStore {
   constructor() {
     this.bindActions(ErrorActions);
-    this.errors = [];
+    this.errors = null;
     this.persist = false;
   }
   onUpdate(error) {
-    this.errors.push(error);
+    this.errors = error;
   }
   onClear() {
-    this.errors = [];
+    this.errors = null;
   }
 }
 
