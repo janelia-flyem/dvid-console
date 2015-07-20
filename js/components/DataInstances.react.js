@@ -1,6 +1,4 @@
 import React from 'react';
-import {OverlayTrigger} from 'react-bootstrap';
-import {Tooltip} from 'react-bootstrap';
 
 class DataInstances extends React.Component {
   render() {
@@ -34,6 +32,11 @@ class DataInstances extends React.Component {
 }
 
 class DataInstance extends React.Component {
+
+  componentDidMount() {
+    $('[data-toggle="tooltip"]').tooltip();
+  }
+
   render() {
     var tile_input = '';
     var label_input = '';
@@ -54,11 +57,13 @@ class DataInstance extends React.Component {
       name_url += 'roi';
       info = 'ROI coords';
     }
-    else
+    else {
       name_url += 'info';
-    var name_tooltip = <Tooltip placement="right">Display {info}</Tooltip>;
+    }
+
+    var name_tooltip = 'Display ' + info;
     var type_url = '/api/node/' + this.props.instance.Base.RepoUUID + '/' + name + '/help';
-    var type_tooltip = <Tooltip placement="right">Display {type} help</Tooltip>;
+    var type_tooltip = 'Display ' + type + ' help';
 
     if (type === 'grayscale8' || type === 'multiscale2d' || type === 'uint8blk' || type === 'imagetile' )
       tile_input = <TileInput name={name}/>;
@@ -67,8 +72,8 @@ class DataInstance extends React.Component {
 
     return (
       <tr>
-        <th><OverlayTrigger delayShow={300} delayHide={150} overlay={name_tooltip}><a href={name_url} target="_blank">{name}</a></OverlayTrigger></th>
-        <th><OverlayTrigger delayShow={300} delayHide={150} overlay={type_tooltip}><a href={type_url} target="_blank"><span className={label_class}>{type}</span></a></OverlayTrigger></th>
+        <th><a href={name_url} target="_blank" data-toggle="tooltip" data-placement="right" title={name_tooltip}>{name}</a></th>
+        <th><a href={type_url} target="_blank" data-toggle="tooltip" data-placement="right" title={type_tooltip}><span className={label_class}>{type}</span></a></th>
         <td>{tile_input}</td>
         <td>{label_input}</td>
       </tr>
