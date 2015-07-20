@@ -1,13 +1,17 @@
 import React from 'react';
+import Router from 'react-router';
 import {OverlayTrigger} from 'react-bootstrap';
 import {Tooltip} from 'react-bootstrap';
 import d3 from 'd3';
 import dagreD3 from 'dagre-d3';
 import LogActions from '../actions/LogActions';
 
-class RepoDAG extends React.Component {
-  // Dagre graph
-  componentDidMount() {
+// Dagre graph
+var RepoDAG  = React.createClass({
+  mixins: [Router.Navigation],
+
+  componentDidMount: function() {
+    var self = this;
     var g = new dagreD3.graphlib.Graph().setGraph({});
     $.each(this.props.repo.DAG.Nodes,function (name,n) {
       var version = n.VersionID;
@@ -17,11 +21,14 @@ class RepoDAG extends React.Component {
       var nodeclass = "";
       if (n.Locked)
         nodeclass = "type-locked";
-      g.setNode(version,{ label: version + ': ' + name.substr(0,5),
-                          class: nodeclass,
-                          rx: 5, ry: 5,
-                          log: log,
-                          fullname: version + ': ' + name});
+      g.setNode(version,{
+        label: version + ': ' + name.substr(0,5),
+        class: nodeclass,
+        rx: 5, ry: 5,
+        log: log,
+        fullname: version + ': ' + name,
+        uuid: name
+      });
       $.each(n.Children,function (c) {
         g.setEdge(version,n.Children[c],{ lineInterpolate: 'basis', arrowheadStyle: "fill: #000"});
       });
@@ -38,7 +45,10 @@ class RepoDAG extends React.Component {
     render(inner, g);
     inner.selectAll("g.node")
       .attr("title", function(v) { return g.node(v).fullname })
-      .on("mouseenter", function(v) { if (g.node(v).log.length > 0) { LogActions.update(g.node(v).log); }});
+      .on("mouseenter", function(v) { if (g.node(v).log.length > 0) { LogActions.update(g.node(v).log); }})
+      .on("click", function(v) {
+        self.transitionTo( 'repo', { uuid: g.node(v).uuid } );
+      });
     // Center the graph
 //    var initialScale = 0.55;
 //    zoom
@@ -48,9 +58,9 @@ class RepoDAG extends React.Component {
 //    svg.attr('height', g.graph().height * initialScale + 40);
     svg.attr('width', g.graph().width * 1);
     svg.attr('height', g.graph().height * 1);
-  }
+  },
 
-  render() {
+  render: function() {
     var smallStyle = { fontSize: '10pt' };
     return (
       <div>
@@ -60,7 +70,7 @@ class RepoDAG extends React.Component {
       </div>
     );
   }
-}
+});
 
 
 module.exports = RepoDAG;
