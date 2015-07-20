@@ -34,7 +34,8 @@ class LogTable extends React.Component {
     if (this.props.current) {
       var log = this.props.current;
       var span = null,
-        restore = null;
+        restore = null,
+        title = <p><b>Log:</b></p>;
 
       if (log.length > 1) {
         var oldest = moment(log[0].split(' ', 1)[0]);
@@ -43,14 +44,14 @@ class LogTable extends React.Component {
       }
 
       if (this.props.current[0] !== this.props.orig[0] ) {
-        restore = <a className="" href="" onClick={this.handleLogRestore}><small>restore full log</small></a>;
+        title = <p><b>Node Log:</b> <a className="" href="" onClick={this.handleLogRestore}><small>restore repo log</small></a></p>;
       }
 
       return (
         <div>
           <div className="row log-meta">
             <div className="col-sm-6">
-              <p><b>Log:</b> {restore}</p>
+            {title}
             </div>
             <div className="col-sm-6 text-right">
               <p>{log.length} {log.length > 1 ? 'entries':' entry'} {span}</p>
