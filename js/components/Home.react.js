@@ -16,30 +16,42 @@ class RepoList extends React.Component {
         }
       }
 
-      return (
-        <Table striped bordered condensed>
-          <thead>
-            <tr>
-            <th>Alias</th>
-            <th>Description</th>
-            <th>Root UUID</th>
-            <th>Last Updated</th>
-            </tr>
-          </thead>
-          <tbody>
-          {repo_list.map((repo, i) => {
-            return (
-              <tr key={i}>
-                <td><Link to="repo" params={{uuid: repo.Root}}>{repo.Alias}</Link></td>
-                <td>{repo.Description}</td>
-                <td><Link to="repo" params={{uuid: repo.Root}}>{repo.Root}</Link></td>
-                <td>{moment(repo.Updated).format("MMM Do YYYY, h:mm:ss a")}</td>
+      if (repo_list.length === 0) {
+        return (
+          <div className="text-center empty">
+            <h4>There have been no repositories created on this server.</h4>
+            <p>Use the "New Repository" button above to create one now.</p>
+          </div>
+        );
+      }
+      else {
+        return (
+          <Table striped bordered condensed>
+            <thead>
+              <tr>
+              <th>Alias</th>
+              <th>Description</th>
+              <th>Root UUID</th>
+              <th>Last Updated</th>
               </tr>
-            );
-          })}
-          </tbody>
-        </Table>
-      );
+            </thead>
+            <tbody>
+            {repo_list.map((repo, i) => {
+              if (repo) {
+                return (
+                  <tr key={i}>
+                    <td><Link to="repo" params={{uuid: repo.Root}}>{repo.Alias}</Link></td>
+                    <td>{repo.Description}</td>
+                    <td><Link to="repo" params={{uuid: repo.Root}}>{repo.Root}</Link></td>
+                    <td>{moment(repo.Updated).format("MMM Do YYYY, h:mm:ss a")}</td>
+                  </tr>
+                );
+              }
+            })}
+            </tbody>
+          </Table>
+        );
+      }
     }
 
     return (

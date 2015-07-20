@@ -18,6 +18,10 @@
   border-bottom-right-radius: 2px;
 }
 
+.empty {
+  padding: 8em;
+}
+
 .log .timestamp {
   width: 14em;
 }
