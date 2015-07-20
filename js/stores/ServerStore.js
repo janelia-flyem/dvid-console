@@ -8,7 +8,8 @@ class ServerStore {
     this.bindActions(ServerActions);
     this.repos = null;
     this.stats = null;
-    this.api = dvid.connect();
+    this.api = dvid.connect({host:'emdata1', port: 8500});
+    this.repo = null;
 
    this.exportPublicMethods({
      getLoad: this.getLoad
@@ -29,17 +30,33 @@ class ServerStore {
     });
   }
 
-  onFetch(msg) {
+  onFetch(uuid) {
     var self = this;
-    self.api.reposInfo({
-      callback: function(data) {
-        self.repos = data;
-        self.emitChange();
-      },
-      error: function (err) {
-        ErrorActions.update(err);
-      }
-    });
+
+    if (uuid) {
+      self.api.get({
+        uuid: uuid,
+        endpoint: 'info',
+        callback: function(data) {
+          self.repo = data;
+          self.emitChange();
+        },
+        error: function (err) {
+          ErrorActions.update(err);
+        }
+      });
+    }
+    else {
+      self.api.reposInfo({
+        callback: function(data) {
+          self.repos = data;
+          self.emitChange();
+        },
+        error: function (err) {
+          ErrorActions.update(err);
+        }
+      });
+    }
   }
 
   getLoad(callback) {

@@ -24,7 +24,7 @@ var InstanceSelect = React.createClass({
     // generate a new url with the choices made and ...
     // redirect the browser
     this.transitionTo('tilemap', {
-      uuid : this.props.repo.Root,
+      uuid : this.props.uuid,
       tileSource : tile_source,
       labelSource : label_source
     });

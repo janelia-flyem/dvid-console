@@ -7,8 +7,8 @@ class ServerActions {
   fetchStats() {
     this.dispatch();
   }
-  fetch() {
-    this.dispatch('message');
+  fetch(uuid) {
+    this.dispatch(uuid);
   }
 }
 

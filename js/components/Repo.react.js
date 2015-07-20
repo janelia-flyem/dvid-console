@@ -11,24 +11,24 @@ import RepoMeta from './RepoMeta.react';
 
 class RepoDetails extends React.Component {
   render() {
-    if (this.props.repos && this.props.repos.hasOwnProperty(this.props.uuid)) {
-      var repo = this.props.repos[this.props.uuid];
+    if (this.props.repo) {
+      var repo = this.props.repo;
 
       return (
         <div>
-          <RepoMeta repo={repo}/>
+          <RepoMeta repo={repo} uuid={this.props.uuid}/>
 
           <RepoLog log={repo.Log}/>
 
           <div className="row">
             <div className="col-sm-12">
-              <RepoDAG repo={repo}/>
+              <RepoDAG repo={repo} uuid={this.props.uuid}/>
             </div>
           </div>
 
           <div className="row">
             <div className="col-sm-12">
-              <InstanceSelect repo={repo}/>
+              <InstanceSelect repo={repo} uuid={this.props.uuid}/>
             </div>
           </div>
 
@@ -37,7 +37,9 @@ class RepoDetails extends React.Component {
     }
 
     return (
-      <div></div>
+      <div>
+        <p>Repository not found.</p>
+      </div>
     );
   }
 }
@@ -45,7 +47,7 @@ class RepoDetails extends React.Component {
 
 class Repo extends React.Component {
   componentDidMount() {
-    ServerActions.fetch();
+    ServerActions.fetch(this.props.params.uuid);
   }
 
   render() {
