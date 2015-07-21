@@ -33,6 +33,7 @@
     "moment": "^2.10.3",
     "react": "^0.13.3",
     "react-bootstrap": "^0.23.7",
-    "react-router": "^0.13.3"
+    "react-router": "^0.13.3",
+    "three": "^0.71.0"
   }
 }
