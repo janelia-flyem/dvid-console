@@ -9,16 +9,23 @@ var TileMap = React.createClass({
   mixins: [Router.State],
 
   getInitialState: function() {
+    var repo = {
+      Root: this.getParams().uuid,
+      DAG: {
+        Nodes: {}
+      },
+      DataInstances: {}
+    };
+
+    repo.DAG.Nodes[this.getParams().uuid] = 'loading';
+
     return {
       uuid: this.getParams().uuid,
       plane: this.getParams().plane,
       tileSource: this.getParams().tileSource,
       labelSource: this.getParams().labelSource,
       coordinateString: this.getParams().coordinates,
-      repo: {
-        Root: this.getParams().uuid,
-        DataInstances: {}
-      }
+      repo: repo
     };
   },
 
