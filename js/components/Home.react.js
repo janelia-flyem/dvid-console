@@ -83,7 +83,7 @@ class Home extends React.Component {
             <h1>Repositories</h1>
           </div>
           <div className="col-sm-6 text-right newrepo">
-            <Button bsStyle="primary" href="/#/repo"><Glyphicon glyph="plus" /> New Repository</Button>
+            {/*<Button bsStyle="primary" href="/#/repo"><Glyphicon glyph="plus" /> New Repository</Button>*/}
           </div>
         </div>
         <div className="row">
