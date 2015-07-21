@@ -10,11 +10,18 @@ class RepoList extends React.Component {
   render() {
     if (this.props.repos) {
       var repo_list = [];
+
       for (var key in this.props.repos) {
         if (this.props.repos.hasOwnProperty(key)) {
           repo_list.push(this.props.repos[key]);
         }
       }
+
+      // sort the list so that the repositories with the most recent
+      // changes are at the top.
+      repo_list.sort(function(a,b){
+        return new Date(b.Updated) - new Date(a.Updated);
+      });
 
       if (repo_list.length === 0) {
         return (
