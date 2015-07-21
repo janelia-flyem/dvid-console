@@ -49,28 +49,53 @@ var RepoDAG  = React.createClass({
       });
       var render = new dagreD3.render();
       var inner = svg.append("g");
-      // Set up zoom support
-      var zoom = d3.behavior.zoom().on("zoom", function() {
-        inner.attr("transform", "translate(" + d3.event.translate + ")" +
-                  "scale(" + d3.event.scale + ")");
-      });
-      svg.call(zoom);
+
       render(inner, g);
+
+      svg.attr('width', 700);
+      svg.attr('height', 300);
+
+      // determine which dimension is hte biggest and use that
+      // to scale the graph to fit the window.
+      var useWidth = null;
+      if ( g.graph().width > g.graph().height) {
+        useWidth = true;
+      }
+
+      // figure out the scale ratio that will be used to resize the graph.
+      var scale = 1;
+      if (useWidth) {
+        scale = svg.attr("width") / g.graph().width;
+      } else {
+        scale = svg.attr("height") / g.graph().height ;
+      }
+
+      // work out the offset needed to center the graph
+      var xCenterOffset = Math.abs(((g.graph().width * scale) - svg.attr("width")) / 2);
+
+      // apply the scale and translation in one go.
+      inner.attr("transform", "matrix(" + scale + ", 0, 0, " + scale + ", " + xCenterOffset + ", 0)");
+
       inner.selectAll("g.node")
         .attr("title", function(v) { return g.node(v).fullname })
         .on("mouseenter", function(v) { if (g.node(v).log.length > 0) { LogActions.update(g.node(v).log); }})
         .on("click", function(v) {
           self.transitionTo( 'repo', { uuid: g.node(v).uuid } );
         });
-      // Center the graph
-  //    var initialScale = 0.55;
-  //    zoom
-  //      .translate([(svg.attr("width") - g.graph().width * initialScale) / 2, 20])
-  //      .scale(initialScale)
-  //      .event(svg);
-  //    svg.attr('height', g.graph().height * initialScale + 40);
-      svg.attr('width', g.graph().width * 1);
-      svg.attr('height', g.graph().height * 1);
+
+      // Set up zoom support
+      function zoomed() {
+        inner.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+      }
+
+      var zoom = d3.behavior.zoom()
+        .translate([xCenterOffset, 0])
+        .scale(scale)
+        //stop the graphic from being zoomed in super close.
+        .scaleExtent([0,1])
+        .on("zoom", zoomed);
+
+      svg.call(zoom);
     }
   },
 

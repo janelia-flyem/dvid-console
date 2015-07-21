@@ -193,6 +193,13 @@ table.datainstances {
 
 /* dagre-d3 */
 
+.dag svg {
+  border: 1px solid #ccc;
+}
+.dag {
+  text-align: center;
+}
+
 svg {
   overflow: scroll;
 }
