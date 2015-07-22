@@ -56,7 +56,7 @@ class StatsDisplay extends React.Component {
           </div>
           <div className="col-md-3 col-sm-6">
             <div className="panel panel-default">
-              <div className="panel-heading">DVID Version</div>
+              <div className="panel-heading"><Glyphicon glyph="bookmark"/> DVID Version</div>
               <div className="panel-body">
                 <a href={gitLink}>{this.props.stats["DVID Version"]}</a>
               </div>
@@ -64,7 +64,7 @@ class StatsDisplay extends React.Component {
           </div>
           <div className="col-md-3 col-sm-6">
             <div className="panel panel-default">
-              <div className="panel-heading">Storage Backend</div>
+              <div className="panel-heading"><Glyphicon glyph="hdd"/> Storage Backend</div>
               <div className="panel-body smaller">
               {this.props.stats["Storage backend"]}
               </div>
@@ -72,7 +72,7 @@ class StatsDisplay extends React.Component {
           </div>
           <div className="col-md-3 col-sm-6">
             <div className="panel panel-default">
-              <div className="panel-heading">Datastore Version</div>
+              <div className="panel-heading"><Glyphicon glyph="bookmark"/> Datastore Version</div>
               <div className="panel-body">
               {this.props.stats["Datastore Version"]}
               </div>

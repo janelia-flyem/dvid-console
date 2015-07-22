@@ -78,6 +78,7 @@ table.datainstances {
   text-align:center;
   font-size:2em;
   color:#666;
+  height:70px;
 }
 
 .serverstats .glyphicon {
