@@ -3,6 +3,7 @@ import Router from 'react-router';
 import ServerActions from '../actions/ServerActions';
 import ServerStore from '../stores/ServerStore';
 import AltContainer from 'alt/AltContainer';
+import {Glyphicon} from 'react-bootstrap';
 
 
 class StatsDisplay extends React.Component {
@@ -19,17 +20,37 @@ class StatsDisplay extends React.Component {
 
       return (
         <div className="serverstats row">
-          <div className="col-sm-2">
-            <button className="btn btn-primary btn-large">Cores <span className="badge">{this.props.stats.Cores}</span></button>
+          <div className="col-md-3 col-sm-6">
+            <div className="panel panel-default">
+              <div className="panel-heading"><Glyphicon glyph="tasks"/> DVID CPU Cores</div>
+              <div className="panel-body">
+                {this.props.stats.Cores}
+              </div>
+            </div>
           </div>
-          <div className="col-sm-2 col-sm-offset-1">
-            <button className="btn btn-primary btn-large">Repos <span className="badge">{Object.keys(this.props.repos).length}</span></button>
+          <div className="col-md-3 col-sm-6">
+            <div className="panel panel-default">
+              <div className="panel-heading"><Glyphicon glyph="folder-open"/> Repositories</div>
+              <div className="panel-body">
+                {Object.keys(this.props.repos).length}
+              </div>
+            </div>
           </div>
-          <div className="col-sm-2 col-sm-offset-1">
-            <button className="btn btn-primary btn-large">Uptime <span className="badge"> {this.props.stats['Server uptime'].split('.', 1) + 's'}</span></button>
+          <div className="col-md-3 col-sm-6">
+            <div className="panel panel-default">
+              <div className="panel-heading"><Glyphicon glyph="time"/> Server Uptime</div>
+              <div className="panel-body">
+                {this.props.stats['Server uptime'].split('.', 1) + 's'}
+              </div>
+            </div>
           </div>
-          <div className="col-sm-2 col-sm-offset-1">
-            <button className="btn btn-primary btn-large">Version Nodes <span className="badge">{versionNodes}</span></button>
+          <div className="col-md-3 col-sm-6">
+            <div className="panel panel-default">
+              <div className="panel-heading"><Glyphicon glyph="tags"/> Version Nodes</div>
+              <div className="panel-body">
+                {versionNodes}
+              </div>
+            </div>
           </div>
         </div>
       );

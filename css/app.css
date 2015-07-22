@@ -70,6 +70,18 @@ table.datainstances {
   text-align: center;
 }
 
+.serverstats .panel-body {
+  text-align:center;
+  font-size:2em;
+  color:#666;
+}
+
+.serverstats .glyphicon {
+  margin-right: 0.5em;
+  float:right;
+  color: #666;
+}
+
 /*** tileviewer styling ***/
 
 .openseadragon, .data-missing {
