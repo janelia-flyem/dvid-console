@@ -51,6 +51,10 @@ var chartOptions = {
   xaxis: { show: false },
   legend: {
     position: 'nw'
+  },
+  grid: {
+    borderWidth: 1,
+    borderColor: '#ccc'
   }
 };
 
