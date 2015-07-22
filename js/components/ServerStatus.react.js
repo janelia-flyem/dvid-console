@@ -138,7 +138,12 @@ class ServerStatus extends React.Component {
 
   render() {
     return (
-      <div className="usageChart"></div>
+      <div className="panel panel-default">
+        <div className="panel-heading">Monitoring</div>
+        <div className="panel-body">
+          <div className="usageChart"></div>
+        </div>
+      </div>
     );
   }
 }

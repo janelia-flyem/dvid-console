@@ -22,7 +22,6 @@ class Admin extends React.Component {
       <div>
         <h1>Server Stats</h1>
         <ServerStats/>
-        <h2>Monitoring</h2>
         <ServerStatus/>
       </div>
     );
