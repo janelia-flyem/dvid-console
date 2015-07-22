@@ -29,8 +29,11 @@
 
 .log {
   overflow: auto;
-  height: 10.8em;
-  border: 2px solid #ccc;
+  height: 10.6em;
+}
+
+.log {
+  padding: 0;
 }
 
 .log-meta button {

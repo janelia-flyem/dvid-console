@@ -35,7 +35,7 @@ class LogTable extends React.Component {
       var log = this.props.current;
       var span = null,
         restore = null,
-        title = <p><b>Log:</b></p>;
+        title = <span><b>Log:</b></span>;
 
       if (log.length > 1) {
         var oldest = moment(log[0].split(' ', 1)[0]);
@@ -44,20 +44,17 @@ class LogTable extends React.Component {
       }
 
       if (this.props.current[0] !== this.props.orig[0] ) {
-        title = <p><b>Node Log:</b> <a className="" href="" onClick={this.handleLogRestore}><small>restore repo log</small></a></p>;
+        title = <span><b>Node Log:</b> <a className="" href="" onClick={this.handleLogRestore}><small>restore repo log</small></a></span>;
       }
 
       return (
         <div>
-          <div className="row log-meta">
-            <div className="col-sm-6">
-            {title}
+          <div className="panel panel-default">
+            <div className="panel-heading">
+              {title}
+              <span className="pull-right">{log.length} {log.length > 1 ? 'entries':' entry'} {span}</span>
             </div>
-            <div className="col-sm-6 text-right">
-              <p>{log.length} {log.length > 1 ? 'entries':' entry'} {span}</p>
-            </div>
-          </div>
-          <div className="log">
+            <div className="panel-body log">
             <Table striped>
               <tbody>
                 {log.map(function(entry, i) {
@@ -65,6 +62,7 @@ class LogTable extends React.Component {
                 })}
               </tbody>
             </Table>
+            </div>
           </div>
         </div>
       );
