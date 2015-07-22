@@ -18,13 +18,15 @@ class StatsDisplay extends React.Component {
         }
       }
 
+      var gitLink = "https://github.com/janelia-flyem/dvid/commit/" + this.props.stats['DVID Version'];
+
       return (
         <div className="serverstats row">
           <div className="col-md-3 col-sm-6">
             <div className="panel panel-default">
               <div className="panel-heading"><Glyphicon glyph="tasks"/> DVID CPU Cores</div>
               <div className="panel-body">
-                {this.props.stats.Cores}
+                {this.props.stats.Cores} <small>out of {this.props.stats["Maximum Cores"]}</small>
               </div>
             </div>
           </div>
@@ -49,6 +51,30 @@ class StatsDisplay extends React.Component {
               <div className="panel-heading"><Glyphicon glyph="tags"/> Version Nodes</div>
               <div className="panel-body">
                 {versionNodes}
+              </div>
+            </div>
+          </div>
+          <div className="col-md-3 col-sm-6">
+            <div className="panel panel-default">
+              <div className="panel-heading">DVID Version</div>
+              <div className="panel-body">
+                <a href={gitLink}>{this.props.stats["DVID Version"]}</a>
+              </div>
+            </div>
+          </div>
+          <div className="col-md-3 col-sm-6">
+            <div className="panel panel-default">
+              <div className="panel-heading">Storage Backend</div>
+              <div className="panel-body smaller">
+              {this.props.stats["Storage backend"]}
+              </div>
+            </div>
+          </div>
+          <div className="col-md-3 col-sm-6">
+            <div className="panel panel-default">
+              <div className="panel-heading">Datastore Version</div>
+              <div className="panel-body">
+              {this.props.stats["Datastore Version"]}
               </div>
             </div>
           </div>
