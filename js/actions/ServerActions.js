@@ -7,6 +7,9 @@ class ServerActions {
   fetchStats() {
     this.dispatch();
   }
+  fetchTypes() {
+    this.dispatch();
+  }
   fetch(uuid) {
     this.dispatch(uuid);
   }

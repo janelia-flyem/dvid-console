@@ -10,6 +10,7 @@ class ServerStore {
     this.stats = null;
     this.api = dvid.connect({host:'emdata1', port: 8500});
     this.repo = null;
+    this.types = null;
 
    this.exportPublicMethods({
      getLoad: this.getLoad
@@ -22,6 +23,19 @@ class ServerStore {
     self.api.serverInfo({
       callback: function(data) {
         self.stats = data;
+        self.emitChange();
+      },
+      error: function (err) {
+        ErrorActions.update(err);
+      }
+    });
+  }
+
+  onFetchTypes() {
+    var self = this;
+    self.api.serverTypes({
+      callback: function(data) {
+        self.types = data;
         self.emitChange();
       },
       error: function (err) {

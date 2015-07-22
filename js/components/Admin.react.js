@@ -1,6 +1,7 @@
 import React from 'react';
 import ServerStatus from './ServerStatus.react';
 import ServerStats from './ServerStats.react';
+import ServerTypes from './ServerTypes.react';
 
 class Admin extends React.Component {
   constructor() {
@@ -23,6 +24,7 @@ class Admin extends React.Component {
         <h1>Server Stats</h1>
         <ServerStats/>
         <ServerStatus/>
+        <ServerTypes/>
       </div>
     );
   }
