@@ -1,5 +1,5 @@
 import React from 'react';
-import Router from 'react-router';
+import {Router, Link} from 'react-router';
 import ServerStore from '../stores/ServerStore';
 import ServerActions from '../actions/ServerActions';
 import AltContainer from 'alt/AltContainer';
@@ -16,6 +16,10 @@ class RepoDetails extends React.Component {
 
       return (
         <div>
+          <ol className="breadcrumb">
+            <li><Link to="consoleapp">Home</Link></li>
+            <li className="active">Repo</li>
+          </ol>
           <RepoMeta repo={repo} uuid={this.props.uuid}/>
 
           <RepoLog log={repo.Log}/>

@@ -18,6 +18,10 @@ var About = React.createClass({
     return (
       <div>
 		    <a id="forkme_banner" href="https://github.com/janelia-flyem/dvid">View DVID on GitHub</a>
+        <ol className="breadcrumb">
+          <li><Link to="consoleapp">Home</Link></li>
+          <li className="active">Admin</li>
+        </ol>
         <h3>Welcome to DVID</h3>
 
         <p>DVID documentation can be found on the extensive <a href="https://github.com/janelia-flyem/dvid#dvid-">README</a> on

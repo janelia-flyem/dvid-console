@@ -3,7 +3,8 @@ var React = require('react'),
   TileMapArea = require('./TileMapArea.react'),
   DataInstances = require('./DataInstances.react'),
   RepoMeta = require('./RepoMeta.react'),
-  config = require('../utils/config');
+  config = require('../utils/config'),
+  Link = Router.Link;
 
 var TileMap = React.createClass({
   mixins: [Router.State],
@@ -57,6 +58,11 @@ var TileMap = React.createClass({
   render: function () {
     return (
       <div>
+        <ol className="breadcrumb">
+          <li><Link to="consoleapp">Home</Link></li>
+          <li><Link to="repo" params={{uuid: this.state.repo.Root}} >Repo</Link></li>
+          <li className="active">Tile viewer</li>
+        </ol>
         <RepoMeta repo={this.state.repo} uuid={this.state.uuid}/>
         <div className="row">
           <div className="col-sm-12">
