@@ -45,8 +45,8 @@ var routes = (
     <Route name="about" path="about" handler={About}/>
     <Route name="newrepo"  path="repo"  handler={NewRepo}/>
     <Route name="repo"  path="repo/:uuid"  handler={Repo}/>
-    <Route name="tilemap" path="/repo/:uuid/ts/:tileSource/ls/:labelSource" handler={TileMap}/>
-    <Route name="tilemapwithcoords" path="/repo/:uuid/ts/:tileSource/ls/:labelSource/:plane/:coordinates" handler={TileMap}/>
+    <Route name="tilemap" path="/repo/:uuid/ts/:tileSource/ls/:labelSource" handler={TileMap} ignoreScrollBehavior/>
+    <Route name="tilemapwithcoords" path="/repo/:uuid/ts/:tileSource/ls/:labelSource/:plane/:coordinates" handler={TileMap} ignoreScrollBehavior/>
     <NotFoundRoute handler={NotFound}/>
   </Route>
 );
