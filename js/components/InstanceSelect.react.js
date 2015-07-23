@@ -35,7 +35,7 @@ var InstanceSelect = React.createClass({
       <div className="dataselect">
         <button className="btn btn-default" onClick={this.showDataHandler}>Open Tile Viewer</button>
         <form id="instance_select">
-          <DataInstances repo={this.props.repo}/>
+          <DataInstances repo={this.props.repo} uuid={this.props.uuid}/>
         </form>
       </div>
     );

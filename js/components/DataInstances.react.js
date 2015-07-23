@@ -8,7 +8,7 @@ class DataInstances extends React.Component {
       for (var key in instances) {
         if (instances.hasOwnProperty(key)) {
           var instance = instances[key];
-          rows.push(<DataInstance key={key} instance={instance}/>);
+          rows.push(<DataInstance key={key} instance={instance} uuid={this.props.uuid}/>);
         }
       }
     }
@@ -43,7 +43,7 @@ class DataInstance extends React.Component {
     var type = this.props.instance.Base.TypeName;
     var label_class = 'label lbl-' + type;
     var name = this.props.instance.Base.Name;
-    var name_url = '/api/node/' + this.props.instance.Base.RepoUUID + '/' + name + '/';
+    var name_url = '/api/node/' + this.props.uuid + '/' + name + '/';
     var info = 'information';
     if (type == 'keyvalue') {
       name_url += 'keys/0/z';
@@ -62,7 +62,7 @@ class DataInstance extends React.Component {
     }
 
     var name_tooltip = 'Display ' + info;
-    var type_url = '/api/node/' + this.props.instance.Base.RepoUUID + '/' + name + '/help';
+    var type_url = '/api/node/' + this.props.uuid + '/' + name + '/help';
     var type_tooltip = 'Display ' + type + ' help';
 
     if (type === 'grayscale8' || type === 'multiscale2d' || type === 'uint8blk' || type === 'imagetile' )
