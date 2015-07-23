@@ -1,5 +1,5 @@
 bindata.go
 node_modules
 build
-
+dist
 *.swp
