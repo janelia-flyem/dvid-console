@@ -14,7 +14,9 @@ class StatsDisplay extends React.Component {
       for (var key in this.props.repos) {
         if (this.props.repos.hasOwnProperty(key)) {
           var repo = this.props.repos[key];
-          versionNodes += Object.keys(repo.DAG.Nodes).length;
+          if (repo) {
+            versionNodes += Object.keys(repo.DAG.Nodes).length;
+          }
         }
       }
 
