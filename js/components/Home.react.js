@@ -13,7 +13,9 @@ class RepoList extends React.Component {
 
       for (var key in this.props.repos) {
         if (this.props.repos.hasOwnProperty(key)) {
-          repo_list.push(this.props.repos[key]);
+          if (this.props.repos[key]) {
+            repo_list.push(this.props.repos[key]);
+          }
         }
       }
 
