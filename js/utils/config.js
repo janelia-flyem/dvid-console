@@ -1,10 +1,10 @@
 // Set the base url of the DVID server that you are trying to
 // contact.
 //var root = 'http://emrecon100.janelia.priv';
-var root = 'http://emdata1.int.janelia.org:8500';
+var root = '';
 //var root = 'http://tem-dvid.int.janelia.org';
-var host = 'emdata1.int.janelia.org';
-var port = 8500;
+var host = '';
+var port = '';
 
 exports.host = host;
 exports.port = port;

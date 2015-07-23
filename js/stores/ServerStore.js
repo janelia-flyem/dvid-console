@@ -2,13 +2,14 @@ import alt from '../alt';
 import ServerActions from '../actions/ServerActions';
 import ErrorActions from '../actions/ErrorActions';
 import dvid from 'dvid';
+import config from '../utils/config';
 
 class ServerStore {
   constructor() {
     this.bindActions(ServerActions);
     this.repos = null;
     this.stats = null;
-    this.api = dvid.connect();
+    this.api = dvid.connect({host: config.host, port: config.port});
     this.repo = null;
     this.types = null;
 
