@@ -50,6 +50,17 @@ module.exports = function(grunt) {
         dest: 'dist/index.html'
       }
     },
+    compress: {
+      main: {
+        options: {
+          mode: 'tgz',
+          archive: 'dvid-console-<%= pkg.version %>.tar.gz'
+        },
+        files: [
+          { src: '**/*', cwd: 'dist/', dest: 'dvid-console/', expand: true }
+        ]
+      }
+    },
     watch: {
       scripts: {
         files: ['js/**/*.js'],
@@ -58,14 +69,14 @@ module.exports = function(grunt) {
     }
   });
 
-  // Load the plugin that provides the "uglify" task.
+  // Load the plugins
   grunt.loadNpmTasks('grunt-browserify');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-contrib-compress');
 
   // Default task(s).
   grunt.registerTask('default', ['browserify']);
-  grunt.registerTask('dist', ['browserify','uglify','copy']);
-
+  grunt.registerTask('dist', ['browserify','uglify','copy', 'compress']);
 };
