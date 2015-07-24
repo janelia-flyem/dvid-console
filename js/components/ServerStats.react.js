@@ -20,7 +20,16 @@ class StatsDisplay extends React.Component {
         }
       }
 
-      var gitLink = "https://github.com/janelia-flyem/dvid/commit/" + this.props.stats['DVID Version'];
+      var dvidVersion = 'unknown';
+      var gitLink = "https://github.com/janelia-flyem/dvid/";
+
+      if (this.props.stats.hasOwnProperty("DVID Version")) {
+        dvidVersion = this.props.stats["DVID Version"];
+        // strip of trailing version information like -dirty or -alpha, so that
+        // we can link back to github without it being a broken link.
+        gitLink += "commit/" + dvidVersion.replace(/-.*$/,'');
+      }
+
 
       return (
         <div className="serverstats row">
@@ -60,7 +69,7 @@ class StatsDisplay extends React.Component {
             <div className="panel panel-default">
               <div className="panel-heading"><Glyphicon glyph="bookmark"/> DVID Version</div>
               <div className="panel-body">
-                <a href={gitLink}>{this.props.stats["DVID Version"]}</a>
+                <a href={gitLink}>{dvidVersion}</a>
               </div>
             </div>
           </div>
