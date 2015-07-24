@@ -15,19 +15,26 @@ var InstanceSelect = React.createClass({
     // grab label source selection
     label_source = $("#instance_select input:radio[name=label_source]:checked").val();
     // display an error message if either one is missing.
-    if(!tile_source || !label_source) {
-      ErrorActions.update('Please select a tile source and a label source from the table below.');
+    if(!tile_source) {
+      ErrorActions.update('Please select a tile source from the table below.');
       return;
     }
 
     ErrorActions.clear();
     // generate a new url with the choices made and ...
     // redirect the browser
-    this.transitionTo('tilemap', {
-      uuid : this.props.uuid,
-      tileSource : tile_source,
-      labelSource : label_source
-    });
+    if (!label_source) {
+      this.transitionTo('tileonly', {
+        uuid : this.props.uuid,
+        tileSource : tile_source
+      });
+    } else {
+      this.transitionTo('tilemap', {
+        uuid : this.props.uuid,
+        tileSource : tile_source,
+        labelSource : label_source
+      });
+    }
   },
 
   render: function () {

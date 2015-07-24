@@ -315,7 +315,7 @@ var TileMapArea = React.createClass({
           self.setState({'x': x, 'y': y});
           var url_plane =  tileSourceMapping[self.state.plane] || 'xy';
 
-          self.replaceWith('tilemapwithcoords',{
+          self.updateUrl({
             uuid: uuid,
             plane: url_plane,
             coordinates: x +'_' + y + '_' + self.state.layer,
@@ -471,7 +471,7 @@ var TileMapArea = React.createClass({
       var tileSourceMapping = ['xy','xz','yz'];
       var plane = tileSourceMapping[this.state.plane] || 'xy';
 
-      this.replaceWith('tilemapwithcoords',{
+      this.updateUrl({
         uuid: uuid,
         plane: plane,
         coordinates: x +'_' + y + '_' + layer,
@@ -546,6 +546,14 @@ var TileMapArea = React.createClass({
 
   sparseCloseHandler: function() {
     this.setState({volumeViewer: false});
+  },
+
+  updateUrl: function(opts) {
+    if (this.props.labelSource) {
+      this.replaceWith('tilemapwithcoords', opts );
+    } else {
+      this.replaceWith('tileonlywithcoords', opts );
+    }
   },
 
   updateViewerPlane: function (currentSeg) {
