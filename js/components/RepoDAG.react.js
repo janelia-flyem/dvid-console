@@ -84,20 +84,35 @@ var RepoDAG  = React.createClass({
             $("#nodelogtext").text("Node Log for " + dag.node(v).fullname);
         });
 
-      // Set up zoom support
-      function zoomed() {
-        inner.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
-      }
+    var nodeDrag = d3.behavior.drag()
+        .on("drag", function (d) {
+        var node = d3.select(this),
+            selectedNode = dag.node(d);
+        var prevX = selectedNode.x,
+            prevY = selectedNode.y;
 
-      var zoom = d3.behavior.zoom()
-        .translate([xCenterOffset, 0])
-        .scale(scale)
-        //stop the graphic from being zoomed in super close.
-        .scaleExtent([0,1])
-        .on("zoom", zoomed);
+        selectedNode.x += d3.event.dx;
+        selectedNode.y += d3.event.dy;
 
-      svg.call(zoom);
-    }
+        node.attr('transform', 'translate(' + selectedNode.x + ',' + selectedNode.y + ')');
+
+        var dx = selectedNode.x - prevX,
+            dy = selectedNode.y - prevY;
+
+        $.each(dag.nodeEdges(d), function (i, e) {
+            translateEdge(dag.edge(e.v, e.w), dx, dy);
+            $('#' + dag.edge(e.v, e.w).id + " .path").attr('d', calcPoints(e));
+        });
+    });
+
+    var edgeDrag = d3.behavior.drag()
+        .on('drag', function (d) {
+        translateEdge(dag.edge(d.v, d.w), d3.event.dx, d3.event.dy);
+        $('#' + dag.edge(d.v, d.w).id + " .path").attr('d', calcPoints(d));
+    });
+
+    nodeDrag.call(elementHolderLayer.selectAll("g.node"));
+    edgeDrag.call(elementHolderLayer.selectAll("g.edgePath"));
   },
 
   render: function() {
@@ -114,3 +129,61 @@ var RepoDAG  = React.createClass({
 
 
 module.exports = RepoDAG;
+
+function translateEdge(e, dx, dy) {
+    e.points.forEach(function (p) {
+        p.x = p.x + dx;
+        p.y = p.y + dy;
+    });
+}
+
+//taken from dagre-d3 source code (not the exact same)
+function calcPoints(e) {
+    var edge = dag.edge(e.v, e.w),
+        tail = dag.node(e.v),
+        head = dag.node(e.w);
+    var points = edge.points.slice(1, edge.points.length - 1);
+    var afterslice = edge.points.slice(1, edge.points.length - 1);
+    points.unshift(intersectRect(tail, points[0]));
+    points.push(intersectRect(head, points[points.length - 1]));
+    return d3.svg.line()
+        .x(function (d) {
+        return d.x;
+    })
+        .y(function (d) {
+        return d.y;
+    })
+        .interpolate("basis")
+    (points);
+}
+
+//taken from dagre-d3 source code (not the exact same)
+function intersectRect(node, point) {
+    var x = node.x;
+    var y = node.y;
+    var dx = point.x - x;
+    var dy = point.y - y;
+    var w = $("#" + node.id + " rect").attr('width') / 2;
+    var h = $("#" + node.id + " rect").attr('height') / 2;
+    var sx = 0,
+        sy = 0;
+    if (Math.abs(dy) * w > Math.abs(dx) * h) {
+        // Intersection is top or bottom of rect.
+        if (dy < 0) {
+            h = -h;
+        }
+        sx = dy === 0 ? 0 : h * dx / dy;
+        sy = h;
+    } else {
+        // Intersection is left or right of rect.
+        if (dx < 0) {
+            w = -w;
+        }
+        sx = w;
+        sy = dx === 0 ? 0 : w * dy / dx;
+    }
+    return {
+        x: x + sx,
+        y: y + sy
+    };
+}
