@@ -240,7 +240,7 @@ text {
   pointer-events: none;
 }
 
-.node rect {
+.nodeShape {
   stroke: #333;
   stroke-width: 1.5px;
   fill: #fff;
@@ -256,6 +256,9 @@ text {
   stroke-width: 1.5px;
   fill: none;
   cursor: pointer;
+}
+.nodeShape, .edgePath:focus {
+    outline: none;
 }
 .Edge {
   lineInterpolate: 'basis';
