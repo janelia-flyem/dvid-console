@@ -81,6 +81,7 @@ var RepoDAG  = React.createClass({
         .on("mouseenter", function(v) { if (g.node(v).log.length > 0) { LogActions.update(g.node(v).log); }})
         .on("click", function(v) {
           self.transitionTo( 'repo', { uuid: g.node(v).uuid } );
+            $("#nodelogtext").text("Node Log for " + dag.node(v).fullname);
         });
 
       // Set up zoom support
