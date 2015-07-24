@@ -6,6 +6,8 @@ import d3 from 'd3';
 import dagreD3 from 'dagre-d3';
 import LogActions from '../actions/LogActions';
 
+var dag, elementHolderLayer;
+
 // Dagre graph
 var RepoDAG  = React.createClass({
   mixins: [Router.Navigation],
@@ -19,41 +21,86 @@ var RepoDAG  = React.createClass({
   },
 
   drawGraph: function(props) {
-
     if (props.repo.DAG.Nodes.hasOwnProperty(props.uuid)) {
-      var self = this;
-      var svg = d3.select("svg");
-      // clear out the existing data.
-      svg.selectAll("*").remove();
+      this.initDag(this);
+    }
+  },
 
-      var g = new dagreD3.graphlib.Graph().setGraph({});
-      $.each(props.repo.DAG.Nodes,function (name,n) {
+  initDag: function(t){
+    //initialize svg for D3
+    var svg = d3.select("svg");
+        // .attr("width", width)
+        // .attr("height", height);
+    // clear out the existing data.
+    svg.selectAll("*").remove();
+    //adds background to differentiate from graph elements
+    var svgBackground = svg.append("rect")
+        .attr("id", "svgBackground")
+        .attr("fill", "transparent")
+        .attr("width", $("svg").width())
+        .attr("height", $("svg").height());
+    //creates a group that will hold all the svg elements for the graph
+    elementHolderLayer = svg.append("g")
+        .attr("id", "elementHolderLayer");
+    //defines a shadow for the entire svg for use when hovering over nodes
+    var shadow = svg.append("defs")
+            .append("filter")
+            .attr("id", "drop-shadow")
+            .attr('x', "-40%")
+            .attr('y', "-40%")
+            .attr('height', "200%")
+            .attr('width', "200%");
+        shadow.append("feOffset")
+            .attr('result', "offOut")
+            .attr('in', "SourceAlpha")
+            .attr('dx', "0")
+            .attr('dy', "0");
+        shadow.append("feGaussianBlur")
+            .attr('result', "blurOut")
+            .attr('in', "offOut")
+            .attr('stdDeviation', "8");
+        shadow.append("feBlend")
+            .attr('in', "SourceGraphic")
+            .attr('in2', "blurOut")
+            .attr('mode', "normal");
+
+    //creates new dagreD3 object
+    dag = new dagreD3.graphlib.Graph({
+        compound: true,
+        multigraph: true
+    })
+        .setGraph({})
+        .setDefaultEdgeLabel(function () {
+        return {};
+    });
+
+    //adds nodes and edges from the JSON dag data
+    $.each(this.props.repo.DAG.Nodes, function (name, n) {
         var version = n.VersionID;
         var log = '';
-        if (n.Log.length)
-          log = (n.Log);
+        if (n.Log.length) log = (n.Log);
         var nodeclass = "";
-        if (n.Locked)
-          nodeclass = "type-locked";
-        g.setNode(version,{
-          label: version + ': ' + name.substr(0,5),
-          class: nodeclass,
-          rx: 5, ry: 5,
-          log: log,
-          fullname: version + ': ' + name,
-          uuid: name
+        if (n.Locked) nodeclass = "type-locked";
+        dag.setNode(version, {
+            label: version + ': ' + name.substr(0, 5),
+            class: nodeclass,
+            rx: 5,
+            ry: 5,
+            log: log,
+            fullname: version + ': ' + name,
+            uuid: name,
+            id: "node" + version
         });
-        $.each(n.Children,function (c) {
-          g.setEdge(version,n.Children[c],{ lineInterpolate: 'basis', arrowheadStyle: "fill: #000"});
+        $.each(n.Children, function (c) {
+            dag.setEdge(version, n.Children[c], {
+                lineInterpolate: 'basis',
+                arrowheadStyle: "fill: #000",
+                id: version + "-" + n.Children[c]
+            });
         });
-      });
-      var render = new dagreD3.render();
-      var inner = svg.append("g");
+    });
 
-      render(inner, g);
-
-      svg.attr('width', 700);
-      svg.attr('height', 300);
+    this.update(t);
 
     // determine which dimension is hte biggest and use that
     // to scale the graph to fit the window.
@@ -89,8 +136,43 @@ var RepoDAG  = React.createClass({
     zoom.translate([xCenterOffset, yCenterOffset]);
   },
 
+  update: function(t){
+    //renders the dag
+    var dagreRenderer = new dagreD3.render();
+    dagreRenderer(elementHolderLayer, dag);
+
+    elementHolderLayer.selectAll("g.node text")
+        .attr("class", "nodeLabel");
+    elementHolderLayer.selectAll("g.node rect")
+        .attr("id", function (d) {
+        return "node" + d;
+    })
+        .attr("class", "nodeShape")
+        .attr("title", function (v) {
+        return dag.node(v).fullname;
+    })
+        .on("mouseenter", function (v) {
+        if (dag.node(v).log.length > 0) {
+            LogActions.update(dag.node(v).log);
             $("#nodelogtext").text("Node Log for " + dag.node(v).fullname);
+        }
+        $('#' + this.id).css("filter", "url(#drop-shadow)");
+    })
+        .on("mouseleave", function (v) {
+        $('#' + this.id).css("filter", "");
+    })
+        .on("click", function (v) {
+        //prevents a drag from being registered as a click
+        if (d3.event.defaultPrevented) return;
+        //loads the node's data into page (updates tile viewer link)
+        t.transitionTo('repo', {
+            uuid: dag.node(v).uuid
         });
+    });
+    elementHolderLayer.selectAll("g.edgePath path")
+        .attr("id", function (e) {
+        return e.v + "-" + e.w;
+    });
 
     var nodeDrag = d3.behavior.drag()
         .on("drag", function (d) {
