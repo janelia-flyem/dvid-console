@@ -55,32 +55,40 @@ var RepoDAG  = React.createClass({
       svg.attr('width', 700);
       svg.attr('height', 300);
 
-      // determine which dimension is hte biggest and use that
-      // to scale the graph to fit the window.
-      var useWidth = null;
-      if ( g.graph().width > g.graph().height) {
+    // determine which dimension is hte biggest and use that
+    // to scale the graph to fit the window.
+    var useWidth = null;
+    if (dag.graph().width > dag.graph().height) {
         useWidth = true;
-      }
+    }
+    // figure out the scale ratio that will be used to resize the graph.
+    var scale = 1;
+    if (useWidth) {
+        scale = $("svg").width() / dag.graph().width;
+    } else {
+        scale = $("svg").height() / dag.graph().height;
+    }
+    //decrease the scale by a bit so the dag doesn't hit the edge of the svg container
+    scale -= 0.01;
+    // work out the offsets needed to center the graph
+    var xCenterOffset = Math.abs(((dag.graph().width * scale) - $("svg").width()) / 2);
+    var yCenterOffset = Math.abs(((dag.graph().height * scale) - $("svg").height()) / 2);
+    // apply the scale and translation in one go.
+    elementHolderLayer.attr("transform", "matrix(" + scale + ", 0, 0, " + scale + ", " + xCenterOffset + "," + yCenterOffset + ")");
+    // Set up zoom support
+    var zoom = d3.behavior.zoom()
+        .on("zoom", function () {
+        elementHolderLayer.attr("transform", "translate(" + d3.event.translate + ")" +
+            "scale(" + d3.event.scale + ")");
+    })
+    //prevents graph from being zoomed in super close or smaller than the container
+    .scaleExtent([scale, 1.5]);
+    svgBackground.call(zoom);
+    //scale and translate zoom so that it lines up with the graph
+    zoom.scale(scale);
+    zoom.translate([xCenterOffset, yCenterOffset]);
+  },
 
-      // figure out the scale ratio that will be used to resize the graph.
-      var scale = 1;
-      if (useWidth) {
-        scale = svg.attr("width") / g.graph().width;
-      } else {
-        scale = svg.attr("height") / g.graph().height ;
-      }
-
-      // work out the offset needed to center the graph
-      var xCenterOffset = Math.abs(((g.graph().width * scale) - svg.attr("width")) / 2);
-
-      // apply the scale and translation in one go.
-      inner.attr("transform", "matrix(" + scale + ", 0, 0, " + scale + ", " + xCenterOffset + ", 0)");
-
-      inner.selectAll("g.node")
-        .attr("title", function(v) { return g.node(v).fullname })
-        .on("mouseenter", function(v) { if (g.node(v).log.length > 0) { LogActions.update(g.node(v).log); }})
-        .on("click", function(v) {
-          self.transitionTo( 'repo', { uuid: g.node(v).uuid } );
             $("#nodelogtext").text("Node Log for " + dag.node(v).fullname);
         });
 
@@ -121,12 +129,11 @@ var RepoDAG  = React.createClass({
       <div>
       <h4>Version DAG <span style={smallStyle}> (nodes in red are locked)</span></h4>
       Mouse over a node to view the log
-      <div className="dag"><svg width="100%" ref="DAGimage"><g/></svg></div>
+      <div className="dag"><svg width="1000" height="500" ref="DAGimage"><g/></svg></div>
       </div>
     );
   }
 });
-
 
 module.exports = RepoDAG;
 
