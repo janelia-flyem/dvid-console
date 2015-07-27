@@ -102,10 +102,10 @@ var RepoDAG  = React.createClass({
 
     this.update(t);
 
-    // determine which dimension is hte biggest and use that
+    // determine which dimension is the smallest and use that
     // to scale the graph to fit the window.
     var useWidth = null;
-    if (dag.graph().width > dag.graph().height) {
+    if (dag.graph().width < dag.graph().height) {
         useWidth = true;
     }
     // figure out the scale ratio that will be used to resize the graph.
