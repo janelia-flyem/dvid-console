@@ -237,12 +237,14 @@ text {
   font-weight: 300;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serf;
   font-size: 14px;
+  pointer-events: none;
 }
 
-.node rect {
+.nodeShape {
   stroke: #333;
   stroke-width: 1.5px;
   fill: #fff;
+  cursor: pointer;
 }
 
 .edgeLabel rect {
@@ -253,6 +255,10 @@ text {
   stroke: #333;
   stroke-width: 1.5px;
   fill: none;
+  cursor: pointer;
+}
+.nodeShape, .edgePath:focus {
+    outline: none;
 }
 .Edge {
   lineInterpolate: 'basis';

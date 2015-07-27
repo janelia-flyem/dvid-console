@@ -44,7 +44,7 @@ class LogTable extends React.Component {
       }
 
       if (this.props.current[0] !== this.props.orig[0] ) {
-        title = <span><b>Node Log:</b> <a className="" href="" onClick={this.handleLogRestore}><small>restore repo log</small></a></span>;
+        title = <span><b id="nodelogtext">Node Log:</b> <a className="" href="" onClick={this.handleLogRestore}><small>restore repo log</small></a></span>;
       }
 
       return (
