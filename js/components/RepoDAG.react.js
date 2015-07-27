@@ -141,13 +141,7 @@ var RepoDAG  = React.createClass({
     var dagreRenderer = new dagreD3.render();
     dagreRenderer(elementHolderLayer, dag);
 
-    elementHolderLayer.selectAll("g.node text")
-        .attr("class", "nodeLabel");
-    elementHolderLayer.selectAll("g.node rect")
-        .attr("id", function (d) {
-        return "node" + d;
-    })
-        .attr("class", "nodeShape")
+    elementHolderLayer.selectAll("g.node")
         .attr("title", function (v) {
         return dag.node(v).fullname;
     })
@@ -168,10 +162,6 @@ var RepoDAG  = React.createClass({
         t.transitionTo('repo', {
             uuid: dag.node(v).uuid
         });
-    });
-    elementHolderLayer.selectAll("g.edgePath path")
-        .attr("id", function (e) {
-        return e.v + "-" + e.w;
     });
 
     var nodeDrag = d3.behavior.drag()
