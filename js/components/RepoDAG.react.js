@@ -102,19 +102,8 @@ var RepoDAG  = React.createClass({
 
     this.update(t);
 
-    // determine which dimension is the smallest and use that
-    // to scale the graph to fit the window.
-    var useWidth = null;
-    if (dag.graph().width < dag.graph().height) {
-        useWidth = true;
-    }
     // figure out the scale ratio that will be used to resize the graph.
-    var scale = 1;
-    if (useWidth) {
-        scale = $("svg").width() / dag.graph().width;
-    } else {
-        scale = $("svg").height() / dag.graph().height;
-    }
+    var scale = Math.min($("svg").width()  / dag.graph().width, $("svg").height() / dag.graph().height )
     //decrease the scale by a bit so the dag doesn't hit the edge of the svg container
     scale -= 0.01;
     // work out the offsets needed to center the graph
