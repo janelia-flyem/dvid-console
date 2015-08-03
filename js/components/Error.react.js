@@ -7,9 +7,17 @@ import AltContainer from 'alt/AltContainer';
 class ErrorMessage extends React.Component {
   render() {
     if (this.props.errors) {
+      var message = 'Unknown error ocured';
+
+      if (this.props.errors.hasOwnProperty('message')) {
+        message = this.props.errors.message;
+      } else {
+        message = this.props.errors;
+      }
+
       return (
         <Alert bsStyle='danger' onDismiss={this.handleDismiss.bind(this)}>
-          <p>{this.props.errors}</p>
+          <p>{message}</p>
         </Alert>
       );
     }
