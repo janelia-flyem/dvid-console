@@ -22,11 +22,11 @@ var RepoDAG  = React.createClass({
 
   drawGraph: function(props) {
     if (props.repo.DAG.Nodes.hasOwnProperty(props.uuid)) {
-      this.initDag(this);
+      this.initDag(this, props);
     }
   },
 
-  initDag: function(t){
+  initDag: function(t, props){
     //initialize svg for D3
     var svg = d3.select("svg");
         // .attr("width", width)
@@ -75,7 +75,7 @@ var RepoDAG  = React.createClass({
     });
 
     //adds nodes and edges from the JSON dag data
-    $.each(this.props.repo.DAG.Nodes, function (name, n) {
+    $.each(props.repo.DAG.Nodes, function (name, n) {
         var version = n.VersionID;
         var log = '';
         if (n.Log.length) log = (n.Log);
