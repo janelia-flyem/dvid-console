@@ -24,10 +24,9 @@ var About = React.createClass({
         </ol>
         <h3>Welcome to DVID</h3>
 
-        <p>DVID documentation can be found on the extensive <a href="https://github.com/janelia-flyem/dvid#dvid-">README</a> on
-          github as well as the automatically updated <a href="https://godoc.org/github.com/janelia-flyem/dvid">Go Doc
+        <p>DVID documentation can be found on <a href="https://github.com/janelia-flyem/dvid#dvid-">github</a>
+          as well as the automatically updated <a href="https://godoc.org/github.com/janelia-flyem/dvid">Go Doc
           documentation</a>.</p>
-        <p>The <a href="/console/index.html">DVID admin console</a> for this server may be available if you have permissions.</p>
 
         <h4>HTTP API</h4>
 

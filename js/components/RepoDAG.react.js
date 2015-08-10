@@ -22,11 +22,11 @@ var RepoDAG  = React.createClass({
 
   drawGraph: function(props) {
     if (props.repo.DAG.Nodes.hasOwnProperty(props.uuid)) {
-      this.initDag(this);
+      this.initDag(this, props);
     }
   },
 
-  initDag: function(t){
+  initDag: function(t, props){
     //initialize svg for D3
     var svg = d3.select("svg");
         // .attr("width", width)
@@ -75,7 +75,7 @@ var RepoDAG  = React.createClass({
     });
 
     //adds nodes and edges from the JSON dag data
-    $.each(this.props.repo.DAG.Nodes, function (name, n) {
+    $.each(props.repo.DAG.Nodes, function (name, n) {
         var version = n.VersionID;
         var log = '';
         if (n.Log.length) log = (n.Log);
@@ -102,21 +102,10 @@ var RepoDAG  = React.createClass({
 
     this.update(t);
 
-    // determine which dimension is the smallest and use that
-    // to scale the graph to fit the window.
-    var useWidth = null;
-    if (dag.graph().width < dag.graph().height) {
-        useWidth = true;
-    }
     // figure out the scale ratio that will be used to resize the graph.
-    var scale = 1;
-    if (useWidth) {
-        scale = $("svg").width() / dag.graph().width;
-    } else {
-        scale = $("svg").height() / dag.graph().height;
-    }
-    //decrease the scale by a bit so the dag doesn't hit the edge of the svg container
-    scale -= 0.01;
+    var scale = Math.min($("svg").width()  / dag.graph().width, $("svg").height() / dag.graph().height )
+    //only scale the graph if it's larger than the container. otherwise, keep original size
+    scale = scale > 1 ? 1 : scale -=0.01;
     // work out the offsets needed to center the graph
     var xCenterOffset = Math.abs(((dag.graph().width * scale) - $("svg").width()) / 2);
     var yCenterOffset = Math.abs(((dag.graph().height * scale) - $("svg").height()) / 2);
