@@ -128,6 +128,25 @@ var RepoDAG  = React.createClass({
   update: function(t){
     //renders the dag
     var dagreRenderer = new dagreD3.render();
+    // Add a custom arrow
+    dagreRenderer.arrows().normal = function normal(parent, id, edge, type) {
+        var marker = parent.append("marker")
+            .attr("id", id)
+            .attr("viewBox", "-1 2 12 10")
+            .attr("refX", 11)
+            .attr("refY", 5)
+            .attr("markerWidth", 8)
+            .attr("markerHeight", 14)
+            .attr("markerUnits", "strokeWidth")
+            .attr("orient", "auto");
+
+        var path = marker.append("path")
+            .attr("d", "M 0 0 L 10 5 L 0 10")
+            .style("stroke-width", 1.5)
+            .style("stroke", "black")
+            .style("stroke-linejoin", "round");
+        dagreD3.util.applyStyle(path, edge[type + "Style"]);
+    };
     dagreRenderer(elementHolderLayer, dag);
 
     elementHolderLayer.selectAll("g.node")

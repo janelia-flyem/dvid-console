@@ -240,26 +240,23 @@ text {
   pointer-events: none;
 }
 
-.node rect {
-  stroke: #333;
+.node > rect {
+  stroke: #000;
   stroke-width: 1.5px;
   fill: #fff;
   cursor: pointer;
 }
 
-.edgeLabel rect {
+/*.edgeLabel rect {
   fill: #fff;
-}
+}*/
 
 .edgePath {
-  stroke: #333;
+  stroke: #000;
   stroke-width: 1.5px;
   fill: none;
   cursor: pointer;
 }
 .node, .edgePath:focus {
     outline: none;
-}
-.Edge {
-  lineInterpolate: 'basis';
 }
