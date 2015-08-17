@@ -89,7 +89,11 @@ var RepoDAG  = React.createClass({
             log: log,
             fullname: version + ': ' + name,
             uuid: name,
-            id: "node" + version
+            id: "node" + version,
+            expandedChildren: null,
+            collapsedChildren: null,
+            isMerge: false,
+            isCollapsible: true
         });
         $.each(n.Children, function (c) {
             dag.setEdge(version, n.Children[c], {
@@ -100,11 +104,62 @@ var RepoDAG  = React.createClass({
         });
     });
 
-    this.update(t);
+    //returns a list of all predecessors of a parent node
+    function findAllPredecessors(node, predecessorsList) {
+        predecessorsList = predecessorsList || [];
+        dag.predecessors(node).forEach(function (n) {
+            //some nodes can be visited more than once so this removes them
+            if (predecessorsList.indexOf(n) == -1) {
+                predecessorsList.push(n);
+            }
+            findAllPredecessors(n, predecessorsList);
+        });
+        return predecessorsList;
+    }
 
+    //sets merges and all their predecessors to be uncollapsible
+    //gives merges a "merge" class
+    dag.nodes().forEach(function (n) {
+        if (dag.predecessors(n).length > 1) {
+            dag.node(n).isMerge = true;
+            dag.node(n).class = dag.node(n).class + " " + "merge";
+            dag.node(n).isCollapsible = false;
+            findAllPredecessors(n).forEach(function (p) {
+                dag.node(p).isCollapsible = false;
+            });
+        }
+    });
+
+    //gives parents a variable to access their collapsible children
+    dag.nodes().forEach(function (n) {
+        //collapsibleChildren will be a dictionary with key being the node name (that you can call dag.node() with) and the value being properties of that node
+        var collapsibleChildren = {};
+        dag.successors(n).forEach(function (c) {
+            if (dag.node(c).isCollapsible) {
+                //adds the node properties to collapsibleChildren so that it can be used to add the node back later
+                collapsibleChildren[c] = dag.node(c);
+            }
+        });
+        // only give it expandedChildren if it has collapsible children. otherwise it is kept null (and not set to {})
+        if (Object.getOwnPropertyNames(collapsibleChildren).length !== 0) {
+            dag.node(n).expandedChildren = collapsibleChildren;
+            dag.node(n).class = dag.node(n).class + " " + "expanded";
+        }
+    });
+
+    this.update();
+    this.fitDAG();
+    //kludge for fixing edge crossings created by the initial dagre render
+    this.collapseGraph();
+    this.expandGraph();
+    //set transition for future collapsing and expanding
+    dag.graph().transition = function (selection) {
+    return selection.transition().duration(300);
+    };
   },
 
-  update: function(t){
+  update: function(){
+    var self = this;
     //renders the dag
     var dagreRenderer = new dagreD3.render();
     // Add a custom arrow
@@ -129,9 +184,9 @@ var RepoDAG  = React.createClass({
     dagreRenderer(elementHolderLayer, dag);
 
     elementHolderLayer.selectAll("g.node")
-        .attr("title", function (v) {
-        return dag.node(v).fullname;
-    })
+    //     .attr("title", function (v) {
+    //     return dag.node(v).fullname;
+    // })
         .on("mouseenter", function (v) {
         if (dag.node(v).log.length > 0) {
             LogActions.update(dag.node(v).log);
@@ -143,12 +198,17 @@ var RepoDAG  = React.createClass({
         $('#' + this.id).css("filter", "");
     })
         .on("click", function (v) {
-        //prevents a drag from being registered as a click
+        // prevents a drag from being registered as a click
         if (d3.event.defaultPrevented) return;
-        //loads the node's data into page (updates tile viewer link)
-        t.transitionTo('repo', {
-            uuid: dag.node(v).uuid
-        });
+        if (d3.event.shiftKey) {
+          //loads the node's data into page (updates tile viewer link)
+          self.transitionTo('repo', {
+              uuid: dag.node(v).uuid
+          });
+        }else{
+          self.toggleChildren(v);
+        }
+
     });
 
     var nodeDrag = d3.behavior.drag()
@@ -216,6 +276,37 @@ var RepoDAG  = React.createClass({
     this.update();
   },
 
+  //fully expands entire DAG
+  expandGraph: function () {
+      //keep track of number of nodes expanded so that recursion can be terminated
+      var nodesExpanded = 0;
+      dag.nodes().forEach(function (n) {
+          if (dag.node(n).collapsedChildren) {
+              nodesExpanded += 1;
+              expandChildren(n);
+          }
+      });
+      if (nodesExpanded) {
+          this.expandGraph();
+      } else {
+          //if no nodes were expanded, it means the graph has been completely expanded.
+          this.update();
+          this.fitDAG();
+      }
+  },
+
+  //fully collapses entire DAG
+  collapseGraph: function () {
+    //need to go in reverse order so that parent nodes won't be collapsed until all of their children are collapsed
+    dag.nodes().reverse().forEach(function (n) {
+      if (dag.node(n).expandedChildren) {
+          collapseChildren(n)
+      }
+    });
+    this.update();
+    this.fitDAG();
+  },
+
   downloadSVGHandler: function(event) {
     this.fitDAG();
     console.log('downloading the SVG');
@@ -229,10 +320,15 @@ var RepoDAG  = React.createClass({
     var smallStyle = { fontSize: '10pt' };
     return (
       <div>
-      <h4>Version DAG <span style={smallStyle}> (nodes in red are locked)</span></h4>
-      Mouse over a node to view the log
-      <div className="dag"><svg width="1000" height="500" ref="DAGimage"><g/></svg></div>
+      <h4>Version DAG <span style={smallStyle}> (Nodes with thick borders are locked.)</span></h4>
+      Mouse over a node to view the log. Click on blue nodes to expand/collapse. Shift + click nodes to navigate to repo.
+      <div>
         <button className="btn btn-default" onClick={this.downloadSVGHandler}>Download DAG as SVG</button>
+        <button className="btn btn-default" onClick={this.fitDAG}>Fit graph to window</button>
+        <button className="btn btn-default" onClick={this.expandGraph}>Expand graph</button>
+        <button className="btn btn-default" onClick={this.collapseGraph}>Collapse graph</button>
+      </div>
+      <div className="dag"><svg width="1000" height="500" ref="DAGimage"><g/></svg> </div>
       </div>
     );
   }
@@ -296,4 +392,42 @@ function intersectRect(node, point) {
         x: x + sx,
         y: y + sy
     };
+}
+
+function collapseChildren(parent){
+  dag.node(parent).class = dag.node(parent).class.replace("expanded", '');
+  dag.node(parent).class = dag.node(parent).class + " " + "collapsed";
+  collapse(dag.node(parent).expandedChildren);
+  dag.node(parent).collapsedChildren = dag.node(parent).expandedChildren;
+  dag.node(parent).expandedChildren = null;
+}
+
+function expandChildren(parent){
+  dag.node(parent).class = dag.node(parent).class.replace("collapsed", '');
+  dag.node(parent).class = dag.node(parent).class + " " + "expanded";
+  expand(parent, dag.node(parent).collapsedChildren);
+  dag.node(parent).expandedChildren = dag.node(parent).collapsedChildren;
+  dag.node(parent).collapsedChildren = null;
+}
+
+//recursively collapses subgraph of parent
+function collapse(expandedChildren) {
+    for (var child in expandedChildren) {
+        dag.removeNode(child);
+        collapse(expandedChildren[child].expandedChildren);
+    }
+}
+//recursively expands subgraph of parent
+function expand(parent, collapsedChildren) {
+    for (var child in collapsedChildren) {
+        dag.setNode(child, collapsedChildren[child]);
+        dag.setEdge(parent, child, {
+            lineInterpolate: 'basis',
+            id: parent + "-" + child,
+            arrowheadStyle: "fill: #000",
+        });
+        //NOT a typo! only the parent's immediate collapsed children are expanded.
+        //the parent's children's expanded children (not collapsed children) are expanded for the rest of the graph.
+        expand(child, collapsedChildren[child].expandedChildren);
+    }
 }

@@ -230,7 +230,16 @@ svg {
 }
 
 g.type-locked > rect {
-  fill: #f77;
+  stroke: black;
+  stroke-width: 3px;
+}
+
+g.collapsed > rect {
+  fill: #6699FF;
+}
+
+g.expanded > rect {
+  fill: #99CCFF;
 }
 
 text {
@@ -246,10 +255,6 @@ text {
   fill: #fff;
   cursor: pointer;
 }
-
-/*.edgeLabel rect {
-  fill: #fff;
-}*/
 
 .edgePath {
   stroke: #000;
