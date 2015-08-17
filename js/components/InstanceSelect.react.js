@@ -37,10 +37,19 @@ var InstanceSelect = React.createClass({
     }
   },
 
+  downloadSVGHandler: function(event) {
+    console.log('downloading the SVG');
+    var e = document.createElement('script');
+    e.setAttribute('src', "/js/vendor/svg-crowbar.js");
+    e.setAttribute('class', 'svg-crowbar');
+    document.body.appendChild(e);
+  },
+
   render: function () {
     return (
       <div className="dataselect">
         <button className="btn btn-default" onClick={this.showDataHandler}>Open Tile Viewer</button>
+        <button className="btn btn-default" onClick={this.downloadSVGHandler}>Download DAG as SVG</button>
         <form id="instance_select">
           <DataInstances repo={this.props.repo} uuid={this.props.uuid}/>
         </form>
