@@ -6,7 +6,7 @@ import d3 from 'd3';
 import dagreD3 from 'dagre-d3';
 import LogActions from '../actions/LogActions';
 
-var dag, elementHolderLayer;
+var dag, elementHolderLayer, svgBackground;
 
 // Dagre graph
 var RepoDAG  = React.createClass({
@@ -34,7 +34,7 @@ var RepoDAG  = React.createClass({
     // clear out the existing data.
     svg.selectAll("*").remove();
     //adds background to differentiate from graph elements
-    var svgBackground = svg.append("rect")
+    svgBackground = svg.append("rect")
         .attr("id", "svgBackground")
         .attr("fill", "transparent")
         .attr("width", $("svg").width())
@@ -102,27 +102,6 @@ var RepoDAG  = React.createClass({
 
     this.update(t);
 
-    // figure out the scale ratio that will be used to resize the graph.
-    var scale = Math.min($("svg").width()  / dag.graph().width, $("svg").height() / dag.graph().height )
-    //only scale the graph if it's larger than the container. otherwise, keep original size
-    scale = scale > 1 ? 1 : scale -=0.01;
-    // work out the offsets needed to center the graph
-    var xCenterOffset = Math.abs(((dag.graph().width * scale) - $("svg").width()) / 2);
-    var yCenterOffset = Math.abs(((dag.graph().height * scale) - $("svg").height()) / 2);
-    // apply the scale and translation in one go.
-    elementHolderLayer.attr("transform", "matrix(" + scale + ", 0, 0, " + scale + ", " + xCenterOffset + "," + yCenterOffset + ")");
-    // Set up zoom support
-    var zoom = d3.behavior.zoom()
-        .on("zoom", function () {
-        elementHolderLayer.attr("transform", "translate(" + d3.event.translate + ")" +
-            "scale(" + d3.event.scale + ")");
-    })
-    //prevents graph from being zoomed in super close or smaller than the container
-    .scaleExtent([scale, 1.5]);
-    svgBackground.call(zoom);
-    //scale and translate zoom so that it lines up with the graph
-    zoom.scale(scale);
-    zoom.translate([xCenterOffset, yCenterOffset]);
   },
 
   update: function(t){
@@ -201,6 +180,40 @@ var RepoDAG  = React.createClass({
 
     nodeDrag.call(elementHolderLayer.selectAll("g.node"));
     edgeDrag.call(elementHolderLayer.selectAll("g.edgePath"));
+  },
+
+  fitDAG: function(){
+    // figure out the scale ratio that will be used to resize the graph.
+    var scale = Math.min($("svg").width()  / dag.graph().width, $("svg").height() / dag.graph().height )
+    //only scale the graph if it's larger than the container. otherwise, keep original size
+    scale = scale > 1 ? 1 : scale -=0.01;
+    // work out the offsets needed to center the graph
+    var xCenterOffset = Math.abs(((dag.graph().width * scale) - $("svg").width()) / 2);
+    var yCenterOffset = Math.abs(((dag.graph().height * scale) - $("svg").height()) / 2);
+    // apply the scale and translation in one go.
+    elementHolderLayer.attr("transform", "matrix(" + scale + ", 0, 0, " + scale + ", " + xCenterOffset + "," + yCenterOffset + ")");
+    // Set up zoom support
+    var zoom = d3.behavior.zoom()
+        .on("zoom", function () {
+        elementHolderLayer.attr("transform", "translate(" + d3.event.translate + ")" +
+            "scale(" + d3.event.scale + ")");
+    })
+    //prevents graph from being zoomed in super close or smaller than the container
+    .scaleExtent([0, 1.5]);
+    svgBackground.call(zoom);
+    //scale and translate zoom so that it lines up with the graph
+    zoom.scale(scale);
+    zoom.translate([xCenterOffset, yCenterOffset]);
+  },
+
+  //toggles collapsing and expanding of a parent node
+  toggleChildren: function (parent) {
+    if (dag.node(parent).expandedChildren) {
+        collapseChildren(parent)
+    } else if (dag.node(parent).collapsedChildren) {
+        expandChildren(parent)
+    }
+    this.update();
   },
 
   downloadSVGHandler: function(event) {
