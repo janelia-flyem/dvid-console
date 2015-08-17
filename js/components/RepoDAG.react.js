@@ -203,6 +203,15 @@ var RepoDAG  = React.createClass({
     edgeDrag.call(elementHolderLayer.selectAll("g.edgePath"));
   },
 
+  downloadSVGHandler: function(event) {
+    this.fitDAG();
+    console.log('downloading the SVG');
+    var e = document.createElement('script');
+    e.setAttribute('src', "/js/vendor/svg-crowbar.js");
+    e.setAttribute('class', 'svg-crowbar');
+    document.body.appendChild(e);
+  },
+
   render: function() {
     var smallStyle = { fontSize: '10pt' };
     return (
@@ -210,6 +219,7 @@ var RepoDAG  = React.createClass({
       <h4>Version DAG <span style={smallStyle}> (nodes in red are locked)</span></h4>
       Mouse over a node to view the log
       <div className="dag"><svg width="1000" height="500" ref="DAGimage"><g/></svg></div>
+        <button className="btn btn-default" onClick={this.downloadSVGHandler}>Download DAG as SVG</button>
       </div>
     );
   }
