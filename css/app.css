@@ -218,8 +218,10 @@ table.datainstances {
 
 /* dagre-d3 */
 
-.dag svg {
+.dag div {
+  width:90%;
   border: 1px solid #ccc;
+  margin: auto;
 }
 .dag {
   text-align: center;

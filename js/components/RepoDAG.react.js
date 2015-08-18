@@ -319,15 +319,19 @@ var RepoDAG  = React.createClass({
   render: function() {
     return (
       <div>
-      <h4>Version DAG <small> (Nodes with thick borders are locked.)</small></h4>
-      Mouse over a node to view the log. Click on blue nodes to expand/collapse. Shift + click nodes to navigate to repo.
-      <div>
-        <button className="btn btn-default" onClick={this.downloadSVGHandler}>Download DAG as SVG</button>
-        <button className="btn btn-default" onClick={this.fitDAG}>Fit graph to window</button>
-        <button className="btn btn-default" onClick={this.expandGraph}>Expand graph</button>
-        <button className="btn btn-default" onClick={this.collapseGraph}>Collapse graph</button>
-      </div>
-      <div className="dag"><svg width="1000" height="500" ref="DAGimage"><g/></svg> </div>
+        <h4>Version DAG <small> (Nodes with thick borders are locked.)</small></h4>
+        Mouse over a node to view the log. Click on blue nodes to expand/collapse. Shift + click nodes to navigate to repo.
+        <div>
+          <button className="btn btn-default" onClick={this.downloadSVGHandler}>Download DAG as SVG</button>
+          <button className="btn btn-default" onClick={this.fitDAG}>Fit graph to window</button>
+          <button className="btn btn-default" onClick={this.expandGraph}>Expand graph</button>
+          <button className="btn btn-default" onClick={this.collapseGraph}>Collapse graph</button>
+        </div>
+        <div className="dag">
+          <div>
+            <svg width="100%" height="500" ref="DAGimage"><g/></svg>
+          </div>
+        </div>
       </div>
     );
   }
