@@ -317,10 +317,9 @@ var RepoDAG  = React.createClass({
   },
 
   render: function() {
-    var smallStyle = { fontSize: '10pt' };
     return (
       <div>
-      <h4>Version DAG <span style={smallStyle}> (Nodes with thick borders are locked.)</span></h4>
+      <h4>Version DAG <small> (Nodes with thick borders are locked.)</small></h4>
       Mouse over a node to view the log. Click on blue nodes to expand/collapse. Shift + click nodes to navigate to repo.
       <div>
         <button className="btn btn-default" onClick={this.downloadSVGHandler}>Download DAG as SVG</button>
