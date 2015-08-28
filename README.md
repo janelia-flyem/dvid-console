@@ -16,13 +16,16 @@ Usage
 
 ##### Quick Install
 *When you want to use the latest release of the console without making any changes.*
-* Download the [latest release] (https://github.com/janelia-flyem/dvid-console/releases/latest)
+* Make sure you have [DVID](https://github.com/janelia-flyem/dvid) installed and configured
+* Download the dvid-console-&lt;version&gt;.tar.gz file from the [latest release] (https://github.com/janelia-flyem/dvid-console/releases/latest)
 * Unpack it
 
   ```bash
     tar -zxvf dvid-console-<version>.tar.gz
   ```
-* Add `-webclient=/path/to/unpacked/dvid-console` when starting the DVID server
+* Add `-webclient=/path/to/unpacked/dvid-console` when starting the DVID server eg:
+
+  `dvid -verbose -webclient=/path/to/unpacked/dvid-console serve /path/to/dvid/data`
 
 
 ##### For Developers
