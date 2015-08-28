@@ -6,8 +6,7 @@ image-oriented datastore.  The console allows administration of a DVID server wi
 additional tools.
 
 This code can be used with DVID in two ways:
-* Specify the repo location using the `-webclient=/path/to/repo` option with the DVID `serve`
-command.
+* Specify the repo location using the `-webclient` option with the DVID `serve`command.
 * Compile the entire repository into gzipped data that is included in dvid executable.  This
 allows a single DVID executable to have an embedded console and is the default way that DVID
 is built.
