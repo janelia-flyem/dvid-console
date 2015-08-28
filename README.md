@@ -41,6 +41,6 @@ Usage
   ```bash
   grunt dist
   ```
-* Add `-webclient=/path/to/dvid-console/repo` when starting the DVID server  
+* Add `-webclient=/path/to/dvid-console/dist` when starting the DVID server  
   
   
