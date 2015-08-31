@@ -247,7 +247,7 @@ g.expanded > rect {
 text {
   font-weight: 300;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serf;
-  font-size: 14px;
+  font-size: 10pt;
   pointer-events: none;
 }
 
