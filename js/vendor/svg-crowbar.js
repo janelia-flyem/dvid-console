@@ -23,6 +23,7 @@
 
     // add empty svg element
     var emptySvg = window.document.createElementNS(prefix.svg, 'svg');
+    emptySvg.setAttribute("class", "svg-crowbar");
     window.document.body.appendChild(emptySvg);
     var emptySvgDeclarationComputed = getComputedStyle(emptySvg);
 
