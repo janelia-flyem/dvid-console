@@ -309,7 +309,6 @@ var RepoDAG  = React.createClass({
 
   downloadSVGHandler: function(event) {
     this.fitDAG();
-    console.log('downloading the SVG');
     var e = document.createElement('script');
     e.setAttribute('src', "/js/vendor/svg-crowbar.js");
     e.setAttribute('class', 'svg-crowbar');
