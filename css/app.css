@@ -267,3 +267,7 @@ text {
 .node, .edgePath:focus {
     outline: none;
 }
+
+#arrowhead15 path {
+  fill: #111;
+}

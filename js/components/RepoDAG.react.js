@@ -98,7 +98,7 @@ var RepoDAG  = React.createClass({
         $.each(n.Children, function (c) {
             dag.setEdge(version, n.Children[c], {
                 lineInterpolate: 'basis',
-                arrowheadStyle: "fill: #000",
+                arrowheadStyle: "fill: #111",
                 id: version + "-" + n.Children[c]
             });
         });
@@ -427,7 +427,7 @@ function expand(parent, collapsedChildren) {
         dag.setEdge(parent, child, {
             lineInterpolate: 'basis',
             id: parent + "-" + child,
-            arrowheadStyle: "fill: #000",
+            arrowheadStyle: "fill: #111",
         });
         //NOT a typo! only the parent's immediate collapsed children are expanded.
         //the parent's children's expanded children (not collapsed children) are expanded for the rest of the graph.
