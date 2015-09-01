@@ -29,10 +29,22 @@ var InstanceSelect = React.createClass({
         tileSource : tile_source
       });
     } else {
-      this.transitionTo('tilemap', {
+      // label source has been selected, so lets try and center on the ROI.
+      var label_meta = this.props.repo.DataInstances[label_source];
+      // first grab the min and max points from the Extended meta data
+      var minPoint = label_meta.Extended.MinPoint;
+      var maxPoint = label_meta.Extended.MaxPoint;
+      // work out the mid points for the x,y & z planes
+      var x = Math.round((maxPoint[0] + minPoint[0]) / 2);
+      var y = Math.round((maxPoint[1] + minPoint[1]) / 2);
+      var z = Math.round((maxPoint[2] + minPoint[2]) / 2);
+
+      this.transitionTo('tilemapwithcoords', {
         uuid : this.props.uuid,
         tileSource : tile_source,
-        labelSource : label_source
+        labelSource : label_source,
+        plane: 'xy',
+        coordinates : x + '_' + y + '_' + z
       });
     }
   },
