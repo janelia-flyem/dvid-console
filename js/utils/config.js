@@ -6,7 +6,11 @@ var port = '';
 exports.host = host;
 exports.port = port;
 
-var root = "http://" + host;
+var root = '';
+
+if (host) {
+  root = "http://" + host;
+}
 
 if (port) {
   root = root + ":" + port;
