@@ -40,10 +40,18 @@ var InstanceSelect = React.createClass({
   render: function () {
     return (
       <div className="dataselect">
-        <button className="btn btn-default" onClick={this.showDataHandler}>Open Tile Viewer</button>
-        <form id="instance_select">
-          <DataInstances repo={this.props.repo} uuid={this.props.uuid}/>
-        </form>
+        <h4>Data Instances</h4>
+        <div className="row">
+          <div className="col-sm-3">
+            <p>Select a tile source and a label source, then open the tile viewer to preview your data.</p>
+            <button className="btn btn-default" onClick={this.showDataHandler}>Open Tile Viewer</button>
+          </div>
+          <div className="col-sm-9">
+            <form id="instance_select">
+              <DataInstances repo={this.props.repo} uuid={this.props.uuid}/>
+            </form>
+         </div>
+       </div>
       </div>
     );
   }
