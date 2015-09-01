@@ -4,6 +4,7 @@ import ServerActions from '../actions/ServerActions';
 import ServerStore from '../stores/ServerStore';
 import AltContainer from 'alt/AltContainer';
 import {Glyphicon} from 'react-bootstrap';
+import pjson from '../../package.json';
 
 
 class StatsDisplay extends React.Component {
@@ -86,6 +87,14 @@ class StatsDisplay extends React.Component {
               <div className="panel-heading"><Glyphicon glyph="bookmark"/> Datastore Version</div>
               <div className="panel-body">
               {this.props.stats["Datastore Version"]}
+              </div>
+            </div>
+          </div>
+          <div className="col-md-3 col-sm-6">
+            <div className="panel panel-default">
+              <div className="panel-heading"><Glyphicon glyph="bookmark"/>Console Version</div>
+              <div className="panel-body">
+              <p>v{pjson.version}</p>
               </div>
             </div>
           </div>
