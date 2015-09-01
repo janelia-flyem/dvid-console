@@ -188,6 +188,9 @@ var RepoDAG  = React.createClass({
 
     elementHolderLayer.selectAll("g.node")
       .on("mouseenter", function (v) {
+        if (dag.node(v).note) {
+          flash(dag.node(v).note, "3em", this);
+        }
         if (dag.node(v).log.length > 0) {
           LogActions.update(dag.node(v).log);
           $("#nodelogtext").text("Node Log for " + dag.node(v).fullname);
@@ -209,6 +212,22 @@ var RepoDAG  = React.createClass({
           self.toggleChildren(v);
         }
       });
+
+    function flash(name, dx, el) {
+      console.log(d3.select(el).attr('transform'));
+      d3.select(".dag_note")
+        .remove();
+      elementHolderLayer.append("text")
+        .attr("class", "dag_note")
+        .attr("transform", d3.select(el).attr('transform'))
+        .attr('dx', dx)
+        .attr('dy', '-1.5em')
+        .text(name)
+        .transition()
+          .duration(3500)
+          .style("opacity", 0)
+          .remove();
+    }
 
     var nodeDrag = d3.behavior.drag()
         .on("drag", function (d) {
