@@ -187,20 +187,17 @@ var RepoDAG  = React.createClass({
     dagreRenderer(elementHolderLayer, dag);
 
     elementHolderLayer.selectAll("g.node")
-    //     .attr("title", function (v) {
-    //     return dag.node(v).fullname;
-    // })
-        .on("mouseenter", function (v) {
+      .on("mouseenter", function (v) {
         if (dag.node(v).log.length > 0) {
-            LogActions.update(dag.node(v).log);
-            $("#nodelogtext").text("Node Log for " + dag.node(v).fullname);
+          LogActions.update(dag.node(v).log);
+          $("#nodelogtext").text("Node Log for " + dag.node(v).fullname);
         }
         $('#' + this.id).css("filter", "url(#drop-shadow)");
-    })
-        .on("mouseleave", function (v) {
+      })
+      .on("mouseleave", function (v) {
         $('#' + this.id).css("filter", "");
-    })
-        .on("click", function (v) {
+      })
+      .on("click", function (v) {
         // prevents a drag from being registered as a click
         if (d3.event.defaultPrevented) return;
         if (d3.event.shiftKey) {
@@ -211,8 +208,7 @@ var RepoDAG  = React.createClass({
         }else{
           self.toggleChildren(v);
         }
-
-    });
+      });
 
     var nodeDrag = d3.behavior.drag()
         .on("drag", function (d) {
