@@ -8,7 +8,7 @@ class RepoMeta extends React.Component {
 
     var dataLink = "/api/repo/" + this.props.uuid + "/info";
 
-    if (repo.DAG.Nodes.hasOwnProperty(this.props.uuid)) {
+    if (repo && repo.DAG && repo.DAG.Nodes.hasOwnProperty(this.props.uuid)) {
       return (
         <div className="repometa row">
           <div className="col-sm-6">

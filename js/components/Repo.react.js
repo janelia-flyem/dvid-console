@@ -42,7 +42,11 @@ class RepoDetails extends React.Component {
 
     return (
       <div>
-        <p>Repository not found.</p>
+        <ol className="breadcrumb">
+          <li><Link to="consoleapp">Home</Link></li>
+          <li className="active">Repo</li>
+        </ol>
+        <RepoMeta repo={repo} uuid={this.props.uuid}/>
       </div>
     );
   }
