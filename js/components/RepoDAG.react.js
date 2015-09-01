@@ -81,12 +81,15 @@ var RepoDAG  = React.createClass({
         if (n.Log.length) log = (n.Log);
         var nodeclass = "";
         if (n.Locked) nodeclass = "type-locked";
+        var note = null;
+        if (n.Note) note = n.Note;
         dag.setNode(version, {
             label: version + ': ' + name.substr(0, 5),
             class: nodeclass,
             rx: 5,
             ry: 5,
             log: log,
+            note: note,
             fullname: version + ': ' + name,
             uuid: name,
             id: "node" + version,
