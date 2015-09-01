@@ -1,13 +1,17 @@
 // Set the base url of the DVID server that you are trying to
 // contact.
-//var root = 'http://emrecon100.janelia.priv';
-var root = '';
-//var root = 'http://tem-dvid.int.janelia.org';
 var host = '';
 var port = '';
 
 exports.host = host;
 exports.port = port;
+
+var root = "http://" + host;
+
+if (port) {
+  root = root + ":" + port;
+}
+
 
 var settings = {
   // the layers at which tile will be fetched from the server. For sources that
