@@ -83,6 +83,11 @@ var RepoDAG  = React.createClass({
         if (n.Locked) nodeclass = "type-locked";
         var note = null;
         if (n.Note) note = n.Note;
+
+        if (n.UUID === props.uuid) {
+          nodeclass = nodeclass + " " + "current";
+        }
+
         dag.setNode(version, {
             label: version + ': ' + name.substr(0, 5),
             class: nodeclass,

@@ -258,6 +258,12 @@ text {
   cursor: pointer;
 }
 
+g.current > rect {
+  fill: #FCF8E3;
+  stroke: #FAEBCC;
+}
+
+
 .edgePath {
   stroke: #000;
   stroke-width: 1.5px;
