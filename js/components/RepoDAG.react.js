@@ -219,7 +219,6 @@ var RepoDAG  = React.createClass({
       });
 
     function flash(name, dx, el) {
-      console.log(d3.select(el).attr('transform'));
       d3.select(".dag_note")
         .remove();
       elementHolderLayer.append("text")
