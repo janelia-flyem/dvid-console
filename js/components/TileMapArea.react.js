@@ -619,6 +619,7 @@ var TileMapArea = React.createClass({
       sparse_viewer = <SparseVolViewer dvid={ServerStore.state.api} uuid={this.props.uuid} x={this.state.click_x} y={this.state.click_y} z={this.state.click_z} axis={this.state.click_axis} label={this.state.click_label} closeHandler={this.sparseCloseHandler} labelType={this.props.labelSource} tileSource={this.props.tileSource} />;
     }
 
+    var neutu_url = "neutu://" + this.props.uuid + '/' + this.props.tileSource + '/' + this.props.labelSource + '/' + this.state.x + '/' + this.state.y + '/' + this.state.layer;
 
     return (
       <div>
@@ -664,6 +665,7 @@ var TileMapArea = React.createClass({
         <div className="row">
           <div className="col-sm-12">
           <TileCoordinates width={this.state.x} height={this.state.y} depth={this.state.layer} plane={this.state.plane}/>
+          <a href={neutu_url}>Open with NeuTu</a>
           </div>
         </div>
       </div>
