@@ -24,8 +24,8 @@ var About = React.createClass({
         </ol>
         <h3>Welcome to DVID</h3>
 
-        <p>DVID documentation can be found on <a href="https://github.com/janelia-flyem/dvid#dvid-">github</a>
-          as well as the automatically updated <a href="https://godoc.org/github.com/janelia-flyem/dvid">Go Doc
+        <p>DVID documentation can be found on <a href="https://github.com/janelia-flyem/dvid">github</a> as
+          well as the automatically updated <a href="https://godoc.org/github.com/janelia-flyem/dvid">Go Doc
           documentation</a>.</p>
 
         <h4>HTTP API</h4>
