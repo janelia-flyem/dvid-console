@@ -209,12 +209,12 @@ var RepoDAG  = React.createClass({
         // prevents a drag from being registered as a click
         if (d3.event.defaultPrevented) return;
         if (d3.event.shiftKey) {
+          self.toggleChildren(v);
+        }else{
           //loads the node's data into page (updates tile viewer link)
           self.transitionTo('repo', {
               uuid: dag.node(v).uuid
           });
-        }else{
-          self.toggleChildren(v);
         }
       });
 
@@ -341,7 +341,7 @@ var RepoDAG  = React.createClass({
     return (
       <div>
         <h4>Version DAG <small> (Nodes with thick borders are locked.)</small></h4>
-        Mouse over a node to view the log. Click on blue nodes to expand/collapse. Shift + click nodes to navigate to repo.
+        <p>Mouse over a node to view the log. <kbd>Shift</kbd> + Click on blue nodes to expand/collapse. Click nodes to navigate to repo.</p>
         <div>
           <button className="btn btn-default" onClick={this.downloadSVGHandler}>Download DAG as SVG</button>
           <button className="btn btn-default" onClick={this.fitDAG}>Fit graph to window</button>
