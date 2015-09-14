@@ -191,16 +191,31 @@ var RepoDAG  = React.createClass({
     };
     dagreRenderer(elementHolderLayer, dag);
 
+    d3.select(".dag_note").remove();
+
+    var tooltip = d3.select("body")
+      .append("div")
+      .attr("class", "dag_note")
+      .style("position", "absolute")
+      .style("z-index", "10")
+      .style("visibility", "hidden")
+      .text("a simple tooltip");
+
     elementHolderLayer.selectAll("g.node")
       .on("mouseenter", function (v) {
         if (dag.node(v).note) {
-          flash(dag.node(v).note, "3em", this);
+          tooltip.style("visibility", "visible");
+          tooltip.text(dag.node(v).note);
         }
         LogActions.update({log: dag.node(v).log, uuid: dag.node(v).uuid});
         $('#' + this.id).css("filter", "url(#drop-shadow)");
       })
       .on("mouseleave", function (v) {
+        tooltip.style("visibility", "hidden");
         $('#' + this.id).css("filter", "");
+      })
+      .on("mousemove", function() {
+        tooltip.style("top", (event.pageY-30)+"px").style("left",(event.pageX+30)+"px")
       })
       .on("click", function (v) {
         // prevents a drag from being registered as a click
@@ -214,21 +229,6 @@ var RepoDAG  = React.createClass({
           });
         }
       });
-
-    function flash(name, dx, el) {
-      d3.select(".dag_note")
-        .remove();
-      elementHolderLayer.append("text")
-        .attr("class", "dag_note")
-        .attr("transform", d3.select(el).attr('transform'))
-        .attr('dx', dx)
-        .attr('dy', '-1.5em')
-        .text(name)
-        .transition()
-          .duration(3500)
-          .style("opacity", 0)
-          .remove();
-    }
 
     var nodeDrag = d3.behavior.drag()
         .on("drag", function (d) {
