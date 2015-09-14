@@ -11,7 +11,9 @@ class LogStore {
   }
   onUpdate(data) {
     this.current = data.log;
-    this.current.reverse();
+    if (this.current && this.current.constructor === Array) {
+      this.current.reverse();
+    }
     this.uuid = data.uuid;
   }
   onRevert() {
