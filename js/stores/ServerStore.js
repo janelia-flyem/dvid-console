@@ -48,7 +48,7 @@ class ServerStore {
   onFetch(opts) {
     var self = this;
 
-    if (opts.uuid) {
+    if (opts && opts.uuid) {
       self.api.repo({
         uuid: opts.uuid,
         endpoint: 'info',
