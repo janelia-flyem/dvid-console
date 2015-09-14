@@ -6,16 +6,23 @@ class LogStore {
     this.bindActions(LogActions);
     this.current = [];
     this.orig = [];
+    this.uuid = null;
+    this.repo_uuid = null;
   }
-  onUpdate(log) {
-    this.current = log;
+  onUpdate(data) {
+    this.current = data.log;
+    this.current.reverse();
+    this.uuid = data.uuid;
   }
   onRevert() {
     this.current = this.orig.slice();
+    this.uuid = null;
   }
-  onInit(log) {
-    this.orig = log.slice();
+  onInit(data) {
+    this.orig = data.log.slice();
+    this.orig.reverse();
     this.current = this.orig.slice();
+    this.repo_uuid = data.uuid;
   }
 }
 

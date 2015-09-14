@@ -22,7 +22,7 @@ class RepoDetails extends React.Component {
           </ol>
           <RepoMeta repo={repo} uuid={this.props.uuid}/>
 
-          <RepoLog log={repo.Log}/>
+          <RepoLog log={repo.Log} uuid={this.props.uuid}/>
 
           <div className="row">
             <div className="col-sm-12">
@@ -55,7 +55,7 @@ class RepoDetails extends React.Component {
 
 class Repo extends React.Component {
   componentDidMount() {
-    ServerActions.fetch(this.props.params.uuid);
+    ServerActions.fetch({uuid: this.props.params.uuid});
   }
 
   render() {

@@ -1,9 +1,11 @@
 import React from 'react';
 import moment from 'moment';
-import {Table, Button} from 'react-bootstrap';
+import {Modal, Table, Button} from 'react-bootstrap';
 import LogStore from '../stores/LogStore';
 import LogActions from '../actions/LogActions';
+import ServerActions from '../actions/ServerActions';
 import AltContainer from 'alt/AltContainer';
+import ErrorActions from '../actions/ErrorActions';
 
 class LogEntry extends React.Component {
   render(){
@@ -23,11 +25,64 @@ class LogEntry extends React.Component {
 }
 
 class LogTable extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      showLogModal: false
+    };
+  }
 
   handleLogRestore(e) {
     LogActions.revert();
     e.preventDefault();
   }
+
+  openLogModal(e) {
+    e.preventDefault();
+    this.setState({showLogModal: true});
+  }
+
+  closeLogModal(e) {
+    e.preventDefault();
+    this.setState({showLogModal: false});
+  }
+
+  saveLogEntry(e) {
+    var self = this;
+    e.preventDefault();
+
+    var isRepo = self.props.uuid ? false : true;
+    var uuid = self.props.uuid || self.props.repo_uuid;
+
+    // get the new log entry out of the form
+    var logEntry = React.findDOMNode(this.refs.newLog).value;
+    // call method on the dvid api to save the log
+    // trigger a re-render of the table.
+    ServerActions.addLog({
+      entry: logEntry,
+      uuid: uuid,
+      isRepo: isRepo,
+      callback: function(data) {
+        if (isRepo) {
+          LogActions.init({log: data.Log, uuid: uuid});
+        } else {
+          LogActions.update({log: data.DAG.Nodes[self.props.uuid].Log, uuid: self.props.uuid});
+        }
+        ErrorActions.clear();
+        // close the modal dialogue
+        self.setState({showLogModal: false});
+      },
+      error: function(err) {
+        self.setState({showLogModal: false});
+        if (/locked node/.test(err)) {
+          ErrorActions.update(new Error('You can not add a log entry to a locked node.'));
+        } else {
+          ErrorActions.update(err);
+        }
+      }
+    });
+  }
+
 
   render() {
 
@@ -39,7 +94,8 @@ class LogTable extends React.Component {
 
     var span = null,
       restore = null,
-      title = <span><b>Log:</b></span>;
+      title = <span><b>Repo Log:</b></span>,
+      modalTitle = <Modal.Title>Add a new entry to the repo log</Modal.Title>;
 
     if (log.length > 1) {
       var oldest = moment(log[0].split(' ', 1)[0]);
@@ -48,7 +104,8 @@ class LogTable extends React.Component {
     }
 
     if (this.props.current[0] !== this.props.orig[0] ) {
-      title = <span><b id="nodelogtext">Node Log:</b> <a className="" href="" onClick={this.handleLogRestore}><small>restore repo log</small></a></span>;
+      title = <span><b id="nodelogtext">Node Log for {this.props.uuid}: </b> <a className="" href="" onClick={this.handleLogRestore}><small>restore repo log</small></a></span>;
+      modalTitle = <Modal.Title>Add a log entry for node {this.props.uuid}</Modal.Title>;
     }
 
     return (
@@ -56,7 +113,7 @@ class LogTable extends React.Component {
         <div className="panel panel-default">
           <div className="panel-heading">
             {title}
-            <span className="pull-right">{log.length} {log.length == 1 ? ' entry' : ' entries'} {span}</span>
+            <span className="pull-right">{log.length} {log.length == 1 ? ' entry' : ' entries'} {span} <a className="btn btn-xs btn-default" href="" onClick={this.openLogModal.bind(this)}>Add entry</a></span>
           </div>
           <div className="panel-body log">
           <Table striped>
@@ -68,6 +125,19 @@ class LogTable extends React.Component {
           </Table>
           </div>
         </div>
+        <Modal show={this.state.showLogModal} onHide={this.closeLogModal.bind(this)}>
+          <Modal.Header closeButton>
+          {modalTitle}
+          </Modal.Header>
+          <Modal.Body>
+            <div className="form-group">
+              <input className="form-control" type="text" ref="newLog" name="new_log" id="new_log" placeholder="Enter your new log message"/>
+            </div>
+            <div className="form-group">
+              <button onClick={this.saveLogEntry.bind(this)} className="btn btn-primary">Add</button>
+            </div>
+          </Modal.Body>
+        </Modal>
       </div>
     );
   }
@@ -76,14 +146,13 @@ class LogTable extends React.Component {
 
 class RepoLog extends React.Component {
   componentDidMount() {
-    this.props.log.reverse();
-    LogActions.init(this.props.log);
+    LogActions.init({log: this.props.log, uuid: this.props.uuid});
   }
 
   render(){
     return (
       <AltContainer store={LogStore}>
-        <LogTable />
+        <LogTable/>
       </AltContainer>
     );
   }

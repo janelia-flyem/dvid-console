@@ -45,15 +45,18 @@ class ServerStore {
     });
   }
 
-  onFetch(uuid) {
+  onFetch(opts) {
     var self = this;
 
-    if (uuid) {
-      self.api.get({
-        uuid: uuid,
+    if (opts.uuid) {
+      self.api.repo({
+        uuid: opts.uuid,
         endpoint: 'info',
         callback: function(data) {
           self.repo = data;
+          if (opts.callback) {
+            opts.callback(data);
+          }
           self.emitChange();
         },
         error: function (err) {
@@ -71,6 +74,42 @@ class ServerStore {
           ErrorActions.update(err);
         }
       });
+    }
+  }
+
+  onAddLog(data) {
+    var self = this,
+      entry = data.entry,
+      uuid  = data.uuid,
+      cb    = data.callback,
+      payload = {
+        log: [ entry ]
+      },
+      error = function(err) {
+        ErrorActions.update(err);
+      };
+
+    if (data.error) {
+      error = data.error;
+    }
+
+    var request = {
+      endpoint: 'log',
+      uuid: uuid,
+      payload: JSON.stringify(payload),
+      method: 'POST',
+      callback: function(data) {
+        self.onFetch({uuid: uuid, callback: cb});
+      },
+      error: error
+    };
+
+    if (entry) {
+      if (data.isRepo) {
+        self.api.repo( request );
+      } else {
+        self.api.node( request );
+      }
     }
   }
 

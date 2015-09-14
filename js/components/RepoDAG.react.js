@@ -196,8 +196,7 @@ var RepoDAG  = React.createClass({
         if (dag.node(v).note) {
           flash(dag.node(v).note, "3em", this);
         }
-        LogActions.update(dag.node(v).log);
-        $("#nodelogtext").text("Node Log for " + dag.node(v).fullname);
+        LogActions.update({log: dag.node(v).log, uuid: dag.node(v).uuid});
         $('#' + this.id).css("filter", "url(#drop-shadow)");
       })
       .on("mouseleave", function (v) {

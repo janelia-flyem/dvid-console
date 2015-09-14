@@ -13,6 +13,9 @@ class ServerActions {
   fetch(uuid) {
     this.dispatch(uuid);
   }
+  addLog(entry) {
+    this.dispatch(entry);
+  }
 }
 
 module.exports = (alt.createActions(ServerActions));
