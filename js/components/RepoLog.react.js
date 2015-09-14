@@ -149,6 +149,10 @@ class RepoLog extends React.Component {
     LogActions.init({log: this.props.log, uuid: this.props.uuid});
   }
 
+  componentWillUpdate(props) {
+    LogActions.init({log: props.log, uuid: props.uuid});
+  }
+
   render(){
     return (
       <AltContainer store={LogStore}>
