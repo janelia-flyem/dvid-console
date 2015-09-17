@@ -286,3 +286,7 @@ g.current > rect {
   background: #fff;
   padding: 0.3em 1em;
 }
+
+.tooltip-inner {
+  max-width: 400px;
+}

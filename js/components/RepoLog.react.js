@@ -9,6 +9,18 @@ import ErrorActions from '../actions/ErrorActions';
 
 class LogEntry extends React.Component {
 
+  componentDidMount() {
+    $(React.findDOMNode(this)).tooltip({
+      selector: '[data-toggle="tooltip"]'
+    });
+  }
+
+  componentDidUpdate() {
+    var tips = $(React.findDOMNode(this)).find('[data-toggle="tooltip"]');
+    console.log(tips.tooltip('destroy'));
+    console.log(tips.tooltip());
+  }
+
   render(){
     var entry = this.props.entry.split(/\s(.+)/);
     var log_text = entry[1];
@@ -20,7 +32,7 @@ class LogEntry extends React.Component {
     return (
       <tr>
         <td className="timestamp">{moment(entry[0]).format("MMM Do YYYY, h:mm:ss a")}</td>
-        <td><span title={full_text}>{log_text}</span></td>
+        <td><span data-toggle="tooltip" data-placement="top" title={full_text}>{log_text}</span></td>
       </tr>
     );
   }
