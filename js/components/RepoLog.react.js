@@ -8,9 +8,11 @@ import AltContainer from 'alt/AltContainer';
 import ErrorActions from '../actions/ErrorActions';
 
 class LogEntry extends React.Component {
+
   render(){
     var entry = this.props.entry.split(/\s(.+)/);
     var log_text = entry[1];
+    var full_text = log_text;
     if (log_text.length > 100) {
       log_text = log_text.substring(0,100) + '...';
     }
@@ -18,7 +20,7 @@ class LogEntry extends React.Component {
     return (
       <tr>
         <td className="timestamp">{moment(entry[0]).format("MMM Do YYYY, h:mm:ss a")}</td>
-        <td>{log_text}</td>
+        <td><span title={full_text}>{log_text}</span></td>
       </tr>
     );
   }
