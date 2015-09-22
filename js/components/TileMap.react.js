@@ -75,8 +75,8 @@ var TileMap = React.createClass({
           <div className="col-sm-4">
             <p><strong>Tile Source:</strong> {this.state.tileSource}</p>
           </div>
+          {labelBlock}
         </div>
-        {labelBlock}
         <div className="row">
           <div className="col-sm-12">
             <TileMapArea dvid={this.props.dvid} instances={this.state.repo.DataInstances} uuid={this.state.uuid} coordinateString={this.state.coordinateString} plane={this.state.plane} tileSource={this.state.tileSource} labelSource={this.state.labelSource} />
