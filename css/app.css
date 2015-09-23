@@ -171,9 +171,9 @@ table.datainstances {
 
 #coords-tip {
   padding: 0.3em;
-  background: rgba(255,255,255,0.5);
-  border: 1px solid #444;
+  background: rgba(0,0,0,0.2);
   border-radius: 5px;
+  color: rgba(255,255,0,0.8);
 }
 
 /*** end tileviewer ***/
