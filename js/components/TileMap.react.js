@@ -40,7 +40,7 @@ var TileMap = React.createClass({
   },
 
   componentDidMount: function () {
-    this.props.dvid.get({
+    this.props.dvid.repo({
       uuid: this.state.uuid,
       endpoint: 'info',
       callback: function(result) {
