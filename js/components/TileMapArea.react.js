@@ -368,22 +368,38 @@ var TileMapArea = React.createClass({
         ]});
 
         function onHookOsdViewerMove(event) {
-            // set event.stopHandlers = true to prevent any more handlers in the chain from being called
-            // set event.stopBubbling = true to prevent the original event from bubbling
-            // set event.preventDefaultAction = true to prevent viewer's default action
-            var coords = img_helper.physicalToDataPoint(event.position);
-            var z = Math.round($('#depth').val());
-            var string = 'x: ' + Math.round(coords.x) + ', y: ' + Math.round(coords.y) + ', z: ' + z;
-            $('#coords-tip').empty()
-              .append('<p>' + string + '</p>')
-              .css({
-                'position': 'absolute',
-                'top': event.position.y + 20,
-                'left': event.position.x + 20
-              });
-            event.stopHandlers = true;
-            event.stopBubbling = true;
-            event.preventDefaultAction = true;
+          // set event.stopHandlers = true to prevent any more handlers in the chain from being called
+          // set event.stopBubbling = true to prevent the original event from bubbling
+          // set event.preventDefaultAction = true to prevent viewer's default action
+          var coords = img_helper.physicalToDataPoint(event.position);
+          coords.z = $('#depth').val();
+
+          var x = coords.x;
+          var y = coords.y;
+          var z = coords.z;
+
+          if (self.state.plane === 1) {
+            x = coords.x;
+            y = coords.z;
+            z = coords.y;
+          }
+          else if ( self.state.plane === 2) {
+            x = coords.z;
+            y = coords.x;
+            z = coords.y;
+          }
+
+          var string = 'x: ' + Math.round(x) + ', y: ' + Math.round(y) + ', z: ' + Math.round(z);
+          $('#coords-tip').empty()
+            .append('<p>' + string + '</p>')
+            .css({
+              'position': 'absolute',
+              'top': event.position.y + 20,
+              'left': event.position.x + 20
+            });
+          event.stopHandlers = true;
+          event.stopBubbling = true;
+          event.preventDefaultAction = true;
         }
 
         viewer.recenter = false;
