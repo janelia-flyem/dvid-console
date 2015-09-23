@@ -165,6 +165,17 @@ table.datainstances {
   margin-right: 0.3em;
 }
 
+#coords-tip p {
+  margin: 0;
+}
+
+#coords-tip {
+  padding: 0.3em;
+  background: rgba(255,255,255,0.5);
+  border: 1px solid #444;
+  border-radius: 5px;
+}
+
 /*** end tileviewer ***/
 
 

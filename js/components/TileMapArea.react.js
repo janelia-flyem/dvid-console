@@ -42,6 +42,11 @@ var TileMapArea = React.createClass({
 
   componentDidMount: function() {
     //this.componentWillReceiveProps(this.props);
+    $('body').on('mouseover','#viewer canvas:eq(0)', function() {
+      $('#coords-tip').show();
+    }).on('mouseout','#viewer canvas:eq(0)', function() {
+      $('#coords-tip').hide();
+    });
   },
 
   componentWillReceiveProps: function (props) {
@@ -357,6 +362,29 @@ var TileMapArea = React.createClass({
         viewer.xy.addHandler('add-layer', function(event) {
           viewer.layer = event.drawer;
         });
+
+        var viewerInputHook = viewer.xy.addViewerInputHook({hooks: [
+          {tracker: 'viewer', handler: 'moveHandler', hookHandler: onHookOsdViewerMove}
+        ]});
+
+        function onHookOsdViewerMove(event) {
+            // set event.stopHandlers = true to prevent any more handlers in the chain from being called
+            // set event.stopBubbling = true to prevent the original event from bubbling
+            // set event.preventDefaultAction = true to prevent viewer's default action
+            var coords = img_helper.physicalToDataPoint(event.position);
+            var z = Math.round($('#depth').val());
+            var string = 'x: ' + Math.round(coords.x) + ', y: ' + Math.round(coords.y) + ', z: ' + z;
+            $('#coords-tip').empty()
+              .append('<p>' + string + '</p>')
+              .css({
+                'position': 'absolute',
+                'top': event.position.y + 20,
+                'left': event.position.x + 20
+              });
+            event.stopHandlers = true;
+            event.stopBubbling = true;
+            event.preventDefaultAction = true;
+        }
 
         viewer.recenter = false;
 
@@ -678,6 +706,7 @@ var TileMapArea = React.createClass({
           <a href={neutu_url}>Open with NeuTu</a>
           </div>
         </div>
+        <div id="coords-tip" style={{display: 'none'}}></div>
       </div>
     );
   }
