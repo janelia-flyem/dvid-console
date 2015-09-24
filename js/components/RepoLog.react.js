@@ -17,8 +17,8 @@ class LogEntry extends React.Component {
 
   componentDidUpdate() {
     var tips = $(React.findDOMNode(this)).find('[data-toggle="tooltip"]');
-    console.log(tips.tooltip('destroy'));
-    console.log(tips.tooltip());
+    tips.tooltip('destroy');
+    tips.tooltip();
   }
 
   render(){
