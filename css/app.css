@@ -141,8 +141,8 @@ table.datainstances {
 
 #volume_viewer {
   position: absolute;
-  height: 535px;
-  width: 535px;
+  height: 735px;
+  width: 703px;
   background: #000;
   z-index: 3;
   border: 1px solid #FF0;

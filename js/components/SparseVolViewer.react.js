@@ -749,10 +749,10 @@ function init(state, props) {
   renderer = new THREE.WebGLRenderer();
   renderer.setClearColor( 0x000000 );
   renderer.setPixelRatio( window.devicePixelRatio );
-  renderer.setSize(500, 500 );
+  renderer.setSize(700, 700 );
   document.getElementById('volume_viewer').appendChild( renderer.domElement );
 
-  camera = new THREE.PerspectiveCamera( 70, 500 / 500, 1, 20000 );
+  camera = new THREE.PerspectiveCamera( 70, 700 / 700, 1, 20000 );
   camera.position.z = 8000;
 
   scene = new THREE.Scene();
