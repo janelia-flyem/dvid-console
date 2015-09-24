@@ -215,7 +215,7 @@ var RepoDAG  = React.createClass({
         $('#' + this.id).css("filter", "");
       })
       .on("mousemove", function() {
-        tooltip.style("top", (event.pageY-30)+"px").style("left",(event.pageX+30)+"px")
+        tooltip.style("top", (d3.event.pageY-30)+"px").style("left",(d3.event.pageX+30)+"px")
       })
       .on("click", function (v) {
         // prevents a drag from being registered as a click
