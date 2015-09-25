@@ -1,6 +1,7 @@
 import React from 'react';
 import Router from 'react-router';
-import {Input, ButtonInput} from 'react-bootstrap';
+import {Link} from 'react-router';
+import {Input, ButtonInput, Button} from 'react-bootstrap';
 import ServerStore from '../stores/ServerStore';
 import ErrorActions from '../actions/ErrorActions';
 
@@ -43,7 +44,7 @@ var NewRepo = React.createClass({
         callback: function(res){
           console.log(res);
           self.transitionTo('repo', {
-            uuid : res.Root,
+            uuid : res.root,
           });
         },
         error: function(err) {
@@ -60,7 +61,8 @@ var NewRepo = React.createClass({
           <form onSubmit={this.handleRepoCreate}>
             <Input type="text" value={this.state.alias} label="Alias" ref="alias" onChange={this.handleAliasChange}/>
             <Input type="text" value={this.state.desc} label="Description" ref="desc" onChange={this.handleDescChange}/>
-            <ButtonInput type='submit' value='Create' bsStyle='primary' />
+            <Button type='submit' bsStyle='primary' >Create</Button>
+            <Link to="consoleapp" className="btn btn-default" activeClassName="current">Cancel</Link>
           </form>
         </div>
     );
