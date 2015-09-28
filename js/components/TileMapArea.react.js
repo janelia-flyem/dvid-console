@@ -43,8 +43,10 @@ var TileMapArea = React.createClass({
   componentDidMount: function() {
     //this.componentWillReceiveProps(this.props);
     $('body').on('mouseover','#viewer canvas:eq(0)', function() {
+      $('.keyboard-command-area').focus();
       $('#coords-tip').show();
     }).on('mouseout','#viewer canvas:eq(0)', function() {
+      $('.keyboard-command-area').blur();
       $('#coords-tip').hide();
     });
   },
