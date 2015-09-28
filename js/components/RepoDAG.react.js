@@ -5,11 +5,14 @@ import {Tooltip} from 'react-bootstrap';
 import d3 from 'd3';
 import dagreD3 from 'dagre-d3';
 import LogActions from '../actions/LogActions';
+import ServerActions from '../actions/ServerActions';
+import ServerStore from '../stores/ServerStore';
+import AltContainer from 'alt/AltContainer';
 
 var dag, elementHolderLayer, svgBackground;
 
 // Dagre graph
-var RepoDAG  = React.createClass({
+var RepoDAGDisplay  = React.createClass({
   mixins: [Router.Navigation],
 
   componentDidMount: function() {
@@ -334,6 +337,12 @@ var RepoDAG  = React.createClass({
     document.body.appendChild(e);
   },
 
+  branchNode: function(event) {
+    ServerActions.branchNode({
+      uuid: this.props.uuid
+    });
+  },
+
   render: function() {
     return (
       <div>
@@ -344,6 +353,7 @@ var RepoDAG  = React.createClass({
           <button className="btn btn-default" onClick={this.fitDAG}>Fit graph to window</button>
           <button className="btn btn-default" onClick={this.expandGraph}>Expand graph</button>
           <button className="btn btn-default" onClick={this.collapseGraph}>Collapse graph</button>
+          <button className="btn btn-default" onClick={this.branchNode}>Branch</button>
         </div>
         <div className="dag">
           <div>
@@ -354,6 +364,23 @@ var RepoDAG  = React.createClass({
     );
   }
 });
+
+
+class RepoDAG extends React.Component {
+
+  componentDidMount() {
+    ServerActions.fetchTypes();
+  }
+
+  render() {
+    return (
+      <AltContainer store={ServerStore}>
+        <RepoDAGDisplay uuid={this.props.uuid}/>
+      </AltContainer>
+    );
+  }
+};
+
 
 module.exports = RepoDAG;
 

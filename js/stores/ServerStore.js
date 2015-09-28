@@ -23,6 +23,21 @@ class ServerStore {
     var self = this;
   }
 
+  onBranchNode(opts) {
+    var self = this;
+    this.api.node({
+      uuid: opts.uuid,
+      endpoint: 'branch',
+      method:'POST',
+      callback: function(data) {
+        self.onFetch(opts);
+      },
+      error: function(err) {
+        ErrorActions.update(err);
+      }
+    });
+  }
+
   onFetchStats() {
     var self = this;
     self.api.serverInfo({

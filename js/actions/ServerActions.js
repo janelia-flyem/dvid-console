@@ -16,6 +16,9 @@ class ServerActions {
   addLog(entry) {
     this.dispatch(entry);
   }
+  branchNode(data) {
+    this.dispatch(data);
+  }
 }
 
 module.exports = (alt.createActions(ServerActions));
