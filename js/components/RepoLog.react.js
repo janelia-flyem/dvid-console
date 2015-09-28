@@ -78,7 +78,7 @@ class LogTable extends React.Component {
       isRepo: isRepo,
       callback: function(data) {
         if (isRepo) {
-          LogActions.init({log: data.Log, uuid: uuid});
+          LogActions.init.defer({log: data.Log, uuid: uuid});
         } else {
           LogActions.update({log: data.DAG.Nodes[self.props.uuid].Log, uuid: self.props.uuid});
         }
@@ -164,7 +164,7 @@ class RepoLog extends React.Component {
   }
 
   componentWillUpdate(props) {
-    LogActions.init({log: props.log, uuid: props.uuid});
+    LogActions.init.defer({log: props.log, uuid: props.uuid});
   }
 
   render(){

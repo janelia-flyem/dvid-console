@@ -1,7 +1,9 @@
 import React from 'react';
 import Router from 'react-router';
+import {Modal, Button} from 'react-bootstrap';
 import DataInstances from './DataInstances.react';
 import ErrorActions from '../actions/ErrorActions';
+import InstanceAdd from './InstanceAdd.React.js';
 
 var InstanceSelect = React.createClass({
   // have to write this component with the old syntax otherwise we cant use mixins.
@@ -52,6 +54,7 @@ var InstanceSelect = React.createClass({
   render: function () {
     return (
       <div className="dataselect">
+        <InstanceAdd uuid={this.props.uuid}/>
         <h4>Data Instances</h4>
         <div className="row">
           <div className="col-sm-3">
@@ -62,8 +65,8 @@ var InstanceSelect = React.createClass({
             <form id="instance_select">
               <DataInstances repo={this.props.repo} uuid={this.props.uuid}/>
             </form>
-         </div>
-       </div>
+          </div>
+        </div>
       </div>
     );
   }

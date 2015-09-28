@@ -1,6 +1,8 @@
 import React from 'react';
+import ServerStore from '../stores/ServerStore';
+import AltContainer from 'alt/AltContainer';
 
-class DataInstances extends React.Component {
+class DataInstanceList extends React.Component {
   render() {
     var rows = [];
     if (this.props && this.props.repo.DataInstances) {
@@ -96,5 +98,16 @@ class TileInput extends React.Component {
     );
   }
 }
+
+class DataInstances extends React.Component {
+
+  render() {
+    return (
+      <AltContainer store={ServerStore}>
+        <DataInstanceList uuid={this.props.uuid}/>
+      </AltContainer>
+    );
+  }
+};
 
 module.exports = DataInstances;

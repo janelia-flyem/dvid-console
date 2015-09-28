@@ -19,6 +19,10 @@ class ServerStore {
 
   }
 
+  onUpdate() {
+    var self = this;
+  }
+
   onFetchStats() {
     var self = this;
     self.api.serverInfo({
