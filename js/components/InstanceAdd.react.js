@@ -130,7 +130,7 @@ class InstanceAddButton extends React.Component {
       callback: function(res){
         // force a refresh of the data instances data from the server.
         self.closeDataInstanceModal();
-        ServerActions.fetch.defer({uuid: self.props.uuid});
+        ServerActions.fetch({uuid: self.props.uuid});
       },
       error: function(err) {
         // need to insert an error message into the top of the modal window.

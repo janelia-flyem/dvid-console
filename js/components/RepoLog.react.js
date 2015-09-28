@@ -78,7 +78,7 @@ class LogTable extends React.Component {
       isRepo: isRepo,
       callback: function(data) {
         if (isRepo) {
-          LogActions.init.defer({log: data.Log, uuid: uuid});
+          LogActions.init({log: data.Log, uuid: uuid});
         } else {
           LogActions.update({log: data.DAG.Nodes[self.props.uuid].Log, uuid: self.props.uuid});
         }
@@ -164,6 +164,10 @@ class RepoLog extends React.Component {
   }
 
   componentWillUpdate(props) {
+    // have to use the defer method here otherwise the dispatch code will
+    // complain about trying to dispatch during a dispatch. The defer
+    // method stops that by wrapping the init method in a setTimeout.
+    // see http://alt.js.org/docs/actions/ for more.
     LogActions.init.defer({log: props.log, uuid: props.uuid});
   }
 
