@@ -310,6 +310,11 @@ var TileMapArea = React.createClass({
           color:          "yellow"
         });
 
+        // passing the react object into the openseadragon viewer, so that
+        // we can trigger changes in the UI by updating the state. This is needed
+        // to simplify the layer change controls.
+        viewer.xy.React = self;
+
         //window.viewer = viewer;
         img_helper = viewer.xy.activateImagingHelper();
         //window.img_helper = img_helper;
