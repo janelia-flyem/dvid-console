@@ -1,6 +1,6 @@
 //! OpenSeadragon 1.0.0
-//! Built on 2015-04-15
-//! Git commit: v1.0.0-164-gcb889e0-dirty
+//! Built on 2015-09-29
+//! Git commit: v1.0.0-167-gdfd4648
 //! http://openseadragon.github.io
 //! License: http://openseadragon.github.io/license/
 
@@ -6162,6 +6162,7 @@ $.Viewer = function( options ) {
                             _this.viewport.applyConstraints();
                             return false;
                         case 45://-|_
+                        case 43:
                             _this.viewport.zoomBy(0.9);
                             _this.viewport.applyConstraints();
                             return false;
@@ -6198,6 +6199,18 @@ $.Viewer = function( options ) {
                         case 39://right arrow
                             _this.viewport.panBy(new $.Point(0.05, 0));
                             _this.viewport.applyConstraints();
+                            return false;
+                        case 101://e
+                            var layerUp = parseInt(document.getElementById('depth').value) + 1;
+                            document.getElementById('depth').value = layerUp;
+                            document.getElementById('stack-slider').value = layerUp;
+                            _this.updateLayer(layerUp);
+                            return false;
+                        case 99://c
+                            var layerDown = parseInt(document.getElementById('depth').value) - 1;
+                            document.getElementById('depth').value = layerDown;
+                            document.getElementById('stack-slider').value = layerDown;
+                            _this.updateLayer(layerDown);
                             return false;
                         default:
                             //console.log( 'navigator keycode %s', event.keyCode );
