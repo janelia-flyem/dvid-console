@@ -5,12 +5,18 @@ import AltContainer from 'alt/AltContainer';
 class DataInstanceList extends React.Component {
   render() {
     var rows = [];
+
     if (this.props && this.props.repo.DataInstances) {
       var instances = this.props.repo.DataInstances;
       for (var key in instances) {
         if (instances.hasOwnProperty(key)) {
           var instance = instances[key];
-          rows.push(<DataInstance key={key} instance={instance} uuid={this.props.uuid}/>);
+          var type = instance.Base.TypeName;
+          if (type === 'grayscale8' || type === 'multiscale2d' || type === 'uint8blk' || type === 'imagetile' || type === 'labels64' || type === 'labelblk') {
+            rows.unshift(<DataInstance key={key} instance={instance} uuid={this.props.uuid}/>);
+          } else {
+            rows.push(<DataInstance key={key} instance={instance} uuid={this.props.uuid}/>);
+          }
         }
       }
     }
