@@ -1,6 +1,6 @@
 //! OpenSeadragon 1.0.0
-//! Built on 2015-09-29
-//! Git commit: v1.0.0-167-gdfd4648-dirty
+//! Built on 2015-09-30
+//! Git commit: v1.0.0-168-g2f760c9-dirty
 //! http://openseadragon.github.io
 //! License: http://openseadragon.github.io/license/
 
@@ -6158,11 +6158,13 @@ $.Viewer = function( options ) {
                 if ( !event.preventDefaultAction ) {
                     switch( event.keyCode ){
                         case 61://=|+
+                        case 50://2
                             _this.viewport.zoomBy(1.1);
                             _this.viewport.applyConstraints();
                             return false;
                         case 45://-|_
                         case 43:
+                        case 49://1
                             _this.viewport.zoomBy(0.9);
                             _this.viewport.applyConstraints();
                             return false;
@@ -6200,15 +6202,19 @@ $.Viewer = function( options ) {
                             _this.viewport.panBy(new $.Point(0.05, 0));
                             _this.viewport.applyConstraints();
                             return false;
-                        case 101://e
-                            var layerUp = parseInt(document.getElementById('depth').value) + 1;
+                        case 113://q
+                        case 81://Q
+                            var increment = ( event.shift ) ? 10 : 1;
+                            var layerUp = parseInt(document.getElementById('depth').value) + increment;
                             document.getElementById('depth').value = layerUp;
                             document.getElementById('stack-slider').value = layerUp;
                             _this.React.setState({layer: layerUp});
                             _this.React.handleLayerChange(layerUp);
                             return false;
-                        case 99://c
-                            var layerDown = parseInt(document.getElementById('depth').value) - 1;
+                        case 101://e
+                        case 69://E
+                            var decrement = ( event.shift ) ? 10 : 1;
+                            var layerDown = parseInt(document.getElementById('depth').value) - decrement;
                             document.getElementById('depth').value = layerDown;
                             document.getElementById('stack-slider').value = layerDown;
                             _this.React.setState({layer: layerDown});
