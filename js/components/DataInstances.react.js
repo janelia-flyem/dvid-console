@@ -5,20 +5,54 @@ import AltContainer from 'alt/AltContainer';
 class DataInstanceList extends React.Component {
   render() {
     var rows = [];
+    var tileRows = [];
 
     if (this.props && this.props.repo.DataInstances) {
       var instances = this.props.repo.DataInstances;
+
+      var sorted = [];
+
+
       for (var key in instances) {
         if (instances.hasOwnProperty(key)) {
-          var instance = instances[key];
-          var type = instance.Base.TypeName;
-          if (type === 'grayscale8' || type === 'multiscale2d' || type === 'uint8blk' || type === 'imagetile' || type === 'labels64' || type === 'labelblk') {
-            rows.unshift(<DataInstance key={key} instance={instance} uuid={this.props.uuid}/>);
-          } else {
-            rows.push(<DataInstance key={key} instance={instance} uuid={this.props.uuid}/>);
-          }
+          sorted.push([key, instances[key]]);
         }
       }
+
+      // returns the data instances sorted by type then name.
+      sorted.sort(function(a,b) {
+        var aType = a[1].Base.TypeName;
+        var bType = b[1].Base.TypeName;
+        // first see if we have the same type of instance
+        if (aType === bType) {
+          // same instance type, so sort by the instance name.
+          if (a[0] > b[0]) return 1;
+          if (a[0] < b[0]) return -1;
+          return 0;
+        } else {
+          // sort by the type.
+          if (aType < bType) return -1;
+          if (aType > bType) return 1;
+        }
+        return 0;
+      });
+
+      // at this point loop over each of the sorted elements and place the ones
+      // that are used for the tile viewer in the tileRows array and the others in
+      // the rows array, so that we can push them together later and make sure that
+      // the data instances that are used in the tile viewer are closer to the top
+      // of the page.
+      for (var i = 0; i < sorted.length; i++) {
+        var type = sorted[i][1].Base.TypeName;
+        if (type === 'grayscale8' || type === 'multiscale2d' || type === 'uint8blk' || type === 'imagetile' || type === 'labels64' || type === 'labelblk' ) {
+          tileRows.push(<DataInstance key={sorted[i][0]} instance={sorted[i][1]} uuid={this.props.uuid}/>);
+        } else {
+          rows.push(<DataInstance key={sorted[i][0]} instance={sorted[i][1]} uuid={this.props.uuid}/>);
+        }
+      }
+
+      tileRows.push(rows);
+
     }
 
     return (
@@ -32,7 +66,7 @@ class DataInstanceList extends React.Component {
           </tr>
         </thead>
         <tbody>
-          {rows}
+          {tileRows}
         </tbody>
       </table>
     );
