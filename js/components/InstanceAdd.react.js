@@ -16,7 +16,14 @@ class InstanceAddButton extends React.Component {
     };
   }
 
+  componentDidMount() {
+    $(React.findDOMNode(this)).popover({
+      selector: '[data-toggle="popover"]'
+    });
+  }
+
   render() {
+
 
     if (this.props.types) {
 
@@ -44,10 +51,15 @@ class InstanceAddButton extends React.Component {
         alertMsg =  <Alert bsStyle="danger">{this.state.errorMsg}</Alert>;
       }
 
+      var button = <Button bsSize="xsmall" bsStyle="default" onClick={this.openDataInstanceModal.bind(this)}>Add Data Instance</Button>;
+
+      if (this.props.repo.DAG.Nodes[this.props.uuid].Locked) {
+        button = <a role="button" tabIndex="0" className="btn btn-xs btn-default" data-toggle="popover" data-placement="left" data-trigger="focus" title="Action not permitted" data-content="It is not possible to add a data instance to a locked node. Please select an unlocked node (white) from the DAG above." onClick={this.isLocked.bind(this)}>Add Data Instance</a>;
+      }
 
       return (
         <div className="pull-right">
-          <Button bsSize="xsmall" bsStyle="default" onClick={this.openDataInstanceModal.bind(this)}>Add Data Instance</Button>
+        {button}
           <Modal show={this.state.showDIModal} onHide={this.closeDataInstanceModal.bind(this)}>
             <Modal.Header closeButton>
               <Modal.Title>Add a New Data Instance.</Modal.Title>
@@ -90,6 +102,10 @@ class InstanceAddButton extends React.Component {
     return (
       <div className="pull-right"></div>
     );
+  }
+
+  isLocked(e) {
+    e.preventDefault();
   }
 
 
