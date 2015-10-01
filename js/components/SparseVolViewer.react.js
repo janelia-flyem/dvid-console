@@ -823,11 +823,7 @@ function compose_scene(plane, props) {
 
 function add_cut_planes(uuid, scene, plane, props) {
   var cross_cut = new THREE.Object3D();
-  plane.axis = 'xy';
-  cross_cut.add(cut_plane(plane, uuid, props));
-  plane.axis = 'yz';
-  cross_cut.add(cut_plane(plane, uuid, props));
-  plane.axis = 'xz';
+  plane.axis = props.axis;
   cross_cut.add(cut_plane(plane, uuid, props));
   cross_cut.translateX(-plane.x);
   cross_cut.translateY(-plane.y);
