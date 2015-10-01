@@ -710,8 +710,8 @@ var TileMapArea = React.createClass({
             </div>
           </div>
         </div>
-        {sparse_viewer}
         <div id="viewer" className="openseadragon">
+          {sparse_viewer}
           <div id="viewer-console" className="row">
             <div className="col-sm-4">
               <p>Tile Source: {this.props.tileSource}</p>
