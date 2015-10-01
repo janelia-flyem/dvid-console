@@ -1,6 +1,6 @@
 //! OpenSeadragon 1.0.0
 //! Built on 2015-10-01
-//! Git commit: v1.0.0-170-g64d0713
+//! Git commit: v1.0.0-171-g1735ec1
 //! http://openseadragon.github.io
 //! License: http://openseadragon.github.io/license/
 
@@ -2927,6 +2927,8 @@ $.EventSource.prototype = /** @lends OpenSeadragon.EventSource.prototype */{
         this.dragEndHandler     = options.dragEndHandler || null;
         this.pinchHandler       = options.pinchHandler   || null;
         this.stopHandler        = options.stopHandler    || null;
+        this.keyDownHandler     = options.keyDownHandler || null;
+        this.keyUpHandler       = options.keyUpHandler   || null;
         this.keyHandler         = options.keyHandler     || null;
         this.focusHandler       = options.focusHandler   || null;
         this.blurHandler        = options.blurHandler    || null;
@@ -2945,6 +2947,8 @@ $.EventSource.prototype = /** @lends OpenSeadragon.EventSource.prototype */{
             setCaptureCapable:     !!this.element.setCapture && !!this.element.releaseCapture,
 
             click:                 function ( event ) { onClick( _this, event ); },
+            keydown:               function ( event ) { onKeyDown( _this, event ); },
+            keyup:                 function ( event ) { onKeyUp( _this, event ); },
             keypress:              function ( event ) { onKeyPress( _this, event ); },
             focus:                 function ( event ) { onFocus( _this, event ); },
             blur:                  function ( event ) { onBlur( _this, event ); },
@@ -3396,6 +3400,8 @@ $.EventSource.prototype = /** @lends OpenSeadragon.EventSource.prototype */{
          *      Arbitrary user-defined object.
          */
         keyHandler: function () { },
+        keyDownHandler: function () { },
+        keyUpHandler: function () { },
 
         /**
          * Implement or assign implementation to these handlers during or after
@@ -3537,7 +3543,7 @@ $.EventSource.prototype = /** @lends OpenSeadragon.EventSource.prototype */{
     /**
      * Detect browser pointer device event model(s) and build appropriate list of events to subscribe to.
      */
-    $.MouseTracker.subscribeEvents = [ "click", "keypress", "focus", "blur", $.MouseTracker.wheelEventName ];
+    $.MouseTracker.subscribeEvents = [ "click", "keydown", "keyup", "keypress", "focus", "blur", $.MouseTracker.wheelEventName ];
 
     if( $.MouseTracker.wheelEventName == "DOMMouseScroll" ) {
         // Older Firefox
@@ -3954,6 +3960,56 @@ $.EventSource.prototype = /** @lends OpenSeadragon.EventSource.prototype */{
         }
     }
 
+    function onKeyUp( tracker, event ) {
+      //$.console.log( "keyup %s %s %s %s %s", event.keyCode, event.charCode, event.ctrlKey, event.shiftKey, event.altKey );
+      var propagate;
+      if ( tracker.keyUpHandler ) {
+        event = $.getEvent( event );
+        propagate = tracker.keyUpHandler(
+          {
+            eventSource:          tracker,
+            position:             getMouseRelative( event, tracker.element ),
+            keyCode:              event.keyCode ? event.keyCode : event.charCode,
+            ctrl:                 event.ctrlKey,
+            shift:                event.shiftKey,
+            alt:                  event.altKey,
+            meta:                 event.metaKey,
+            originalEvent:        event,
+            preventDefaultAction: false,
+            userData:             tracker.userData
+          }
+        );
+        if ( !propagate ) {
+            $.cancelEvent( event );
+        }
+      }
+    }
+
+    function onKeyDown( tracker, event ) {
+      //$.console.log( "keydown %s %s %s %s %s", event.keyCode, event.charCode, event.ctrlKey, event.shiftKey, event.altKey );
+      var propagate;
+      if ( tracker.keyDownHandler ) {
+        event = $.getEvent( event );
+        propagate = tracker.keyDownHandler(
+          {
+            eventSource:          tracker,
+            position:             getMouseRelative( event, tracker.element ),
+            keyCode:              event.keyCode ? event.keyCode : event.charCode,
+            ctrl:                 event.ctrlKey,
+            shift:                event.shiftKey,
+            alt:                  event.altKey,
+            meta:                 event.metaKey,
+            originalEvent:        event,
+            preventDefaultAction: false,
+            userData:             tracker.userData
+          }
+        );
+        if ( !propagate ) {
+            $.cancelEvent( event );
+        }
+      }
+    }
+
 
     /**
      * @private
@@ -3969,7 +4025,10 @@ $.EventSource.prototype = /** @lends OpenSeadragon.EventSource.prototype */{
                     eventSource:          tracker,
                     position:             getMouseRelative( event, tracker.element ),
                     keyCode:              event.keyCode ? event.keyCode : event.charCode,
+                    ctrl:                 event.ctrlKey,
                     shift:                event.shiftKey,
+                    alt:                  event.altKey,
+                    meta:                 event.metaKey,
                     originalEvent:        event,
                     preventDefaultAction: false,
                     userData:             tracker.userData
@@ -6154,8 +6213,8 @@ $.Viewer = function( options ) {
                 }
             },
 
-            keyHandler:         function( event ){
-                if ( !event.preventDefaultAction ) {
+            keyDownHandler: function(event) {
+                if ( !event.preventDefaultAction && !event.ctrl && !event.alt && !event.meta ) {
                     switch( event.keyCode ){
                         // zoom in
                         case 61://=|+
@@ -6231,6 +6290,8 @@ $.Viewer = function( options ) {
                             //console.log( 'navigator keycode %s', event.keyCode );
                             return true;
                     }
+                } else {
+                  return true;
                 }
             }
         }).setTracking( true ); // default state
