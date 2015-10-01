@@ -1,6 +1,6 @@
 //! OpenSeadragon 1.0.0
 //! Built on 2015-10-01
-//! Git commit: v1.0.0-171-g1735ec1
+//! Git commit: v1.0.0-172-g0b3b861
 //! http://openseadragon.github.io
 //! License: http://openseadragon.github.io/license/
 
@@ -5184,6 +5184,7 @@ $.EventSource.prototype = /** @lends OpenSeadragon.EventSource.prototype */{
                                     position:             getPointRelativeToAbsolute( updateGPoint.currentPos, tracker.element ),
                                     quick:                quick,
                                     shift:                event.shiftKey,
+                                    alt:                  event.altKey,
                                     isTouchEvent:         updateGPoint.type === 'touch',
                                     originalEvent:        event,
                                     preventDefaultAction: false,
@@ -8195,7 +8196,7 @@ function onBlur(){
 function onCanvasClick( event ) {
     var gestureSettings;
 
-    if ( !event.preventDefaultAction && this.viewport && event.quick ) {
+    if ( !event.preventDefaultAction && this.viewport && event.quick && !event.alt ) {
         gestureSettings = this.gestureSettingsByDeviceType( event.pointerType );
         if ( gestureSettings.clickToZoom ) {
             this.viewport.zoomBy(

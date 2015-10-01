@@ -337,9 +337,9 @@ var TileMapArea = React.createClass({
         });
 
         viewer.xy.addHandler('canvas-click', function(event) {
-          // if shift is held down, then  do something, otherwise ignore as we
+          // if alt is held down, then  do something, otherwise ignore as we
           // don't want to load a new page every time someone clicks on the image.
-          if (event.shift) {
+          if (event.originalEvent.altKey) {
             // run an ajax request to see if there is a body at the clicked coordinates
             var coords = img_helper.physicalToDataPoint(event.position);
             var z = Math.round($('#depth').val());
