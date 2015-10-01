@@ -176,6 +176,22 @@ table.datainstances {
   color: rgba(255,255,0,0.8);
 }
 
+#viewer {
+  position: relative;
+}
+
+#viewer-console {
+  width:100%;
+  color:#ff0;
+  background: rgba(0,0,0,0.3);
+  position:absolute;
+  z-index: 20;
+}
+
+#viewer-console p {
+  margin: 0.3em;
+  font-size: 0.9em;
+}
 /*** end tileviewer ***/
 
 

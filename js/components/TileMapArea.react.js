@@ -706,7 +706,11 @@ var TileMapArea = React.createClass({
           </div>
         </div>
         {sparse_viewer}
-        <div id="viewer" className="openseadragon"></div>
+        <div id="viewer" className="openseadragon">
+          <div id="viewer-console">
+            <TileCoordinates width={this.state.x} height={this.state.y} depth={this.state.layer} plane={this.state.plane}/>
+          </div>
+        </div>
         <div className="row">
           <div className="col-sm-12">
             <form className="form-inline" name="coordinates" onSubmit={this.handleCoordinateChange} id="coordinates">
@@ -725,7 +729,6 @@ var TileMapArea = React.createClass({
         </div>
         <div className="row">
           <div className="col-sm-12">
-          <TileCoordinates width={this.state.x} height={this.state.y} depth={this.state.layer} plane={this.state.plane}/>
           <a href={neutu_url}>Open with NeuTu</a>
           </div>
         </div>
