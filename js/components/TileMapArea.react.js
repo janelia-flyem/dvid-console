@@ -676,6 +676,11 @@ var TileMapArea = React.createClass({
 
     var neutu_url = "neutu://" + this.props.uuid + '/' + this.props.tileSource + '/' + this.props.labelSource + '/' + this.state.x + '/' + this.state.y + '/' + this.state.layer;
 
+    var labelBlock = '';
+    if (this.props.labelSource) {
+      labelBlock = <p>Label Source: {this.props.labelSource}</p>
+    }
+
     return (
       <div>
         <div id="toolbar">
@@ -707,8 +712,16 @@ var TileMapArea = React.createClass({
         </div>
         {sparse_viewer}
         <div id="viewer" className="openseadragon">
-          <div id="viewer-console">
-            <TileCoordinates width={this.state.x} height={this.state.y} depth={this.state.layer} plane={this.state.plane}/>
+          <div id="viewer-console" className="row">
+            <div className="col-sm-4">
+              <p>Tile Source: {this.props.tileSource}</p>
+            </div>
+            <div className="col-sm-5">
+              {labelBlock}
+            </div>
+            <div className="col-sm-3">
+              <TileCoordinates width={this.state.x} height={this.state.y} depth={this.state.layer} plane={this.state.plane}/>
+            </div>
           </div>
         </div>
         <div className="row">

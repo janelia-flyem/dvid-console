@@ -57,12 +57,6 @@ var TileMap = React.createClass({
 
   render: function () {
 
-    var labelBlock = null;
-
-    if (this.state.labelSource) {
-      labelBlock = <div className="col-sm-4"><p><strong>Label Source:</strong> {this.state.labelSource}</p></div>
-    }
-
     return (
       <div>
         <ol className="breadcrumb">
@@ -71,12 +65,6 @@ var TileMap = React.createClass({
           <li className="active">Tile viewer</li>
         </ol>
         <RepoMeta repo={this.state.repo} uuid={this.state.uuid}/>
-        <div className="row">
-          <div className="col-sm-4">
-            <p><strong>Tile Source:</strong> {this.state.tileSource}</p>
-          </div>
-          {labelBlock}
-        </div>
         <div className="row">
           <div className="col-sm-12">
             <TileMapArea dvid={this.props.dvid} instances={this.state.repo.DataInstances} uuid={this.state.uuid} coordinateString={this.state.coordinateString} plane={this.state.plane} tileSource={this.state.tileSource} labelSource={this.state.labelSource} />

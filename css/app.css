@@ -186,6 +186,7 @@ table.datainstances {
   background: rgba(0,0,0,0.3);
   position:absolute;
   z-index: 20;
+  margin: 0 0;
 }
 
 #viewer-console p {
