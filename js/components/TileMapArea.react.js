@@ -20,6 +20,9 @@ var TileMapArea = React.createClass({
   getInitialState: function() {
     return {
       x: 0,
+      targetX: 0,
+      targetY: 0,
+      targetZ: 0,
       y: 0,
       z: 0,
       layer: 0,
@@ -91,7 +94,7 @@ var TileMapArea = React.createClass({
           'yz': 2
         };
         startingTileSource = tileSourceMapping[props.plane];
-        self.setState({plane: startingTileSource});
+        self.setState({plane: startingTileSource, targetZ: startingTileSource});
       }
 
       var createTileViewer = function(gScaleData, tileData) {
@@ -324,7 +327,7 @@ var TileMapArea = React.createClass({
             x = Math.round(img_helper.logicalToDataX(center.x)),
             y = Math.round(img_helper.logicalToDataY(center.y)),
             tileSourceMapping = ['xy','xz','yz'];
-          self.setState({'x': x, 'y': y});
+          self.setState({'x': x, 'y': y, 'targetX': x, 'targetY': y});
           var url_plane =  tileSourceMapping[self.state.plane] || 'xy';
 
           self.updateUrl({
@@ -431,7 +434,7 @@ var TileMapArea = React.createClass({
           };
 
 
-          self.setState({layer: z});
+          self.setState({layer: z, targetZ: z});
           self.setState({plane: choice});
 
 
@@ -463,6 +466,7 @@ var TileMapArea = React.createClass({
             img_helper.centerAboutLogicalPoint(logicalPoint, true);
             self.setState({
               layer: coordinates[2],
+              targetZ: coordinates[2],
               url_update: false
             });
             self.handleLayerChange(coordinates[2]);
@@ -534,7 +538,7 @@ var TileMapArea = React.createClass({
 
   handleZChange: core.throttle(function(event) {
     if (event.target) {
-      this.setState({layer: event.target.value});
+      this.setState({layer: event.target.value, targetZ: event.target.value});
       this.handleLayerChange(event.target.value);
     }
   }, 250),
@@ -568,7 +572,7 @@ var TileMapArea = React.createClass({
     img_helper.centerAboutLogicalPoint(logical);
 
     // change the layer
-    this.setState({layer: z});
+    this.setState({layer: z, targetZ: z});
     this.handleLayerChange(z);
     this.refs.horizontal.getDOMNode().value = '';
     this.refs.vertical.getDOMNode().value = '';
@@ -637,6 +641,19 @@ var TileMapArea = React.createClass({
     }
   },
 
+
+  handleTargetXChange: function(e) {
+    this.setState({'targetX': e.target.value});
+  },
+
+  handleTargetYChange: function(e) {
+    this.setState({'targetY': e.target.value});
+  },
+
+  handleTargetZChange: function(e) {
+    this.setState({'targetZ': e.target.value});
+  },
+
   render: function() {
 
     if (!this.props.instances || !this.props.instances.hasOwnProperty(this.props.tileSource) ) {
@@ -651,19 +668,19 @@ var TileMapArea = React.createClass({
     // need to figure out what plane we are in and change the XYZ labels accordingly.
     //
 
-    var inputOne   = React.createElement('input',{'id': 'horizontal', 'type': 'number', 'min': 0, 'ref': 'horizontal', 'className': 'form-control input-sm', 'placeholder': this.state.x});
-    var inputTwo   = React.createElement('input',{'id': 'vertical', 'type': 'number', 'min': 0, 'ref': 'vertical', 'className': 'form-control input-sm', 'placeholder': this.state.y});
-    var inputThree = React.createElement('input',{'id': 'depth', 'type': 'number', 'min': 0, 'ref': 'depth', 'className': 'form-control input-sm', 'placeholder': this.state.layer});
+    var inputOne   = React.createElement('input',{'id': 'horizontal', 'type': 'number', 'min': 0, 'ref': 'horizontal', 'className': 'form-control input-sm', 'value': this.state.targetX, 'onChange': this.handleTargetXChange});
+    var inputTwo   = React.createElement('input',{'id': 'vertical', 'type': 'number', 'min': 0, 'ref': 'vertical', 'className': 'form-control input-sm', 'value': this.state.targetY, 'onChange': this.handleTargetYChange});
+    var inputThree = React.createElement('input',{'id': 'depth', 'type': 'number', 'min': 0, 'ref': 'depth', 'className': 'form-control input-sm', 'value': this.state.targetZ, 'onChange': this.handleTargetZChange});
 
     if (this.state.plane === 1) {
-      inputOne   = React.createElement('input',{'id': 'horizontal', 'type': 'number', 'min': 0, 'ref': 'horizontal', 'className': 'form-control input-sm', 'placeholder': this.state.x});
-      inputTwo   = React.createElement('input',{'id': 'depth', 'type': 'number', 'min': 0, 'ref': 'depth', 'className': 'form-control input-sm', 'placeholder': this.state.layer});
-      inputThree = React.createElement('input',{'id': 'vertical', 'type': 'number', 'min': 0, 'ref': 'vertical', 'className': 'form-control input-sm', 'placeholder': this.state.y});
+      inputOne   = React.createElement('input',{'id': 'horizontal', 'type': 'number', 'min': 0, 'ref': 'horizontal', 'className': 'form-control input-sm', 'value'  : this.state.targetX, 'onChange': this.handleTargetXChange });
+      inputTwo   = React.createElement('input',{'id': 'depth', 'type': 'number', 'min': 0, 'ref': 'depth', 'className': 'form-control input-sm', 'value': this.state.targetZ, 'onChange': this.handleTargetZChange});
+      inputThree = React.createElement('input',{'id': 'vertical', 'type': 'number', 'min': 0, 'ref': 'vertical', 'className': 'form-control input-sm', 'value' : this.state.targetY, 'onChange': this.handleTargetYChange});
     }
     else if (this.state.plane === 2) {
-      inputOne   = React.createElement('input',{'id': 'depth', 'type': 'number', 'min': 0, 'ref': 'depth', 'className': 'form-control input-sm', 'placeholder': this.state.layer});
-      inputTwo   = React.createElement('input',{'id': 'horizontal', 'type': 'number', 'min': 0, 'ref': 'horizontal', 'className': 'form-control input-sm', 'placeholder': this.state.x});
-      inputThree = React.createElement('input',{'id': 'vertical', 'type': 'number', 'min': 0, 'ref': 'vertical', 'className': 'form-control input-sm', 'placeholder': this.state.y});
+      inputOne   = React.createElement('input',{'id': 'depth', 'type': 'number', 'min': 0, 'ref': 'depth', 'className': 'form-control input-sm', 'value': this.state.targetZ, 'onChange': this.handleTargetZChange});
+      inputTwo   = React.createElement('input',{'id': 'horizontal', 'type': 'number', 'min': 0, 'ref': 'horizontal', 'className': 'form-control input-sm', 'value': this.state.targetX, 'onChange': this.handleTargetXChange});
+      inputThree = React.createElement('input',{'id': 'vertical', 'type': 'number', 'min': 0, 'ref': 'vertical', 'className': 'form-control input-sm', 'value': this.state.targetY, 'onChange': this.handleTargetYChange});
     }
 
     var segButton = null;
