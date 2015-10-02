@@ -301,7 +301,7 @@ var TileMapArea = React.createClass({
           preserveViewport:   true,
           fullPageButton:     "full-page",
           initialPage:        startingTileSource,
-          //immediateRender:    true,
+          immediateRender:    true,
           //gestureSettingsMouse: {
           //  clickToZoom: false
           //},
