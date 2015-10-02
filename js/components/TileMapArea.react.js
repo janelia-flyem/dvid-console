@@ -637,7 +637,6 @@ var TileMapArea = React.createClass({
     }
   },
 
-
   render: function() {
 
     if (!this.props.instances || !this.props.instances.hasOwnProperty(this.props.tileSource) ) {
@@ -652,19 +651,19 @@ var TileMapArea = React.createClass({
     // need to figure out what plane we are in and change the XYZ labels accordingly.
     //
 
-    var inputOne   = React.createElement('input',{'id': 'horizontal', 'type': 'number', 'min': 0, 'ref': 'horizontal', 'className': 'form-control input-sm'});
-    var inputTwo   = React.createElement('input',{'id': 'vertical', 'type': 'number', 'min': 0, 'ref': 'vertical', 'className': 'form-control input-sm'});
-    var inputThree = React.createElement('input',{'id': 'depth', 'type': 'number', 'min': 0, 'ref': 'depth', 'className': 'form-control input-sm'});
+    var inputOne   = React.createElement('input',{'id': 'horizontal', 'type': 'number', 'min': 0, 'ref': 'horizontal', 'className': 'form-control input-sm', 'placeholder': this.state.x});
+    var inputTwo   = React.createElement('input',{'id': 'vertical', 'type': 'number', 'min': 0, 'ref': 'vertical', 'className': 'form-control input-sm', 'placeholder': this.state.y});
+    var inputThree = React.createElement('input',{'id': 'depth', 'type': 'number', 'min': 0, 'ref': 'depth', 'className': 'form-control input-sm', 'placeholder': this.state.layer});
 
     if (this.state.plane === 1) {
-      inputOne   = React.createElement('input',{'id': 'horizontal', 'type': 'number', 'min': 0, 'ref': 'horizontal', 'className': 'form-control input-sm'});
-      inputTwo   = React.createElement('input',{'id': 'depth', 'type': 'number', 'min': 0, 'ref': 'depth', 'className': 'form-control input-sm'});
-      inputThree = React.createElement('input',{'id': 'vertical', 'type': 'number', 'min': 0, 'ref': 'vertical', 'className': 'form-control input-sm'});
+      inputOne   = React.createElement('input',{'id': 'horizontal', 'type': 'number', 'min': 0, 'ref': 'horizontal', 'className': 'form-control input-sm', 'placeholder': this.state.x});
+      inputTwo   = React.createElement('input',{'id': 'depth', 'type': 'number', 'min': 0, 'ref': 'depth', 'className': 'form-control input-sm', 'placeholder': this.state.layer});
+      inputThree = React.createElement('input',{'id': 'vertical', 'type': 'number', 'min': 0, 'ref': 'vertical', 'className': 'form-control input-sm', 'placeholder': this.state.y});
     }
     else if (this.state.plane === 2) {
-      inputOne   = React.createElement('input',{'id': 'depth', 'type': 'number', 'min': 0, 'ref': 'depth', 'className': 'form-control input-sm'});
-      inputTwo   = React.createElement('input',{'id': 'horizontal', 'type': 'number', 'min': 0, 'ref': 'horizontal', 'className': 'form-control input-sm'});
-      inputThree = React.createElement('input',{'id': 'vertical', 'type': 'number', 'min': 0, 'ref': 'vertical', 'className': 'form-control input-sm'});
+      inputOne   = React.createElement('input',{'id': 'depth', 'type': 'number', 'min': 0, 'ref': 'depth', 'className': 'form-control input-sm', 'placeholder': this.state.layer});
+      inputTwo   = React.createElement('input',{'id': 'horizontal', 'type': 'number', 'min': 0, 'ref': 'horizontal', 'className': 'form-control input-sm', 'placeholder': this.state.x});
+      inputThree = React.createElement('input',{'id': 'vertical', 'type': 'number', 'min': 0, 'ref': 'vertical', 'className': 'form-control input-sm', 'placeholder': this.state.y});
     }
 
     var segButton = null;
