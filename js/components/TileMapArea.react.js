@@ -556,6 +556,11 @@ var TileMapArea = React.createClass({
     var y = parseInt(this.refs.vertical.getDOMNode().value.trim(), 10);
     var z = parseInt(this.refs.depth.getDOMNode().value.trim(), 10);
 
+    // populate the entries with the current values if they weren't changed in the form.
+    x = x || this.state.x;
+    y = y || this.state.y;
+    z = z || this.state.layer;
+
     var point = new OpenSeadragon.Point(x,y);
     var logical = img_helper.dataToLogicalPoint(point);
 
