@@ -328,3 +328,18 @@ g.current > rect {
 .tooltip-inner {
   max-width: 400px;
 }
+
+.graph_list {
+  list-style:none;
+}
+
+.graph_list .uuid {
+  width: 19em;
+  display: inline-block;
+}
+
+.commitCreated {
+  width: 14em;
+  display: inline-block;
+}
+

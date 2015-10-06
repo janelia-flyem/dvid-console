@@ -7,6 +7,7 @@ import RepoDAG from './RepoDAG.react';
 import InstanceSelect from './InstanceSelect.react';
 import RepoLog from './RepoLog.react';
 import RepoMeta from './RepoMeta.react';
+import RepoGraph from './RepoGraph.react';
 
 
 class RepoDetails extends React.Component {
@@ -26,7 +27,7 @@ class RepoDetails extends React.Component {
 
           <div className="row">
             <div className="col-sm-12">
-              <RepoDAG repo={repo} uuid={this.props.uuid}/>
+              <RepoGraph repo={repo} uuid={this.props.uuid}/>
             </div>
           </div>
 
