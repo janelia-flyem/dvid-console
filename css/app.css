@@ -331,15 +331,21 @@ g.current > rect {
 
 .graph_list {
   list-style:none;
+  padding-left: 0;
 }
 
 .graph_list .uuid {
-  width: 19em;
+  width: 8em;
   display: inline-block;
 }
 
 .commitCreated {
   width: 14em;
+  display: inline-block;
+}
+
+.lockStatus {
+  width: 1em;
   display: inline-block;
 }
 

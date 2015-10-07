@@ -96,9 +96,14 @@ class Commit extends React.Component {
 
   render() {
 
+    var locked = <i className="lockStatus"></i>;
+    if (this.props.data.locked) {
+      locked = <i className="fa fa-lock lockStatus"></i>;
+    }
+
     return (
       <li>
-        <span className="uuid">{this.props.data.sha}</span>
+        {locked} <span className="uuid">{this.props.data.sha.substr(0,8)}</span>
         <span className="commitCreated">{moment(this.props.data.created).format("MMM Do YYYY, h:mm:ss a")}</span>
         {this.props.data.note}
       </li>
@@ -133,9 +138,6 @@ function generate_graph(commits) {
     var n_parents = commit.parents.length;
     var offset    = reserve.indexOf(branch);
     var routes    = [];
-    if (/6fbc19/.test(commit['sha']) ) {
-      //debugger;
-    }
 
     if (n_parents === 1) {
       if (typeof branches[commit.parents[0]] != 'undefined') {
