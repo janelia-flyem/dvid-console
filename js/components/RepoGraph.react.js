@@ -47,7 +47,8 @@ var RepoGraph  = React.createClass({
           created: entries[i].Created,
           note: entries[i].Note,
           log: entries[i].Log,
-          locked: entries[i].Locked
+          locked: entries[i].Locked,
+          id: entries[i].VersionID
         };
         for (var j = 0; j < entries[i].Parents.length; j++) {
           commit.parents.push(id_lookup[entries[i].Parents[j]]);
@@ -103,7 +104,7 @@ class Commit extends React.Component {
 
     return (
       <li>
-        {locked} <span className="uuid">{this.props.data.sha.substr(0,8)}</span>
+        {locked} <span className="uuid">{this.props.data.sha.substr(0,8)} ({this.props.data.id})</span>
         <span className="commitCreated">{moment(this.props.data.created).format("MMM Do YYYY, h:mm:ss a")}</span>
         {this.props.data.note}
       </li>
