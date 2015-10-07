@@ -27,13 +27,19 @@ class RepoDetails extends React.Component {
 
           <div className="row">
             <div className="col-sm-12">
-              <RepoGraph repo={repo} uuid={this.props.uuid}/>
+              <RepoDAG repo={repo} uuid={this.props.uuid}/>
             </div>
           </div>
 
           <div className="row">
             <div className="col-sm-12">
               <InstanceSelect repo={repo} uuid={this.props.uuid}/>
+            </div>
+          </div>
+
+          <div className="row">
+            <div className="col-sm-12">
+              <RepoGraph repo={repo} uuid={this.props.uuid}/>
             </div>
           </div>
 
