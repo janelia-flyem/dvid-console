@@ -21,14 +21,14 @@ var settings = {
   // the layers at which tile will be fetched from the server. For sources that
   // have been tiled, this should be the defaults 0 - inf. For limited gray scale
   // data, this needs to be 4 for both.
-  //minTileLevel: 0,
-  //maxTileLevel: 4,
+  minTileLevel: 0,
+  maxTileLevel: 4,
 
   // constrain the amount of zoom allowed. For gray scale we don't want to zoom out
   // too far as the image will turn black when there are no tiles to load.
-  //minZoomLevel: 0,
+  minZoomLevel: 0.5,
   //maxZoomLevel: 0,
-  //defaultZoomLevel: 0,
+  defaultZoomLevel: 0.5,
 
   showNavigator: true
 };

@@ -113,6 +113,9 @@ var TileMapArea = React.createClass({
 
         var minLevel = config.settings.minTileLevel;
 
+        // stops inappropriate tiles from loading at the wrong zoom level. Without
+        // this, the dvid server will return tiles as requested, but they will be
+        // showing data in the wrong location, because the coordinates will be off.
         if (!dataIsTiled) {
           minLevel = 4;
           maxLevel = 4;
@@ -287,8 +290,8 @@ var TileMapArea = React.createClass({
         var defaultZoomLevel = config.settings.defaultZoomLevel;
 
         if (!dataIsTiled) {
-          minZoomLevel = 6;
-          defaultZoomLevel = 6;
+          // minZoomLevel = 6;
+          defaultZoomLevel = 1;
         }
 
         viewer.xy = OpenSeadragon({
@@ -463,6 +466,7 @@ var TileMapArea = React.createClass({
             var logicalPoint = img_helper.dataToLogicalPoint(viewer.recenter.coordinates);
             img_helper.centerAboutLogicalPoint(logicalPoint, true);
           }
+          img_helper.setZoomFactor(0.5);
 
           viewer.recenter = false;
 
