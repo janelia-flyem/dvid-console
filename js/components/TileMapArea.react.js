@@ -126,6 +126,18 @@ var TileMapArea = React.createClass({
         var maxHeight = dx;
         var maxWidth = dy;
 
+
+        // setting a minimum value on max height and width to be equal
+        // to the tile size requested. If this is not in place, then the
+        // images get stretched and distorted by the openseadragon code.
+        if (maxHeight < tileSize) {
+          maxHeight = tileSize;
+        }
+
+        if (maxWidth < tileSize) {
+          maxWidth = tileSize;
+        }
+
         // this works out the size of the image based on the number of tiles required
         // to cover the complete image at the largest level.
         //
