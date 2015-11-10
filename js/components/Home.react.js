@@ -72,12 +72,24 @@ class RepoList extends React.Component {
 
 class Home extends React.Component {
 
+  constructor(props, context){
+    super(props);
+    context.router // will work
+  }
+
   // this gets called after the fist time the component is loaded into the page.
   componentDidMount() {
     ServerActions.fetch();
   }
 
   render() {
+    var admin = this.context.router.getCurrentQuery().admin;
+
+    var newRepoBtn = '';
+    if (admin) {
+      var newRepoBtn = <Link to="newrepo" className="btn btn-default btn-sm"><Glyphicon glyph="plus"/> New Repository</Link>
+    }
+
     return (
       <div className="homepage">
         <div className="row">
@@ -85,7 +97,7 @@ class Home extends React.Component {
             <h1>Repositories</h1>
           </div>
           <div className="col-sm-6 text-right newrepo">
-          {/*<Link to="newrepo" className="btn btn-default btn-sm"><Glyphicon glyph="plus"/> New Repository</Link> */}
+            {newRepoBtn}
           </div>
         </div>
         <div className="row">
@@ -99,5 +111,9 @@ class Home extends React.Component {
     );
   }
 }
+
+Home.contextTypes = {
+  router: React.PropTypes.func.isRequired
+};
 
 module.exports = Home;
