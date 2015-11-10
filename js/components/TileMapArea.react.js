@@ -13,6 +13,7 @@ var React  = require('react'),
   img_helper = null;
 
 import ServerStore from '../stores/ServerStore';
+import ErrorActions from '../actions/ErrorActions';
 
 var TileMapArea = React.createClass({
   mixins: [ Router.Navigation ],
@@ -498,6 +499,10 @@ var TileMapArea = React.createClass({
 
           var gScaleData = tileData;
 
+          // if we have a tiled data set and we don't have the MaxTileCoord meta
+          // information, then we need to look to the source datatype. If that
+          // doesn't exist, then we are out of luck as we can't predict the
+          // extent of the data set.
           if (dataIsTiled) {
             var source = tileData.Extended.Source;
             ServerStore.state.api.node({
@@ -506,6 +511,9 @@ var TileMapArea = React.createClass({
               callback: function(infoData) {
                 gScaleData = infoData;
                 createTileViewer(gScaleData, tileData);
+              },
+              error: function() {
+                ErrorActions.update(new Error('There was a problem loading the meta information from ' + source + '. Please make sure that you have loaded it into dvid.'));
               }
             });
           }
