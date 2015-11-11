@@ -504,18 +504,29 @@ var TileMapArea = React.createClass({
           // doesn't exist, then we are out of luck as we can't predict the
           // extent of the data set.
           if (dataIsTiled) {
-            var source = tileData.Extended.Source;
-            ServerStore.state.api.node({
-              uuid: uuid,
-              endpoint: source + '/info',
-              callback: function(infoData) {
-                gScaleData = infoData;
-                createTileViewer(gScaleData, tileData);
-              },
-              error: function() {
-                ErrorActions.update(new Error('There was a problem loading the meta information from ' + source + '. Please make sure that you have loaded it into dvid.'));
-              }
-            });
+            if (!tileData.Extended.MaxTileCoord) {
+              var source = tileData.Extended.Source;
+              ServerStore.state.api.node({
+                uuid: uuid,
+                endpoint: source + '/info',
+                callback: function(infoData) {
+                  gScaleData = infoData;
+                  createTileViewer(gScaleData, tileData);
+                },
+                error: function() {
+                  ErrorActions.update(new Error('There was a problem loading the meta information from ' + source + '. Please make sure that you have loaded it into dvid.'));
+                }
+              });
+            }
+            else {
+              gScaleData.Extended.MaxPoint =  gScaleData.Extended.MaxTileCoord.map(function(n) {
+                return n * gScaleData.Extended.Levels[0].TileSize[0];
+              });
+              gScaleData.Extended.MinPoint = gScaleData.Extended.MinTileCoord.map(function(n) {
+                return n * gScaleData.Extended.Levels[0].TileSize[0];
+              });
+              createTileViewer(gScaleData, tileData);
+            }
           }
           else {
             createTileViewer(gScaleData, tileData);
