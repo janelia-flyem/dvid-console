@@ -38,7 +38,7 @@ class ServerStore {
 
   onFetchTypes() {
     var self = this;
-    self.api.serverTypes({
+    self.api.serverCompiledTypes({
       callback: function(data) {
         self.types = data;
         self.emitChange();
