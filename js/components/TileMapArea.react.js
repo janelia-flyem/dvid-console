@@ -504,7 +504,7 @@ var TileMapArea = React.createClass({
           // doesn't exist, then we are out of luck as we can't predict the
           // extent of the data set.
           if (dataIsTiled) {
-            if (!tileData.Extended.MaxTileCoord) {
+            if (tileData.Extended.Source) {
               var source = tileData.Extended.Source;
               ServerStore.state.api.node({
                 uuid: uuid,
