@@ -344,6 +344,13 @@ var RepoDAGDisplay  = React.createClass({
   },
 
   render: function() {
+    var admin = this.context.router.getCurrentQuery().admin;
+
+    var branchButton = '';
+    if (admin) {
+      branchButton = <button className="btn btn-default" onClick={this.branchNode}>Branch</button>
+    }
+
     return (
       <div>
         <h4>Version DAG <small> (Nodes with thick borders are locked.)</small></h4>
@@ -353,7 +360,7 @@ var RepoDAGDisplay  = React.createClass({
           <button className="btn btn-default" onClick={this.fitDAG}>Fit graph to window</button>
           <button className="btn btn-default" onClick={this.expandGraph}>Expand graph</button>
           <button className="btn btn-default" onClick={this.collapseGraph}>Collapse graph</button>
-          <button className="btn btn-default" onClick={this.branchNode}>Branch</button>
+          {branchButton}
         </div>
         <div className="dag">
           <div>
