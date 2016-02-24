@@ -25,11 +25,16 @@ class RepoList extends React.Component {
         return new Date(b.Updated) - new Date(a.Updated);
       });
 
+      var repoButtonText = <p>Please contact your server adminsitrator to have them create one.</p>;
+      if (this.props.admin) {
+        repoButtonText = <p>Use the "New Repository" button above to create one now.</p>;
+      }
+
       if (repo_list.length === 0) {
         return (
           <div className="text-center empty">
             <h4>There have been no repositories created on this server.</h4>
-            <p>Use the "New Repository" button above to create one now.</p>
+            {repoButtonText}
           </div>
         );
       }
@@ -103,7 +108,7 @@ class Home extends React.Component {
         <div className="row">
           <div className="col-sm-12">
             <AltContainer store={ServerStore}>
-              <RepoList/>
+              <RepoList admin={admin}/>
             </AltContainer>
           </div>
         </div>
