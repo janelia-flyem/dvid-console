@@ -16,9 +16,11 @@ class ErrorMessage extends React.Component {
       }
 
       return (
-        <Alert bsStyle='danger' onDismiss={this.handleDismiss.bind(this)}>
-          <p>{message}</p>
-        </Alert>
+        <div className="fixed_alert">
+          <Alert bsStyle='danger' onDismiss={this.handleDismiss.bind(this)}>
+            <p>{message}</p>
+          </Alert>
+        </div>
       );
     }
 

@@ -349,3 +349,13 @@ g.current > rect {
   display: inline-block;
 }
 
+.fixed_alert {
+  position: fixed;
+  top: 1em;
+  left: 1em;
+  width: 100%;
+  padding-right: 2em;
+  z-index: 100;
+}
+
+
