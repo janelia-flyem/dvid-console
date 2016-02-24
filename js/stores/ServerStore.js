@@ -38,6 +38,32 @@ class ServerStore {
     });
   }
 
+  onCommitNode(opts) {
+    var self = this,
+      uuid = opts.uuid,
+      entry = opts.entry,
+      cb = opts.callback,
+      payload = {
+        log: [entry]
+      },
+      err = function(err) {
+        ErrorActions.update(err);
+      };
+
+    if (opts.error) {
+      err = opts.error;
+    }
+
+    this.api.node({
+      uuid: opts.uuid,
+      endpoint: 'commit',
+      payload: JSON.stringify(payload),
+      method:'POST',
+      callback: cb,
+      error: err
+    });
+  }
+
   onFetchStats() {
     var self = this;
     self.api.serverInfo({

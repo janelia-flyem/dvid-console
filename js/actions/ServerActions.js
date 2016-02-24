@@ -19,6 +19,9 @@ class ServerActions {
   branchNode(data) {
     this.dispatch(data);
   }
+  commitNode(data) {
+    this.dispatch(data);
+  }
 }
 
 module.exports = (alt.createActions(ServerActions));

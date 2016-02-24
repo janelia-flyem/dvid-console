@@ -1,19 +1,25 @@
 import React from 'react';
 import Router from 'react-router';
 import {OverlayTrigger} from 'react-bootstrap';
-import {Tooltip} from 'react-bootstrap';
+import {Modal, Tooltip} from 'react-bootstrap';
 import d3 from 'd3';
 import dagreD3 from 'dagre-d3';
 import LogActions from '../actions/LogActions';
 import ServerActions from '../actions/ServerActions';
 import ServerStore from '../stores/ServerStore';
 import AltContainer from 'alt/AltContainer';
+import ErrorActions from '../actions/ErrorActions';
+import moment from 'moment';
 
 var dag, elementHolderLayer, svgBackground;
 
 // Dagre graph
 var RepoDAGDisplay  = React.createClass({
   mixins: [Router.Navigation],
+
+  getInitialState: function() {
+    return {showCommitModal: false};
+  },
 
   componentDidMount: function() {
     this.drawGraph(this.props);
@@ -343,13 +349,58 @@ var RepoDAGDisplay  = React.createClass({
     });
   },
 
+  openCommitModal: function(e) {
+    e.preventDefault();
+    this.setState({showCommitModal: true});
+  },
+
+  closeCommitModal: function(e) {
+    e.preventDefault();
+    this.setState({showCommitModal: false});
+  },
+
+  commitNode: function(event) {
+    var self = this;
+    event.preventDefault();
+
+    var logEntry = React.findDOMNode(this.refs.commitLog).value;
+
+    //update the log with the new log message.
+    var currentLog = self.props.repo.DAG.Nodes[self.props.uuid].Log;
+    // need a timestamp. It will be close to the server one, but off by a little
+    // until the page reloads and fetches the data from the server. Important?
+    var now = moment();
+    currentLog.unshift(now.format() + '  ' + logEntry);
+
+    ServerActions.commitNode({
+      uuid: this.props.uuid,
+      entry: logEntry,
+      callback: function(data) {
+        self.setState({showCommitModal: false});
+          LogActions.update({log: currentLog, uuid: self.props.uuid});
+      },
+      error: function(err) {
+        self.setState({showCommitModal: false});
+        if (/locked node/.test(err)) {
+          ErrorActions.update(new Error('You can not lock a node that is locked already.'));
+        } else {
+          ErrorActions.update(err);
+        }
+      }
+    });
+  },
+
   render: function() {
     var admin = this.context.router.getCurrentQuery().admin;
 
     var branchButton = '';
+    var commitButton = '';
     if (admin) {
       branchButton = <button className="btn btn-default" onClick={this.branchNode}>Branch</button>
+      commitButton = <button className="btn btn-default" onClick={this.openCommitModal}>Commit</button>
     }
+
+    var modalTitle = <Modal.Title>Commit (lock) node {this.props.uuid}.</Modal.Title>;
 
     return (
       <div>
@@ -361,6 +412,23 @@ var RepoDAGDisplay  = React.createClass({
           <button className="btn btn-default" onClick={this.expandGraph}>Expand graph</button>
           <button className="btn btn-default" onClick={this.collapseGraph}>Collapse graph</button>
           {branchButton}
+          {commitButton}
+
+          <Modal show={this.state.showCommitModal} onHide={this.closeCommitModal}>
+            <Modal.Header closeButton>
+            {modalTitle}
+            </Modal.Header>
+            <Modal.Body>
+              <div className="form-group">
+                <input className="form-control" type="text" ref="commitLog" name="commit_log" id="commit_log" placeholder="Enter your new log message"/>
+              </div>
+              <div className="form-group">
+                <button onClick={this.commitNode} className="btn btn-primary">Commit</button>
+              </div>
+            </Modal.Body>
+          </Modal>
+
+
         </div>
         <div className="dag">
           <div>
