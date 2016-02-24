@@ -69,7 +69,7 @@ class StatsDisplay extends React.Component {
           <div className="col-md-3 col-sm-6">
             <div className="panel panel-default">
               <div className="panel-heading"><Glyphicon glyph="bookmark"/> DVID Version</div>
-              <div className="panel-body">
+              <div className="panel-body smaller">
                 <a href={gitLink}>{dvidVersion}</a>
               </div>
             </div>

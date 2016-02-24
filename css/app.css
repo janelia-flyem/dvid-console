@@ -89,6 +89,7 @@ table.datainstances {
 
 .serverstats .smaller {
   font-size: 1em;
+  padding-top: 1.9em;
 }
 
 .serverstats small {
