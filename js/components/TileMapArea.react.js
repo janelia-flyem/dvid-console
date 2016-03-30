@@ -79,7 +79,8 @@ var TileMapArea = React.createClass({
 
       var tileSources = {
         "multiscale2d": 1,
-        "imagetile": 1
+        "imagetile": 1,
+        "googlevoxels": 1,
       };
 
       //check if we are using tiles or grayscale

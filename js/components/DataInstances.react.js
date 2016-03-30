@@ -44,7 +44,7 @@ class DataInstanceList extends React.Component {
       // of the page.
       for (var i = 0; i < sorted.length; i++) {
         var type = sorted[i][1].Base.TypeName;
-        if (type === 'grayscale8' || type === 'multiscale2d' || type === 'uint8blk' || type === 'imagetile' || type === 'labels64' || type === 'labelblk' ) {
+        if (type === 'grayscale8' || type === 'multiscale2d' || type === 'uint8blk' || type === 'imagetile' || type === 'googlevoxels' || type === 'labels64' || type === 'labelblk' ) {
           tileRows.push(<DataInstance key={sorted[i][0]} instance={sorted[i][1]} uuid={this.props.uuid}/>);
         } else {
           rows.push(<DataInstance key={sorted[i][0]} instance={sorted[i][1]} uuid={this.props.uuid}/>);
@@ -107,9 +107,9 @@ class DataInstance extends React.Component {
     var type_url = '/api/node/' + this.props.uuid + '/' + name + '/help';
     var type_tooltip = 'Display ' + type + ' help';
 
-    if (type === 'grayscale8' || type === 'multiscale2d' || type === 'uint8blk' || type === 'imagetile' )
+    if (type === 'grayscale8' || type === 'multiscale2d' || type === 'uint8blk' || type === 'imagetile' || type === 'googlevoxels')
       tile_input = <TileInput name={name}/>;
-    else if (type === 'labels64' || type === 'labelblk')
+    else if (type === 'labels64' || type === 'labelblk' || type === 'googlevoxels')
       label_input = <LabelInput name={name}/>;
 
     return (
