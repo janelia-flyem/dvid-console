@@ -296,7 +296,7 @@ var RepoDAGDisplay  = React.createClass({
 
   //toggles collapsing and expanding of a parent node
   toggleChildren: function (parent) {
-    if (dag.node(parent).expandedChildren) {
+    if (dag.node(parent) && dag.node(parent).expandedChildren) {
         collapseChildren(parent)
     } else if (dag.node(parent).collapsedChildren) {
         expandChildren(parent)
@@ -327,7 +327,7 @@ var RepoDAGDisplay  = React.createClass({
   collapseGraph: function () {
     //need to go in reverse order so that parent nodes won't be collapsed until all of their children are collapsed
     dag.nodes().reverse().forEach(function (n) {
-      if (dag.node(n).expandedChildren) {
+      if (dag.node(n) && dag.node(n).expandedChildren) {
           collapseChildren(n)
       }
     });
