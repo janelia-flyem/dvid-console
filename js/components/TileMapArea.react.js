@@ -62,7 +62,7 @@ var TileMapArea = React.createClass({
     /* This checks to see if we already have a tile viewer in the page.
      * If we do, then the work here is done, so return.
      */
-    if (viewer && viewer.xy) {
+    if (viewer) {
       return;
     }
 
@@ -113,383 +113,47 @@ var TileMapArea = React.createClass({
           maxLevel = Object.keys(tileData.Extended.Levels).length - 1;
         }
 
-        var minLevel = config.settings.minTileLevel;
-
-        // stops inappropriate tiles from loading at the wrong zoom level. Without
-        // this, the dvid server will return tiles as requested, but they will be
-        // showing data in the wrong location, because the coordinates will be off.
-        if (!dataIsTiled) {
-          minLevel = 4;
-          maxLevel = 4;
-        }
-
         var tileSize = 512;
         if (tileData.Extended && tileData.Extended.Levels) {
           tileSize = tileData.Extended.Levels[0].TileSize[0];
         }
 
-        var maxHeight = dx;
-        var maxWidth = dy;
-
-
-        // setting a minimum value on max height and width to be equal
-        // to the tile size requested. If this is not in place, then the
-        // images get stretched and distorted by the openseadragon code.
-        if (maxHeight < tileSize) {
-          maxHeight = tileSize;
-        }
-
-        if (maxWidth < tileSize) {
-          maxWidth = tileSize;
-        }
-
-        // this works out the size of the image based on the number of tiles required
-        // to cover the complete image at the largest level.
-        //
-        //Notes from Bill.
-        //
-        //Say we have 500x500 tiles but our real volume size is 6133 x 7000 x 8000.
-        //In order to cover the real volume size, we have 5 scales.
-        //
-        //Scale 0 = no downres, so we have 6133/500 = 13 tiles along X to cover real X extent.
-        //Scale 1 = 2x, so we have 3067/500 = 7 tiles along X to cover the downres X extent
-        //Scale 2 = 4x, it’s now 1534/500 = 4 tiles
-        //Scale 3 = 8x, it’s now 717/500 = 2 tiles
-        //Scale 4 = 16x, one tile
-        //
-        //But this means to OpenSeadragon, the “tiled” X extent is really 500 x 16 = 8000 voxels.
-        //This will lead to a lot of empty padding at end of x, y, and z, but shouldn’t affect
-        //your offsets I believe.
-        //
-
-        if (dataIsTiled) {
-          maxHeight = maxWidth = tileSize * Math.pow(2, maxLevel);
-        }
-
-        var volumeWidth = {
-          'xy': dx,
-          'xz': dx,
-          'yz': dy,
-        };
-
-        var volumeHeight = {
-          'xy':  dy,
-          'xz':  dz,
-          'yz':  dz
-        };
-
-        var volumeDepth = {
-          'xy':  dz,
-          'xz':  dy,
-          'yz':  dx
-        };
-
-        $('#stack-slider').attr('max', maxPoint[2]).attr('min', minPoint[2]).change(function() {
-          $('#depth').val($(this).val());
+        viewer = new TileViewer({
+          id: 'viewer',
+          maxZoom: maxLevel,
+          tileSource: url + '/api/node/' + uuid + '/' + tileSource + '/tile/xy/{zoom}/{x}_{y}_{z}',
+          segSource: url + '/api/node/' + uuid + '/' + labeltype + 'pseudocolor/0_1/{tile}_{tile}/{x}_{y}_{z}', 
+          rawSegSource:  url + '/api/node/' + uuid + '/' + labeltype + '/raw/0_1_2/{tile}_{tile}_1/{x}_{y}_{z}',
+          current_z: dz / 2,
+          tileSize: tileSize,
+          x_mid: dx / 2,
+          y_mid: dy / 2,
+          segTileSize: 256
         });
 
-        $('#depth').attr('max', dz);
+        window.viewer = viewer;
 
+        viewer.map.addEventListener('moveend', function(e) {
 
-        viewer = {
-          nmPerPixel: 10,
-          tileSources: [
-          {
-            height:    maxHeight,
-            width:     maxWidth,
-            tileSize:  tileSize,
-            minLevel:  minLevel,
-            maxLevel:  maxLevel,
-            minZ:      0,
-            maxZ:      volumeDepth[slice1]-1,
-            getTileUrl: function xyTileURL(level, x, y, z) {
-              var api_url = url + "/api/node/" + uuid + "/" + tileSource + "/raw/" + slice1 + "/" + tileSize + "_" + tileSize + "/" + (x * tileSize) + "_" + (y * tileSize) + "_" + z;
-              if (dataIsTiled) {
-                  api_url = url + "/api/node/" + uuid + "/" + tileSource + "/tile/" + slice1 + "/" + (maxLevel - level) + "/" + x + "_" + y + "_" + z;
-              }
-              return api_url;
-            }
-          },
-          {
-            height:    maxHeight,
-            width:     maxWidth,
-            tileSize:  tileSize,
-            minLevel:  minLevel,
-            maxLevel:  maxLevel,
-            minZ:      0,
-            maxZ:      volumeDepth[slice2]-1,
-            getTileUrl: function xzTileURL(level, x, y, z) {
-              var api_url = url + "/api/node/" + uuid + "/" + tileSource + "/raw/" + slice2 + "/" + tileSize + "_" + tileSize + "/" + (x * tileSize) + "_" + z + "_" + (y * tileSize);
-              if (dataIsTiled) {
-                api_url = url + "/api/node/" + uuid + "/" + tileSource + "/tile/" + slice2 + "/" + (maxLevel - level) + "/" + x + "_" + z + "_" + y;
-              }
-              return api_url;
-            }
-          },
-          {
-            height:    maxHeight,
-            width:     maxWidth,
-            tileSize:  tileSize,
-            minLevel:  minLevel,
-            maxLevel:  maxLevel,
-            minZ:      0,
-            maxZ:      volumeDepth[slice3]-1,
-            getTileUrl: function yzTileURL(level, x, y, z) {
-              var api_url = url + "/api/node/" + uuid + "/" + tileSource + "/raw/" + slice3 + "/" + tileSize + "_" + tileSize + "/" + z + "_" + (x * tileSize) + "_" + (y * tileSize);
-              if (dataIsTiled) {
-                api_url = url + "/api/node/" + uuid + "/" + tileSource + "/tile/" + slice3 + "/" + (maxLevel - level) + "/" + z + "_" + x + "_" + y;
-              }
-              return api_url;
-            }
-          },
-          // composite for xy plane
-          {
-            virtualMode: 'segmentation',
-            height:    maxHeight,
-            width:     maxWidth,
-            tileSize:  tileSize,
-            minLevel:  maxLevel,
-            maxLevel:  maxLevel,
-            minZ:      0,
-            maxZ:      volumeDepth[slice1]-1,
-            getTileUrl: function xyTileURL(level, x, y, z) {
-              var api_url = url + "/api/node/" + uuid + "/" + labeltype + "/raw/0_1_2/" + tileSize + "_" + tileSize + "_1/" + (x * tileSize) + "_" + (y * tileSize) + "_" + z;
-              return api_url;
-            }
-          },
-          {
-            virtualMode: 'segmentation',
-            height:    maxHeight,
-            width:     maxWidth,
-            tileSize:  tileSize,
-            minLevel:  maxLevel,
-            maxLevel:  maxLevel,
-            minZ:      0,
-            maxZ:      volumeDepth[slice2]-1,
-            getTileUrl: function xzTileURL(level, x, y, z) {
-              var api_url = url + "/api/node/" + uuid + "/" + labeltype + "/raw/0_1_2/" + tileSize + "_1_" + tileSize + "/" + (x * tileSize) + "_" + z + "_" + (y * tileSize);
-              return api_url;
-            }
-          },
-          {
-            virtualMode: 'segmentation',
-            height:    maxHeight,
-            width:     maxWidth,
-            tileSize:  tileSize,
-            minLevel:  maxLevel,
-            maxLevel:  maxLevel,
-            minZ:      0,
-            maxZ:      volumeDepth[slice3]-1,
-            getTileUrl: function yzTileURL(level, x, y, z) {
-              var api_url = url + "/api/node/" + uuid + "/" + labeltype + "/raw/0_1_2/1_" + tileSize + "_" + tileSize + "/" + z + "_" + (x * tileSize) + "_" + (y * tileSize);
-              return api_url;
-            }
-          },
-          ]
-        };
-
-        var minZoomLevel = config.settings.minZoomLevel;
-        var defaultZoomLevel = config.settings.defaultZoomLevel;
-
-        if (!dataIsTiled) {
-          // minZoomLevel = 6;
-          defaultZoomLevel = 1;
-        }
-
-        viewer.xy = OpenSeadragon({
-          // need to be able to pass in the react state, so that we can modify it
-          // when using the other buttons to change z layer.
-          id:                 "viewer",
-          prefixUrl:          "js/vendor/openseadragon/images/",
-          navigatorSizeRatio: 0.25,
-          wrapHorizontal:     false,
-          maxZoomPixelRatio:  1.8,
-          showNavigator:      config.settings.showNavigator,
-          tileSources:        viewer.tileSources,
-          //zoomPerClick:       1.0,
-          toolbar:            "toolbar",
-          minZoomLevel:       minZoomLevel,
-          defaultZoomLevel:   defaultZoomLevel,
-          zoomInButton:       "zoom-in",
-          zoomOutButton:      "zoom-out",
-          homeButton:         "home",
-          previousButton:     "previous",
-          nextButton:         "next",
-          preserveViewport:   true,
-          fullPageButton:     "full-page",
-          initialPage:        startingTileSource,
-          immediateRender:    true,
-          //gestureSettingsMouse: {
-          //  clickToZoom: false
-          //},
-          debugMode:          false
-        });
-        viewer.xy.scalebar({
-          pixelsPerMeter: 1000000000/viewer.nmPerPixel,
-          fontColor:      "yellow",
-          color:          "yellow"
-        });
-
-        // passing the react object into the openseadragon viewer, so that
-        // we can trigger changes in the UI by updating the state. This is needed
-        // to simplify the layer change controls.
-        viewer.xy.React = self;
-
-        //window.viewer = viewer;
-        img_helper = viewer.xy.activateImagingHelper();
-        //window.img_helper = img_helper;
-
-        img_helper.addHandler('image-view-changed', function (event) {
-          var center = event.viewportCenter,
-            x = Math.round(img_helper.logicalToDataX(center.x)),
-            y = Math.round(img_helper.logicalToDataY(center.y)),
-            tileSourceMapping = ['xy','xz','yz'];
-          self.setState({'x': x, 'y': y, 'targetX': x, 'targetY': y});
-          var url_plane =  tileSourceMapping[self.state.plane] || 'xy';
+          var center = this.getCenter();
+          var point  = this.project(center, maxLevel);
+          var y = L.Util.formatNum(point.y, 1);
+          var x = L.Util.formatNum(point.x, 1);
+          var z = this.current_z;
 
           self.updateUrl({
-            uuid: uuid,
-            plane: url_plane,
-            coordinates: x +'_' + y + '_' + self.state.layer,
-            tileSource: self.props.tileSource,
-            labelSource: self.props.labelSource
+            plane: 'xy',
+            coordinates: x +'_' + y + '_' + z,
           });
         });
 
-        viewer.xy.addHandler('canvas-click', function(event) {
-          // if alt is held down, then  do something, otherwise ignore as we
-          // don't want to load a new page every time someone clicks on the image.
-          if (event.originalEvent.altKey) {
-            // run an ajax request to see if there is a body at the clicked coordinates
-            var coords = img_helper.physicalToDataPoint(event.position);
-            var z = Math.round($('#depth').val());
-            var bodiesUrl = url + '/api/node/' + uuid + '/' + labeltype + '/label/' + Math.round(coords.x) + '_' + Math.round(coords.y) + '_' + z;
-              $.getJSON(bodiesUrl, function(data) {
-                if (data.Label && data.Label > 0) {
-                  var axis = $('.cut_plane option:selected').text();
-                  self.setState({
-                    'volumeViewer': true,
-                    'click_z': parseInt(z),
-                    'click_y': Math.round(coords.y),
-                    'click_x': Math.round(coords.x),
-                    'click_axis': axis,
-                    'click_label': data.Label
-                  });
-                }
-              });
-            return;
-          }
-        });
+        self.setState({layer: dz / 2, targetZ: dz / 2});
 
-        viewer.xy.addHandler('open', function(event) {
-          var _$osdCanvas = $(viewer.xy.canvas);
-          _$osdCanvas.on('mousemove.osdimaginghelper', onMouseMove);
-        });
-
-        viewer.xy.addHandler('add-layer', function(event) {
-          viewer.layer = event.drawer;
-        });
-
-        var viewerInputHook = viewer.xy.addViewerInputHook({hooks: [
-          {tracker: 'viewer', handler: 'moveHandler', hookHandler: onHookOsdViewerMove}
-        ]});
-
-        function onHookOsdViewerMove(event) {
-          // set event.stopHandlers = true to prevent any more handlers in the chain from being called
-          // set event.stopBubbling = true to prevent the original event from bubbling
-          // set event.preventDefaultAction = true to prevent viewer's default action
-          var coords = img_helper.physicalToDataPoint(event.position);
-          coords.z = $('#depth').val();
-
-          var x = coords.x;
-          var y = coords.y;
-          var z = coords.z;
-
-          if (self.state.plane === 1) {
-            x = coords.x;
-            y = coords.z;
-            z = coords.y;
-          }
-          else if ( self.state.plane === 2) {
-            x = coords.z;
-            y = coords.x;
-            z = coords.y;
-          }
-
-          var string = 'x: ' + Math.round(x) + ', y: ' + Math.round(y) + ', z: ' + Math.round(z);
-          $('#coords-tip').empty()
-            .append('<p>' + string + '</p>')
-            .css({
-              'position': 'absolute',
-              'top': event.position.y + 20,
-              'left': event.position.x + 20
-            });
-          event.stopHandlers = true;
-          event.stopBubbling = true;
-          event.preventDefaultAction = true;
+        if (props.coordinateString) {
+          var coords = props.coordinateString.split('_');
+          viewer.changeLayer(coords[2]);
+          viewer.jumpTo({x: coords[0], y: coords[1]});
         }
-
-        viewer.recenter = false;
-
-        viewer.xy.addHandler('page', function(event) {
-          var choice = parseInt($('.cut_plane').val());
-          var coordinates = img_helper.logicalToDataPoint(img_helper._viewportCenter);
-          coordinates.z = Math.round($('#depth').val());
-
-
-          // need to move the image to the correct coordinates in the viewer?
-          var converted = convertCoordinates({coordinates: coordinates, from: self.state.plane, to: choice});
-          var z = Math.round(converted.z);
-
-          // save this information to be used later in the open event handler,
-          // when the image has finished updating and we can scroll to the correct
-          // location.
-          viewer.recenter = {
-            from: self.state.plane,
-            to: choice,
-            coordinates: converted
-          };
-
-
-          self.setState({layer: z, targetZ: z});
-          self.setState({plane: choice});
-
-
-
-        });
-
-        // we have to have the center function triggered in the open event, because
-        // it fires off too soon in the page event and the image width is incorrect.
-        // This causes it to center in the wrong location.
-        viewer.xy.addHandler('open', function(event) {
-
-          if (viewer.recenter) {
-
-            var logicalPoint = img_helper.dataToLogicalPoint(viewer.recenter.coordinates);
-            img_helper.centerAboutLogicalPoint(logicalPoint, true);
-          }
-          img_helper.setZoomFactor(0.5);
-
-          viewer.recenter = false;
-
-          // make sure the layer is updated after the page change and open event has been fired.
-          // had to move this after the open event, because the navigator wasn't fully loaded before
-          var z = Math.round($('#depth').val());
-          self.handleLayerChange(z);
-
-          if (props.coordinateString && self.state.url_update) {
-            var coordinates = props.coordinateString.split('_');
-            var dataPoint = new OpenSeadragon.Point(parseInt(coordinates[0]),parseInt(coordinates[1]));
-            var logicalPoint = img_helper.dataToLogicalPoint(dataPoint);
-            img_helper.centerAboutLogicalPoint(logicalPoint, true);
-            self.setState({
-              layer: coordinates[2],
-              targetZ: coordinates[2],
-              url_update: false
-            });
-            self.handleLayerChange(coordinates[2]);
-          }
-        });
 
       }
 
@@ -521,10 +185,10 @@ var TileMapArea = React.createClass({
             }
             else {
               gScaleData.Extended.MaxPoint =  gScaleData.Extended.MaxTileCoord.map(function(n) {
-                return n * gScaleData.Extended.Levels[0].TileSize[0];
+                return n//; * gScaleData.Extended.Levels[0].TileSize[0];
               });
               gScaleData.Extended.MinPoint = gScaleData.Extended.MinTileCoord.map(function(n) {
-                return n * gScaleData.Extended.Levels[0].TileSize[0];
+                return n//; * gScaleData.Extended.Levels[0].TileSize[0];
               });
               createTileViewer(gScaleData, tileData);
             }
@@ -538,9 +202,7 @@ var TileMapArea = React.createClass({
   },
 
   componentWillUnmount: function() {
-    if (viewer && viewer.xy) {
-      viewer.xy.destroy();
-      viewer.xy = null;
+    if (viewer) {
       viewer = null;
     }
   },
@@ -552,32 +214,31 @@ var TileMapArea = React.createClass({
   },
 
   handleLayerChange: function(layer) {
-    if (viewer.xy && viewer.xy.viewport) {
-      viewer.xy.updateLayer(layer);
+    if (viewer) {
+      viewer.changeLayer(layer);
+      var center = viewer.getCenter();
 
-      var x = Math.round(img_helper.logicalToDataX(img_helper._viewportCenter.x));
-      var y = Math.round(img_helper.logicalToDataY(img_helper._viewportCenter.y));
+      var x = center.x;
+      var y = center.y;
       var uuid = this.props.uuid;
 
       var tileSourceMapping = ['xy','xz','yz'];
       var plane = tileSourceMapping[this.state.plane] || 'xy';
 
       this.updateUrl({
-        uuid: uuid,
         plane: plane,
         coordinates: x +'_' + y + '_' + layer,
-        tileSource: this.props.tileSource,
-        labelSource: this.props.labelSource
       });
     }
+
   },
 
-  handleZChange: core.throttle(function(event) {
+  handleZChange: function(event) {
     if (event.target) {
       this.setState({layer: event.target.value, targetZ: event.target.value});
       this.handleLayerChange(event.target.value);
     }
-  }, 250),
+  },
 
   handleZKeyDown: function (event) {
     // event fired when the z input is focused and a key is pressed.
@@ -601,43 +262,17 @@ var TileMapArea = React.createClass({
     y = y || this.state.y;
     z = z || this.state.layer;
 
-    var point = new OpenSeadragon.Point(x,y);
-    var logical = img_helper.dataToLogicalPoint(point);
-
-    //scroll to the point in the plane
-    img_helper.centerAboutLogicalPoint(logical);
-
-    // change the layer
-    this.setState({layer: z, targetZ: z});
-    this.handleLayerChange(z);
-    this.refs.horizontal.getDOMNode().value = '';
-    this.refs.vertical.getDOMNode().value = '';
-    this.refs.depth.getDOMNode().value = '';
-
+    viewer.changeLayer(z);
+    viewer.jumpTo({x: x, y: y});
   },
 
   //simply delegates to the updateViewerPlane() function. I would
   //bypass this entirely, but it seems to have strange consequences
   //on the state object.
   handlePlaneChange: function(event) {
-    this.updateViewerPlane();
   },
 
   handleSegmentation: function (event) {
-    var currentSeg = this.state.segmentation;
-    this.setState({segmentation: !currentSeg});
-    var choice = parseInt(this.refs.cutPlane.getDOMNode().value, 10);
-    if (!currentSeg) {
-      viewer.xy.addLayer({
-        tileSource: viewer.tileSources[choice + 3],
-        opacity: 0.4
-      });
-    }
-    else {
-      if (viewer.layer) {
-        viewer.xy.removeLayer(viewer.layer);
-      }
-    };
   },
 
   sparseCloseHandler: function() {
@@ -645,7 +280,10 @@ var TileMapArea = React.createClass({
   },
 
   updateUrl: function(opts) {
+    opts.uuid = this.props.uuid;
+    opts.tileSource = this.props.tileSource;
     if (this.props.labelSource) {
+      opts.labelSource = this.props.labelSource;
       this.replaceWith('tilemapwithcoords', opts );
     } else {
       this.replaceWith('tileonlywithcoords', opts );
@@ -653,28 +291,6 @@ var TileMapArea = React.createClass({
   },
 
   updateViewerPlane: function (currentSeg) {
-    if (typeof currentSeg == 'undefined') {
-      currentSeg = this.state.segmentation;
-    }
-    // convert the value to an integer for later lookups
-    var choice = parseInt(this.refs.cutPlane.getDOMNode().value, 10);
-
-    // update the tile viewer display.
-    viewer.xy.goToPage(choice);
-    // update the slider to reflect the new depth, which can be found in the viewer
-    // object.
-    var depth = viewer.tileSources[choice].maxZ;
-    $('#depth').attr('max', depth);
-    $('#stack-slider').attr('max', depth);
-
-    // if segmentation should be on, then use the correct tileSource by adding
-    // 3, so that we skip to the segmentation tile sources.
-    if (currentSeg) {
-      viewer.xy.addLayer({
-        tileSource: viewer.tileSources[choice + 3],
-        opacity: 0.5
-      });
-    }
   },
 
 
@@ -741,13 +357,10 @@ var TileMapArea = React.createClass({
     return (
       <div>
         <div id="toolbar">
+        {/*
           <div className="row">
             <form className="form-inline">
               <div className="col-sm-12">
-                <button type="button" className="btn btn-default" id="home">Home</button>
-                <button type="button" className="btn btn-default" id="zoom-in">Zoom In</button>
-                <button type="button" className="btn btn-default" id="zoom-out">Zoom Out</button>
-                {/*<button type="button" className="btn btn-default" id="full-page">Full Screen</button>*/}
                 <button type="button" className="btn btn-default hidden" id="toggle-overlay">overlay</button>
                 {segButton}
                 <select value={this.state.plane} className="form-control cut_plane" ref="cutPlane" onChange={this.handlePlaneChange}>
@@ -758,13 +371,16 @@ var TileMapArea = React.createClass({
               </div>
             </form>
           </div>
+          */}
           <div className="row">
             <div className="col-sm-1" id="stack-input">
-              <input id="depth" type="number" min="0" max="2000" value={this.state.layer} onChange={this.handleZChange} onKeyDown={this.handleZKeyDown} onKeyUp={this.handleZKeyUp}/>
+              <input id="depth" type="number" min="0" max="2000000" value={this.state.layer} onChange={this.handleZChange} onKeyDown={this.handleZKeyDown} onKeyUp={this.handleZKeyUp}/>
             </div>
+            {/*
             <div className="col-sm-11" id="slider-container">
               <input id="stack-slider" min="0" max="2000" type="range" value={this.state.layer} onChange={this.handleZChange} onKeyDown={this.handleZKeyDown} onKeyUp={this.handleZKeyUp}/>
             </div>
+            */}
           </div>
         </div>
         <div id="viewer" className="openseadragon">
@@ -777,7 +393,7 @@ var TileMapArea = React.createClass({
               {labelBlock}
             </div>
             <div className="col-sm-3">
-              <TileCoordinates width={this.state.x} height={this.state.y} depth={this.state.layer} plane={this.state.plane}/>
+            {/*<TileCoordinates width={this.state.x} height={this.state.y} depth={this.state.layer} plane={this.state.plane}/>*/}
             </div>
           </div>
         </div>
@@ -809,98 +425,3 @@ var TileMapArea = React.createClass({
 });
 
 module.exports = TileMapArea;
-
-function convertCoordinates (input) {
-  var converted = null;
-  switch (input.from) {
-    case 0:// xy
-      converted = convertFromXY(input.coordinates, input.to);
-      break;
-    case 1:// xz
-      converted = convertFromXZ(input.coordinates, input.to);
-      break;
-    case 2:// yz
-      converted = convertFromYZ(input.coordinates, input.to);
-      break;
-    default://
-      converted = input.coordinates;
-  }
-
-  return converted;
-};
-
-function convertFromXY(coordinates, to) {
-  var converted = null;
-  switch (to) {
-    case 1:// xz okay
-      converted = new OpenSeadragon.Point(coordinates.x, coordinates.z);
-      converted.z = coordinates.y;
-      break;
-    case 2:// yz okay
-      converted = new OpenSeadragon.Point(coordinates.y, coordinates.z);
-      converted.z = coordinates.x;
-      break;
-    default:
-      converted = coordinates;
-  }
-  return converted;
-};
-
-function convertFromXZ(coordinates, to) {
-  var converted = null;
-  switch (to) {
-    case 0:// xy okay
-      converted = new OpenSeadragon.Point(coordinates.x, coordinates.z);
-      converted.z = coordinates.y;
-      break;
-    case 2:// yz okay
-      converted = new OpenSeadragon.Point(coordinates.z, coordinates.y);
-      converted.z = coordinates.x;
-      break;
-    default:
-      converted = coordinates;
-  }
-  return converted;
-};
-function convertFromYZ(coordinates, to) {
-  var converted = null;
-  switch (to) {
-    case 0:// xy okay
-      converted = new OpenSeadragon.Point(coordinates.z, coordinates.x);
-      converted.z = coordinates.y;
-      break;
-    case 1:// xz okay
-      converted = new OpenSeadragon.Point(coordinates.z, coordinates.y);
-      converted.z = coordinates.x;
-      break;
-    default:
-      converted = coordinates;
-  }
-  return converted;
-};
-
-// logs the underlying body id if present to the console.
-// this might be useful in the future, but would need better
-// integration into the page via a popup or something like
-// that. Just for debugging right now.
-function onMouseMove(event) {
-  return;
-  var url = config.baseUrl();
-  var uuid = config.uuid;
-  var z = Math.round($('#depth').val());
-  var osdmouse = OpenSeadragon.getMousePosition(event);
-
-  var offset = _$osdCanvas.offset();
-
-  var dataX = window.img_helper.physicalToDataX( event.pageX - offset.left );
-  var dataY = window.img_helper.physicalToDataY( event.pageY - offset.top  );
-
-  var bodiesUrl = url + '/api/node/' + uuid + '/bodies/label/' + Math.round(dataX) + '_' + Math.round(dataY) + '_' + z;
-  $.getJSON(bodiesUrl, function(data) {
-    if (data.Label && data.Label > 0) {
-      console.info(data.Label);
-    }
-  });
-
-};
-

@@ -359,4 +359,7 @@ g.current > rect {
   z-index: 100;
 }
 
+.leaflet-control-container .leaflet-top .leaflet-control-zoom {
+  margin-top: 2.5em;
+}
 
