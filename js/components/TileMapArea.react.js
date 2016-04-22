@@ -103,9 +103,9 @@ var TileMapArea = React.createClass({
 
         var maxPoint   = gScaleData.Extended.MaxPoint,
         minPoint   = gScaleData.Extended.MinPoint,
-        dx        = maxPoint[0] - minPoint[0],
-        dy        = maxPoint[1] - minPoint[1],
-        dz        = maxPoint[2];
+        dx        = Math.round((maxPoint[0] - minPoint[0]) / 2),
+        dy        = Math.round((maxPoint[1] - minPoint[1]) / 2),
+        dz        = Math.round((maxPoint[2] - minPoint[2]) / 2);
 
         // set a default level of one unless we actually have tiling information
         var maxLevel = config.settings.maxTileLevel;
@@ -122,12 +122,12 @@ var TileMapArea = React.createClass({
           id: 'viewer',
           maxZoom: maxLevel,
           tileSource: url + '/api/node/' + uuid + '/' + tileSource + '/tile/xy/{zoom}/{x}_{y}_{z}',
-          segSource: url + '/api/node/' + uuid + '/' + labeltype + 'pseudocolor/0_1/{tile}_{tile}/{x}_{y}_{z}', 
+          segSource: url + '/api/node/' + uuid + '/' + labeltype + '/pseudocolor/0_1/{tile}_{tile}/{x}_{y}_{z}',
           rawSegSource:  url + '/api/node/' + uuid + '/' + labeltype + '/raw/0_1_2/{tile}_{tile}_1/{x}_{y}_{z}',
-          current_z: dz / 2,
+          current_z: dz,
           tileSize: tileSize,
-          x_mid: dx / 2,
-          y_mid: dy / 2,
+          x_mid: dx,
+          y_mid: dy,
           segTileSize: 256
         });
 
@@ -147,11 +147,13 @@ var TileMapArea = React.createClass({
           });
         });
 
-        self.setState({layer: dz / 2, targetZ: dz / 2});
+        self.setState({layer: dz, targetZ: dz});
 
+        // if the url already has coordinates in it, then we need to jump to
+        // that point in the tile viewer.
         if (props.coordinateString) {
           var coords = props.coordinateString.split('_');
-          viewer.changeLayer(coords[2]);
+          viewer.changeLayer({layer: coords[2]});
           viewer.jumpTo({x: coords[0], y: coords[1]});
         }
 
@@ -215,7 +217,7 @@ var TileMapArea = React.createClass({
 
   handleLayerChange: function(layer) {
     if (viewer) {
-      viewer.changeLayer(layer);
+      viewer.changeLayer({layer: layer});
       var center = viewer.getCenter();
 
       var x = center.x;
@@ -233,23 +235,6 @@ var TileMapArea = React.createClass({
 
   },
 
-  handleZChange: function(event) {
-    if (event.target) {
-      this.setState({layer: event.target.value, targetZ: event.target.value});
-      this.handleLayerChange(event.target.value);
-    }
-  },
-
-  handleZKeyDown: function (event) {
-    // event fired when the z input is focused and a key is pressed.
-  },
-
-  handleZKeyUp: function(event) {
-    // need to keep this here or the input number and the layer get out of sync
-    // when throttling.
-    this.handleLayerChange(event.target.value);
-  },
-
   handleCoordinateChange: function(event) {
     event.preventDefault();
 
@@ -262,7 +247,7 @@ var TileMapArea = React.createClass({
     y = y || this.state.y;
     z = z || this.state.layer;
 
-    viewer.changeLayer(z);
+    viewer.changeLayer({layer: z});
     viewer.jumpTo({x: x, y: y});
   },
 
@@ -273,6 +258,7 @@ var TileMapArea = React.createClass({
   },
 
   handleSegmentation: function (event) {
+    viewer.toggleSegmentation(0);
   },
 
   sparseCloseHandler: function() {
@@ -357,30 +343,18 @@ var TileMapArea = React.createClass({
     return (
       <div>
         <div id="toolbar">
-        {/*
           <div className="row">
             <form className="form-inline">
               <div className="col-sm-12">
                 <button type="button" className="btn btn-default hidden" id="toggle-overlay">overlay</button>
                 {segButton}
-                <select value={this.state.plane} className="form-control cut_plane" ref="cutPlane" onChange={this.handlePlaneChange}>
+                {/*<select value={this.state.plane} className="form-control cut_plane" ref="cutPlane" onChange={this.handlePlaneChange}>
                   <option value="0">xy</option>
                   <option value="1">xz</option>
                   <option value="2">yz</option>
-                </select>
+                </select>*/}
               </div>
             </form>
-          </div>
-          */}
-          <div className="row">
-            <div className="col-sm-1" id="stack-input">
-              <input id="depth" type="number" min="0" max="2000000" value={this.state.layer} onChange={this.handleZChange} onKeyDown={this.handleZKeyDown} onKeyUp={this.handleZKeyUp}/>
-            </div>
-            {/*
-            <div className="col-sm-11" id="slider-container">
-              <input id="stack-slider" min="0" max="2000" type="range" value={this.state.layer} onChange={this.handleZChange} onKeyDown={this.handleZKeyDown} onKeyUp={this.handleZKeyUp}/>
-            </div>
-            */}
           </div>
         </div>
         <div id="viewer" className="openseadragon">
