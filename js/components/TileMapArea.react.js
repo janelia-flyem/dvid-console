@@ -153,13 +153,20 @@ var TileMapArea = React.createClass({
             var y = L.Util.formatNum(point.y, 1);
             var x = L.Util.formatNum(point.x, 1);
             var z = this.current_z;
-            self.setState({
-              volumeViewer: true,
-              'click_z': z,
-              'click_y': Math.round(y),
-              'click_x': Math.round(x),
-              'click_axis': 'xy',
-              'click_label': labeltype
+
+            var bodiesUrl = url + '/api/node/' + uuid + '/' + labeltype + '/label/' + Math.round(x) + '_' + Math.round(y) + '_' + z;
+            $.getJSON(bodiesUrl, function(data) {
+              if (data.Label && data.Label > 0) {
+                var axis = $('.cut_plane option:selected').text();
+                self.setState({
+                  'volumeViewer': true,
+                  'click_z': parseInt(z),
+                  'click_y': Math.round(y),
+                  'click_x': Math.round(x),
+                  'click_axis': 'xy',
+                  'click_label': data.Label
+                });
+              }
             });
           }
           return;
