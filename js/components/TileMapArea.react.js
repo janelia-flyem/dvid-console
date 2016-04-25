@@ -147,6 +147,24 @@ var TileMapArea = React.createClass({
           });
         });
 
+        viewer.map.addEventListener('click', function(e) {
+          if (e.originalEvent.altKey) {
+            var point  = this.project(e.latlng, maxLevel);
+            var y = L.Util.formatNum(point.y, 1);
+            var x = L.Util.formatNum(point.x, 1);
+            var z = this.current_z;
+            self.setState({
+              volumeViewer: true,
+              'click_z': z,
+              'click_y': Math.round(y),
+              'click_x': Math.round(x),
+              'click_axis': 'xy',
+              'click_label': labeltype
+            });
+          }
+          return;
+        });
+
         self.setState({layer: dz, targetZ: dz});
 
         // if the url already has coordinates in it, then we need to jump to
