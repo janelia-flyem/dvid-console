@@ -118,7 +118,7 @@ var TileMapArea = React.createClass({
           tileSize = tileData.Extended.Levels[0].TileSize[0];
         }
 
-        viewer = new TileViewer({
+        var viewerOpts = {
           id: 'viewer',
           maxZoom: maxLevel,
           tileSource: url + '/api/node/' + uuid + '/' + tileSource + '/tile/xy/{zoom}/{x}_{y}_{z}',
@@ -129,7 +129,15 @@ var TileMapArea = React.createClass({
           x_mid: dx,
           y_mid: dy,
           segTileSize: 256
-        });
+        };
+
+        if (!dataIsTiled) {
+          viewerOpts.rawImages = true;
+          viewerOpts.tileSource = url + '/api/node/' + uuid + '/' + tileSource + "/raw/xy/{tile}_{tile}/{x}_{y}_{z}";
+        }
+
+        viewer = new TileViewer(viewerOpts);
+
 
         window.viewer = viewer;
 
