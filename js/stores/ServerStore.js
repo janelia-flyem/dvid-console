@@ -44,7 +44,7 @@ class ServerStore {
       entry = opts.entry,
       cb = opts.callback,
       payload = {
-        log: [entry]
+        note: [entry]
       },
       err = function(err) {
         ErrorActions.update(err);
