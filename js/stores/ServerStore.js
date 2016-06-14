@@ -9,7 +9,7 @@ class ServerStore {
     this.bindActions(ServerActions);
     this.repos = null;
     this.stats = null;
-    this.api = dvid.connect({host: config.host, port: config.port});
+    this.api = dvid.connect({host: config.host, port: config.port, username: 'dvidconsole', application: 'dvidconsole'});
     this.repo = null;
     this.types = null;
 
