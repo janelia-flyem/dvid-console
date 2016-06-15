@@ -47,17 +47,25 @@ class RepoList extends React.Component {
               <th>Description</th>
               <th>Root UUID</th>
               <th>Last Updated</th>
+              <th>Neuroglancer</th>
               </tr>
             </thead>
             <tbody>
             {repo_list.map((repo, i) => {
               if (repo) {
+
+                var port = window.location.port || "80"
+
+                var host_string = window.location.hostname + ":" + port;
+
+                var glancer_url = "/neuroglancer/#!{%27layers%27:{%27grayscale%27:{%27type%27:%27image%27_%27source%27:%27dvid://http://" + host_string + "/"+ repo.Root + "/grayscale%27}}}"
                 return (
                   <tr key={i}>
                     <td><Link to="repo" params={{uuid: repo.Root}}>{repo.Alias}</Link></td>
                     <td>{repo.Description}</td>
                     <td><Link to="repo" params={{uuid: repo.Root}}>{repo.Root}</Link></td>
                     <td>{moment(repo.Updated).format("MMM Do YYYY, h:mm:ss a")}</td>
+                    <td><a href={glancer_url}>{repo.Root}</a></td>
                   </tr>
                 );
               }

@@ -50,6 +50,11 @@ module.exports = function(grunt) {
         dest: 'dist/',
         expand: true
       },
+      neuroglancer: {
+        src: 'neuroglancer/**',
+        dest: 'dist',
+        expand: true
+      },
       index: {
         src: 'dist.html',
         dest: 'dist/index.html'
