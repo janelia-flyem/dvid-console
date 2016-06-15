@@ -121,9 +121,9 @@ var TileMapArea = React.createClass({
         var viewerOpts = {
           id: 'viewer',
           maxZoom: maxLevel,
-          tileSource: url + '/api/node/' + uuid + '/' + tileSource + '/tile/xy/{zoom}/{x}_{y}_{z}',
-          segSource: url + '/api/node/' + uuid + '/' + labeltype + '/pseudocolor/0_1/{tile}_{tile}/{x}_{y}_{z}',
-          rawSegSource:  url + '/api/node/' + uuid + '/' + labeltype + '/raw/0_1_2/{tile}_{tile}_1/{x}_{y}_{z}',
+          tileSource: url + '/api/node/' + uuid + '/' + tileSource + '/tile/xy/{zoom}/{x}_{y}_{z}?u=dvidconsole;app=tileviewer',
+          segSource: url + '/api/node/' + uuid + '/' + labeltype + '/pseudocolor/0_1/{tile}_{tile}/{x}_{y}_{z}?u=dvidconsole;app=tileviewer',
+          rawSegSource:  url + '/api/node/' + uuid + '/' + labeltype + '/raw/0_1_2/{tile}_{tile}_1/{x}_{y}_{z}?u=dvidconsole;app=tileviewer',
           current_z: dz,
           tileSize: tileSize,
           x_mid: dx,
@@ -133,7 +133,7 @@ var TileMapArea = React.createClass({
 
         if (!dataIsTiled) {
           viewerOpts.rawImages = true;
-          viewerOpts.tileSource = url + '/api/node/' + uuid + '/' + tileSource + "/raw/xy/{tile}_{tile}/{x}_{y}_{z}";
+          viewerOpts.tileSource = url + '/api/node/' + uuid + '/' + tileSource + "/raw/xy/{tile}_{tile}/{x}_{y}_{z}?u=dvidconsole;app=tileviewer";
         }
 
         viewer = new TileViewer(viewerOpts);
