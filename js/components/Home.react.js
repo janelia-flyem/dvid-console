@@ -1,12 +1,53 @@
 import React from 'react';
 import {Router, Link} from 'react-router';
 import ServerActions from '../actions/ServerActions';
+import ErrorActions from '../actions/ErrorActions';
 import ServerStore from '../stores/ServerStore';
 import AltContainer from 'alt/AltContainer';
 import moment from 'moment';
 import {Table, Button, Glyphicon} from 'react-bootstrap';
 
 class RepoList extends React.Component {
+
+  neuroGlancerHandler(uuid, event) {
+    var self = this;
+
+    event.preventDefault();
+
+    // display an error message if uuid is missing.
+    if(!uuid) {
+      ErrorActions.update('Unable to find master node');
+      return;
+    }
+
+    //try to get master uuid if available.
+    ServerActions.fetchMaster({
+      uuid: uuid,
+      callback: function(data) {
+        self._redirectToNeuroGlancer(data[0]);
+      },
+      error: function(e) {
+        if (e.status == 400) {
+          // there was no branches repo, so just use the master uuid.
+          self._redirectToNeuroGlancer(uuid);
+        }
+      }
+    });
+  }
+
+  _redirectToNeuroGlancer(uuid) {
+    ErrorActions.clear();
+    var port = window.location.port || "80"
+    var host_string = window.location.hostname + ":" + port;
+
+    // generate a new url with the choices made and ...
+    // redirect the browser
+    var glancer_url = "/neuroglancer/#!{%27layers%27:{%27grayscale%27:{%27type%27:%27image%27_%27source%27:%27dvid://http://" + host_string + "/"+ uuid + "/grayscale%27}}}"
+
+    window.location.href = glancer_url
+  }
+
+
   render() {
     if (this.props.repos) {
       var repo_list = [];
@@ -59,13 +100,15 @@ class RepoList extends React.Component {
                 var host_string = window.location.hostname + ":" + port;
 
                 var glancer_url = "/neuroglancer/#!{%27layers%27:{%27grayscale%27:{%27type%27:%27image%27_%27source%27:%27dvid://http://" + host_string + "/"+ repo.Root + "/grayscale%27}}}"
+                var neuroClick = this.neuroGlancerHandler.bind(this, repo.Root)
+
                 return (
                   <tr key={i}>
                     <td><Link to="repo" params={{uuid: repo.Root}}>{repo.Alias}</Link></td>
                     <td>{repo.Description}</td>
                     <td><Link to="repo" params={{uuid: repo.Root}}>{repo.Root}</Link></td>
                     <td>{moment(repo.Updated).format("MMM Do YYYY, h:mm:ss a")}</td>
-                    <td><a href={glancer_url}>{repo.Root}</a></td>
+                    <td><a onClick={neuroClick}>View volumetric data</a></td>
                   </tr>
                 );
               }

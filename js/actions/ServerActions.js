@@ -13,6 +13,9 @@ class ServerActions {
   fetch(uuid) {
     this.dispatch(uuid);
   }
+  fetchMaster(data) {
+    this.dispatch(data);
+  }
   addLog(entry) {
     this.dispatch(entry);
   }

@@ -122,6 +122,33 @@ class ServerStore {
     }
   }
 
+  onFetchMaster(opts) {
+    var self = this;
+
+    if (opts && opts.uuid) {
+      // check to see if the branches data type is present
+      // if yes, then grab the master uuid
+      // else run the error callback.
+      self.api.node({
+        uuid: opts.uuid,
+        endpoint: 'branches/key/master',
+        callback: function(data) {
+          if (opts.callback) {
+            opts.callback(data);
+          }
+          self.emitChange();
+        },
+        error: function (err) {
+          if (opts.error) {
+            opts.error(err);
+          }
+        }
+      });
+    }
+  }
+
+
+
   onAddLog(data) {
     var self = this,
       entry = data.entry,
