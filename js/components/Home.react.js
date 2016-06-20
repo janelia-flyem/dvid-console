@@ -36,6 +36,27 @@ class RepoList extends React.Component {
   }
 
   _redirectToNeuroGlancer(uuid) {
+
+    if (uuid.length < 32) {
+      // we dont have a full length uuid, so we need to get it
+      var repo_list = [];
+      var re = new RegExp("^" + uuid)
+
+      for (var key in this.props.repos) {
+        if (this.props.repos.hasOwnProperty(key)) {
+          if (this.props.repos[key]) {
+            if (this.props.repos[key].hasOwnProperty('DAG')) {
+              for (var rkey in this.props.repos[key].DAG.Nodes) {
+                if (re.test(rkey)) {
+                  uuid = rkey;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
     ErrorActions.clear();
     var port = window.location.port || "80"
     var host_string = window.location.hostname + ":" + port;
