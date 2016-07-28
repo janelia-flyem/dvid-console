@@ -3,6 +3,19 @@ import ServerStore from '../stores/ServerStore';
 import AltContainer from 'alt/AltContainer';
 
 class DataInstanceList extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {showSub: false};
+  }
+
+  showHandler() {
+    if (this.state.showSub) {
+      this.setState({showSub: false});
+    } else {
+      this.setState({showSub: true});
+    }
+  }
+
   render() {
     var rows = [];
     var tileRows = [];
@@ -11,11 +24,26 @@ class DataInstanceList extends React.Component {
       var instances = this.props.repo.DataInstances;
 
       var sorted = [];
+      var parents = {};
 
+      var base_key_regex = /^(.*)(_\d)$/;
+
+      var toggleIcon = '+';
+
+      if (this.state.showSub) {
+        toggleIcon = '-';
+      }
 
       for (var key in instances) {
         if (instances.hasOwnProperty(key)) {
-          sorted.push([key, instances[key]]);
+          var match = base_key_regex.exec(key);
+          if (match) {
+            sorted.push([key, instances[key], match[1] + '_' + instances[key].Base.TypeName]);
+            parents[match[1] + '_' + instances[key].Base.TypeName] = 1;
+          }
+          else{
+            sorted.push([key, instances[key]]);
+          }
         }
       }
 
@@ -42,12 +70,18 @@ class DataInstanceList extends React.Component {
       // the rows array, so that we can push them together later and make sure that
       // the data instances that are used in the tile viewer are closer to the top
       // of the page.
+
       for (var i = 0; i < sorted.length; i++) {
         var type = sorted[i][1].Base.TypeName;
-        if (type === 'grayscale8' || type === 'multiscale2d' || type === 'uint8blk' || type === 'imagetile' || type === 'googlevoxels' || type === 'labels64' || type === 'labelblk' ) {
-          tileRows.push(<DataInstance key={sorted[i][0]} instance={sorted[i][1]} uuid={this.props.uuid}/>);
+        var isParent = parents[sorted[i][0] + '_' + type];
+        if (!this.state.showSub && sorted[i][2]) {
+          // don't add the row as we don't want to draw it.
         } else {
-          rows.push(<DataInstance key={sorted[i][0]} instance={sorted[i][1]} uuid={this.props.uuid}/>);
+          if (type === 'grayscale8' || type === 'multiscale2d' || type === 'uint8blk' || type === 'imagetile' || type === 'googlevoxels' || type === 'labels64' || type === 'labelblk' ) {
+            tileRows.push(<DataInstance key={sorted[i][0]} instance={sorted[i][1]} isParent={isParent} uuid={this.props.uuid} show={this.state.showSub}/>);
+          } else {
+            rows.push(<DataInstance key={sorted[i][0]} instance={sorted[i][1]} isParent={isParent} uuid={this.props.uuid} show={this.state.showSub}/>);
+          }
         }
       }
 
@@ -59,7 +93,7 @@ class DataInstanceList extends React.Component {
       <table className="datainstances">
         <thead>
           <tr>
-            <td>Data Instance</td>
+            <td onClick={this.showHandler.bind(this)}>Data Instance [{{toggleIcon}}]</td>
             <td>Type</td>
             <td>Tile Source</td>
             <td>Label Source</td>
@@ -74,7 +108,6 @@ class DataInstanceList extends React.Component {
 }
 
 class DataInstance extends React.Component {
-
   componentDidMount() {
     $('[data-toggle="tooltip"]').tooltip();
   }
@@ -87,6 +120,11 @@ class DataInstance extends React.Component {
     var name = this.props.instance.Base.Name;
     var name_url = '/api/node/' + this.props.uuid + '/' + name + '/';
     var info = 'information';
+
+    if (this.props.isParent) {
+      name = name + '*';
+    }
+
     if (type == 'keyvalue') {
       name_url += 'keys/0/z';
       info = 'keys';
