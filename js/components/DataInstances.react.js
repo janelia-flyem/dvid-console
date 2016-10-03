@@ -1,5 +1,6 @@
 import React from 'react';
 import ServerStore from '../stores/ServerStore';
+import InstanceStore from '../stores/InstanceStore';
 import AltContainer from 'alt/AltContainer';
 
 class DataInstanceList extends React.Component {
@@ -31,11 +32,11 @@ class DataInstanceList extends React.Component {
     var rows = [];
     var tileRows = [];
 
-    if (this.props && this.props.repo.DataInstances) {
-      var instances = this.props.repo.DataInstances;
+    if (this.props.ServerStore && this.props.ServerStore.repo.DataInstances) {
+      var instances = this.props.ServerStore.repo.DataInstances;
 
       var chosen_node = this.props.uuid;
-      var dagNodes = this.props.repo.DAG.Nodes;
+      var dagNodes = this.props.ServerStore.repo.DAG.Nodes;
 
       // create a lookup and reverse lookup for all of the nodes so we can get parents.
       var byUUIDLookUp = {};
@@ -75,16 +76,9 @@ class DataInstanceList extends React.Component {
         toggleIcon = '-';
       }
 
-      var nodeToggleIcon = '+';
-
-      if (this.state.nodeRestrict) {
-        nodeToggleIcon = '-';
-      }
-
-
       for (var key in instances) {
         // skip this if RepoUUID is not in ancestors list
-        if (this.state.nodeRestrict === false || ancestors.hasOwnProperty(instances[key].Base.RepoUUID)) {
+        if (this.props.InstanceStore.nodeRestrict === false || ancestors.hasOwnProperty(instances[key].Base.RepoUUID)) {
           if (instances.hasOwnProperty(key)) {
             var match = base_key_regex.exec(key);
             if (match) {
@@ -144,11 +138,7 @@ class DataInstanceList extends React.Component {
       <table className="datainstances">
         <thead>
           <tr>
-            <td>
-              Data Instance
-              <span onClick={this.showHandler.bind(this)}>[{{toggleIcon}}]</span>
-              <span onClick={this.nodeResHandler.bind(this)}>[{{nodeToggleIcon}}]</span>
-            </td>
+            <td onClick={this.showHandler.bind(this)}> Data Instance [{{toggleIcon}}]</td>
             <td>Type</td>
             <td>Tile Source</td>
             <td>Label Source</td>
@@ -236,7 +226,7 @@ class DataInstances extends React.Component {
 
   render() {
     return (
-      <AltContainer store={ServerStore}>
+      <AltContainer stores={{ServerStore: ServerStore, InstanceStore: InstanceStore}}>
         <DataInstanceList uuid={this.props.uuid}/>
       </AltContainer>
     );

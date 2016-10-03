@@ -3,11 +3,18 @@ import Router from 'react-router';
 import {Modal, Button} from 'react-bootstrap';
 import DataInstances from './DataInstances.react';
 import ErrorActions from '../actions/ErrorActions';
+import InstanceActions from '../actions/InstanceActions';
+import InstanceStore from '../stores/InstanceStore';
 import InstanceAdd from './InstanceAdd.React.js';
+import AltContainer from 'alt/AltContainer';
 
-var InstanceSelect = React.createClass({
+var InstanceSelectPanel = React.createClass({
   // have to write this component with the old syntax otherwise we cant use mixins.
   mixins: [Router.State, Router.Navigation],
+
+  showAllHandler: function(event) {
+    InstanceActions.toggle();
+  },
 
   showDataHandler: function(event) {
     var tile_source = null,
@@ -75,13 +82,22 @@ var InstanceSelect = React.createClass({
   },
 
   render: function () {
+
+    var button = <p>Showing all data instances. <button className="btn btn-default btn-xs" onClick={this.showAllHandler}>Show Select Data Instances</button></p>
+
+    if (this.props.nodeRestrict) {
+      button = <p>Showing data instances created on this node or its ancestors. <button className="btn btn-default btn-xs" onClick={this.showAllHandler}>Show All Data Instances</button></p>
+    }
+
     return (
       <div className="dataselect">
         <InstanceAdd uuid={this.props.uuid}/>
         <h4>Data Instances</h4>
         <div className="row">
           <div className="col-sm-3">
-            <p>Select a tile source and a label source, then open the tile viewer to preview your data.</p>
+            {button}
+            <hr/>
+            <p>Select a tile source and optionally a label source, then open the tile viewer to preview your data.</p>
             <button className="btn btn-default" onClick={this.showDataHandler}>Open Tile Viewer</button>
             <button className="btn btn-default" onClick={this.neuroGlancerHandler}>Open Neuroglancer</button>
           </div>
@@ -96,5 +112,15 @@ var InstanceSelect = React.createClass({
   }
 
 });
+
+class InstanceSelect extends React.Component {
+  render() {
+    return (
+      <AltContainer store={InstanceStore}>
+        <InstanceSelectPanel uuid={this.props.uuid}/>
+      </AltContainer>
+    );
+  }
+};
 
 module.exports = InstanceSelect;
