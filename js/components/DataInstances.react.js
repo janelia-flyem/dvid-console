@@ -5,7 +5,10 @@ import AltContainer from 'alt/AltContainer';
 class DataInstanceList extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {showSub: false};
+    this.state = {
+      showSub: false,
+      nodeRestrict: true
+    };
   }
 
   showHandler() {
@@ -16,12 +19,50 @@ class DataInstanceList extends React.Component {
     }
   }
 
+  nodeResHandler() {
+    if (this.state.nodeRestrict) {
+      this.setState({nodeRestrict: false});
+    } else {
+      this.setState({nodeRestrict: true});
+    }
+  }
+
   render() {
     var rows = [];
     var tileRows = [];
 
     if (this.props && this.props.repo.DataInstances) {
       var instances = this.props.repo.DataInstances;
+
+      var chosen_node = this.props.uuid;
+      var dagNodes = this.props.repo.DAG.Nodes;
+
+      // create a lookup and reverse lookup for all of the nodes so we can get parents.
+      var byUUIDLookUp = {};
+      var byIdLookUp = {};
+
+      for (var key in dagNodes) {
+        byUUIDLookUp[key] = dagNodes[key].Parents;
+        byIdLookUp[dagNodes[key].VersionID] = key;
+      }
+
+
+      // generate an ancestors list to be used for exclusion.
+      var ancestors = {};
+      // work back from the chosen node and add all the ancestors to one list.
+      function add_ancestors (node) {
+        if (byUUIDLookUp.hasOwnProperty(node.UUID)) {
+          ancestors[node.UUID] = true;
+          // check for parents array
+          if (node.Parents.length > 0) {
+            for (let nodeParent of node.Parents) {
+              var parentUUID = byIdLookUp[nodeParent]
+              add_ancestors(dagNodes[parentUUID])
+            }
+          }
+        }
+      }
+      add_ancestors(dagNodes[chosen_node]);
 
       var sorted = [];
       var parents = {};
@@ -34,15 +75,25 @@ class DataInstanceList extends React.Component {
         toggleIcon = '-';
       }
 
+      var nodeToggleIcon = '+';
+
+      if (this.state.nodeRestrict) {
+        nodeToggleIcon = '-';
+      }
+
+
       for (var key in instances) {
-        if (instances.hasOwnProperty(key)) {
-          var match = base_key_regex.exec(key);
-          if (match) {
-            sorted.push([key, instances[key], match[1] + '_' + instances[key].Base.TypeName]);
-            parents[match[1] + '_' + instances[key].Base.TypeName] = 1;
-          }
-          else{
-            sorted.push([key, instances[key]]);
+        // skip this if RepoUUID is not in ancestors list
+        if (this.state.nodeRestrict === false || ancestors.hasOwnProperty(instances[key].Base.RepoUUID)) {
+          if (instances.hasOwnProperty(key)) {
+            var match = base_key_regex.exec(key);
+            if (match) {
+              sorted.push([key, instances[key], match[1] + '_' + instances[key].Base.TypeName]);
+              parents[match[1] + '_' + instances[key].Base.TypeName] = 1;
+            }
+            else{
+              sorted.push([key, instances[key]]);
+            }
           }
         }
       }
@@ -93,7 +144,11 @@ class DataInstanceList extends React.Component {
       <table className="datainstances">
         <thead>
           <tr>
-            <td onClick={this.showHandler.bind(this)}>Data Instance [{{toggleIcon}}]</td>
+            <td>
+              Data Instance
+              <span onClick={this.showHandler.bind(this)}>[{{toggleIcon}}]</span>
+              <span onClick={this.nodeResHandler.bind(this)}>[{{nodeToggleIcon}}]</span>
+            </td>
             <td>Type</td>
             <td>Tile Source</td>
             <td>Label Source</td>
