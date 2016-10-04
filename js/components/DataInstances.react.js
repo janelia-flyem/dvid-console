@@ -130,7 +130,7 @@ class DataInstanceList extends React.Component {
         }
       }
 
-      tileRows.push(rows);
+      tileRows.push.apply(tileRows, rows);
 
     }
 
@@ -138,7 +138,7 @@ class DataInstanceList extends React.Component {
       <table className="datainstances">
         <thead>
           <tr>
-            <td onClick={this.showHandler.bind(this)}> Data Instance [{{toggleIcon}}]</td>
+            <td onClick={this.showHandler.bind(this)}> Data Instance [{toggleIcon}]</td>
             <td>Type</td>
             <td>Tile Source</td>
             <td>Label Source</td>
