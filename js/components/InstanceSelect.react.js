@@ -117,7 +117,7 @@ class InstanceSelect extends React.Component {
   render() {
     return (
       <AltContainer store={InstanceStore}>
-        <InstanceSelectPanel uuid={this.props.uuid}/>
+        <InstanceSelectPanel repo={this.props.repo} uuid={this.props.uuid}/>
       </AltContainer>
     );
   }
