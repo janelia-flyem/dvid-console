@@ -76,7 +76,14 @@ module.exports = function(grunt) {
         files: ['js/**/*.js'],
         tasks: ['browserify']
       }
-    }
+    },
+    connect: {
+        server: {
+            options: {
+              port: 4000
+            }
+        }
+    },
   });
 
   // Load the plugins
@@ -85,8 +92,10 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-compress');
+  grunt.loadNpmTasks('grunt-contrib-connect');
 
   // Default task(s).
   grunt.registerTask('default', ['browserify']);
+  grunt.registerTask('dev', ['browserify', 'connect', 'watch'])
   grunt.registerTask('dist', ['browserify','uglify','copy', 'compress']);
 };

@@ -7,6 +7,7 @@ import InstanceActions from '../actions/InstanceActions';
 import InstanceStore from '../stores/InstanceStore';
 import InstanceAdd from './InstanceAdd.React.js';
 import AltContainer from 'alt/AltContainer';
+import config from '../utils/config';
 
 var InstanceSelectPanel = React.createClass({
   // have to write this component with the old syntax otherwise we cant use mixins.
@@ -63,8 +64,8 @@ var InstanceSelectPanel = React.createClass({
       label_source = null;
     // grab tile source selection
     tile_source = $("#instance_select input:radio[name=tile_source]:checked").val();
-    // grab label source selection
-    label_source = $("#instance_select input:radio[name=label_source]:checked").val();
+    tile_source = tile_source.replace('*','');
+    
     // display an error message if either one is missing.
     if(!tile_source) {
       ErrorActions.update('Please select a tile source from the table below.');
@@ -74,9 +75,7 @@ var InstanceSelectPanel = React.createClass({
     ErrorActions.clear();
     // generate a new url with the choices made and ...
     // redirect the browser
-    var port = window.location.port || "80"
-    var host_string = window.location.hostname + ":" + port;
-    var glancer_url = "/neuroglancer/#!{%27layers%27:{%27" + tile_source + "%27:{%27type%27:%27image%27_%27source%27:%27dvid://http://" + host_string + "/"+ this.props.uuid + "/" + tile_source + "%27}}}"
+    var glancer_url = "/neuroglancer/#!{%27layers%27:{%27" + tile_source + "%27:{%27type%27:%27image%27_%27source%27:%27dvid://" + config.baseUrl() + "/"+ this.props.uuid + "/" + tile_source + "%27}}}"
 
     window.location.href = glancer_url
   },

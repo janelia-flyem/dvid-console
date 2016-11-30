@@ -6,6 +6,7 @@ import ServerStore from '../stores/ServerStore';
 import AltContainer from 'alt/AltContainer';
 import moment from 'moment';
 import {Table, Button, Glyphicon} from 'react-bootstrap';
+import config from '../utils/config';
 
 class RepoList extends React.Component {
 
@@ -27,7 +28,7 @@ class RepoList extends React.Component {
         self._redirectToNeuroGlancer(data[0]);
       },
       error: function(e) {
-        if (e.status == 400) {
+        if (e.status == 400 || e.toString().includes('400')) {
           // there was no branches repo, so just use the master uuid.
           self._redirectToNeuroGlancer(uuid);
         }
@@ -58,12 +59,10 @@ class RepoList extends React.Component {
     }
 
     ErrorActions.clear();
-    var port = window.location.port || "80"
-    var host_string = window.location.hostname + ":" + port;
 
     // generate a new url with the choices made and ...
     // redirect the browser
-    var glancer_url = "/neuroglancer/#!{%27layers%27:{%27grayscale%27:{%27type%27:%27image%27_%27source%27:%27dvid://http://" + host_string + "/"+ uuid + "/grayscale%27}}}"
+    var glancer_url = "/neuroglancer/#!{%27layers%27:{%27grayscale%27:{%27type%27:%27image%27_%27source%27:%27dvid://" + config.baseUrl() + "/"+ uuid + "/grayscale%27}}}"
 
     window.location.href = glancer_url
   }
