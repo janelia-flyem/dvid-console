@@ -146,6 +146,32 @@ class ServerStore {
       });
     }
   }
+  
+  onFetchMasterInfo(opts){
+    var self = this;
+
+    if (opts && opts.uuid) {
+      // check to see if the master_info key is present on the branche datainstance
+      // if yes, then pass the master_info json obj to the callback
+      // else run the error callback.
+      self.api.node({
+        uuid: opts.uuid,
+        endpoint: 'branches/key/master_info',
+        callback: function(data) {
+          if (opts.callback) {
+            opts.callback(data);
+          }
+          self.emitChange();
+        },
+        error: function (err) {
+          if (opts.error) {
+            opts.error(err);
+          }
+        }
+      });
+    }
+
+  }
 
 
 

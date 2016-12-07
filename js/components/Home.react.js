@@ -25,18 +25,18 @@ class RepoList extends React.Component {
     ServerActions.fetchMaster({
       uuid: uuid,
       callback: function(data) {
-        self._redirectToNeuroGlancer(data[0]);
+        self._redirectToNeuroGlancer(data[0], true);
       },
       error: function(e) {
-        if (e.status == 400 || e.toString().includes('400')) {
+        if (e.status == 400 || e.toString().includes('400') || e.toString().includes('404')) {
           // there was no branches repo, so just use the master uuid.
-          self._redirectToNeuroGlancer(uuid);
+          self._redirectToNeuroGlancer(uuid, false);
         }
       }
     });
   }
 
-  _redirectToNeuroGlancer(uuid) {
+  _redirectToNeuroGlancer(uuid, hasMaster) {
 
     if (uuid.length < 32) {
       // we dont have a full length uuid, so we need to get it
@@ -59,13 +59,38 @@ class RepoList extends React.Component {
     }
 
     ErrorActions.clear();
+    //try to get the master segmentation
+    if (!hasMaster){
+      this._redirectGlancerNoLabel(uuid)
+    }
+    ServerActions.fetchMasterInfo({
+      uuid: uuid,
+      callback: function(masterInfo){
+        console.log(masterInfo)
+        if(masterInfo.label_block){
+          var seg_layer = "_%27" + masterInfo.label_block + "%27:{%27type%27:%27segmentation%27_%27source%27:%27dvid://" + config.baseUrl() + "/"+ uuid + "/" + masterInfo.label_block + "%27}"
+        }
+        var img_layer = "%27grayscale%27:{%27type%27:%27image%27_%27source%27:%27dvid://" + config.baseUrl() + "/"+ uuid + "/grayscale%27}"
+        var perspective = "%27perspectiveOrientation%27:[-0.12320884317159653_0.21754156053066254_-0.009492455050349236_0.9681965708732605]_%27perspectiveZoom%27:64"
+        var glancer_url = "/neuroglancer/#!{%27layers%27:{" + img_layer + seg_layer + "}_" + perspective +"}"
 
+        // var glancer_url = "/neuroglancer/#!{%27layers%27:{%27grayscale%27:{%27type%27:%27image%27_%27source%27:%27dvid://" + config.baseUrl() + "/"+ uuid + "/grayscale%27}}}"
+        window.location.href = glancer_url
+      },
+      err: function(){
+        this._redirectGlancerNoLabel(uuid)
+      }.bind(this)
+    })
+
+  }
+
+  _redirectGlancerNoLabel(uuid){
     // generate a new url with the choices made and ...
     // redirect the browser
     var glancer_url = "/neuroglancer/#!{%27layers%27:{%27grayscale%27:{%27type%27:%27image%27_%27source%27:%27dvid://" + config.baseUrl() + "/"+ uuid + "/grayscale%27}}}"
-
     window.location.href = glancer_url
   }
+
 
 
   render() {

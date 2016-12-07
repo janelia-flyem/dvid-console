@@ -60,22 +60,34 @@ var InstanceSelectPanel = React.createClass({
   },
 
   neuroGlancerHandler: function(event) {
-    var tile_source = null,
-      label_source = null;
+    var tile_source = null;
+    var label_source = null;
+    var seg_layer = '';
     // grab tile source selection
     tile_source = $("#instance_select input:radio[name=tile_source]:checked").val();
-    tile_source = tile_source.replace('*','');
-    
-    // display an error message if either one is missing.
+    // display an error message if tilesource is missing.
     if(!tile_source) {
       ErrorActions.update('Please select a tile source from the table below.');
       return;
     }
-
     ErrorActions.clear();
+
+    tile_source = tile_source.replace('*','');
+
+    // grab label source selection
+    label_source = $("#instance_select input:radio[name=label_source]:checked").val();
+    if(label_source){
+      label_source = label_source.replace('*','');
+      var seg_layer = "_%27" + label_source + "%27:{%27type%27:%27segmentation%27_%27source%27:%27dvid://" + config.baseUrl() + "/"+ this.props.uuid + "/" + label_source + "%27}";
+    }
+    
+
+
     // generate a new url with the choices made and ...
     // redirect the browser
-    var glancer_url = "/neuroglancer/#!{%27layers%27:{%27" + tile_source + "%27:{%27type%27:%27image%27_%27source%27:%27dvid://" + config.baseUrl() + "/"+ this.props.uuid + "/" + tile_source + "%27}}}"
+    var tile_layer = "%27" + tile_source + "%27:{%27type%27:%27image%27_%27source%27:%27dvid://" + config.baseUrl() + "/"+ this.props.uuid + "/" + tile_source + "%27}";
+    var perspective = "%27perspectiveOrientation%27:[-0.12320884317159653_0.21754156053066254_-0.009492455050349236_0.9681965708732605]_%27perspectiveZoom%27:64";
+    var glancer_url = "/neuroglancer/#!{%27layers%27:{" + tile_layer + seg_layer + "}_" + perspective +"}"
 
     window.location.href = glancer_url
   },

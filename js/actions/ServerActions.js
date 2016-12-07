@@ -16,6 +16,9 @@ class ServerActions {
   fetchMaster(data) {
     this.dispatch(data);
   }
+  fetchMasterInfo(data){
+    this.dispatch(data)
+  }
   addLog(entry) {
     this.dispatch(entry);
   }
