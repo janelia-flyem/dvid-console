@@ -1,6 +1,6 @@
 {
   "name": "dvid-console",
-  "version": "1.14.6",
+  "version": "1.14.7",
   "description": "Web console for DVID, a distributed, versioned image-oriented datastore.",
   "main": "js/app.js",
   "scripts": {
