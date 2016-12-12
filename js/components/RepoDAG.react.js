@@ -25,6 +25,15 @@ var RepoDAGDisplay  = React.createClass({
     this.drawGraph(this.props);
   },
 
+  shouldComponentUpdate: function(nextProps, nextState) {
+    //avoid over-aggressive rendering of component that was causing perf issues
+    //note that we will need to update this when adding further props to the component
+    return  nextProps.types !== this.props.types ||
+            nextProps.repoMasterSeg !== this.props.repoMasterSeg ||
+            nextProps.repoMasterUuuid !== this.props.repoMasterUuuid ||
+            nextProps.uuid !== this.props.uuid;
+  },
+
   componentWillUpdate: function(props) {
     this.drawGraph(props);
   },
@@ -92,6 +101,10 @@ var RepoDAGDisplay  = React.createClass({
         if (n.Locked) nodeclass = "type-locked";
         var note = null;
         if (n.Note) note = n.Note;
+
+        if(props.repoMasterUuuid && n.UUID.includes(props.repoMasterUuuid)){
+          nodeclass = nodeclass + " " + "master";
+        }
 
         if (n.UUID === props.uuid) {
           nodeclass = nodeclass + " " + "current";
@@ -165,7 +178,6 @@ var RepoDAGDisplay  = React.createClass({
     });
 
     this.update();
-    this.fitDAG();
     //kludge for fixing edge crossings created by the initial dagre render
     this.collapseGraph();
     this.expandGraph();
@@ -173,10 +185,19 @@ var RepoDAGDisplay  = React.createClass({
     dag.graph().transition = function (selection) {
     return selection.transition().duration(300);
     };
+    if(!!props.repoMasterUuuid){
+      this.scrollToMaster();
+    }
+    else{
+      this.scrollToCurrent();
+    }
   },
 
   update: function(){
     var self = this;
+    //clean up old graph elements before redraw
+    var svg = d3.select("svg > g");
+    svg.selectAll("*").remove();
     //renders the dag
     var dagreRenderer = new dagreD3.render();
     // Add a custom arrow
@@ -269,6 +290,62 @@ var RepoDAGDisplay  = React.createClass({
     nodeDrag.call(elementHolderLayer.selectAll("g.node"));
     edgeDrag.call(elementHolderLayer.selectAll("g.edgePath"));
   },
+  scrollToCurrent: function(){
+    ErrorActions.clear()
+    this.expandGraph()
+    var success = this.scrollToNode(".node.current");
+    if(!success){
+      ErrorActions.update('Can\'t find current node');
+    }
+    
+  },
+  scrollToMaster: function(){
+    ErrorActions.clear()
+    this.expandGraph();
+    var success = this.scrollToNode(".node.master");
+    if(!success){
+      this.fitDAG();
+      ErrorActions.update('Repo does not have a master node');
+    }
+  },
+  scrollToNode: function(nodeSelector){
+    // figure out the scale ratio that will be used to resize the graph.
+
+    var node = elementHolderLayer.select(nodeSelector);
+    if(!node.empty()){
+      //get the current transform applied to the node
+      var mTransform = d3.transform(node.attr('transform'));
+      var masterT = {x:mTransform.translate[0], y:mTransform.translate[1]};
+      //create a translation that will center this node on the display
+      var newT = {
+        x: $("svg").width()/2 - masterT.x,
+        y: $("svg").height()/2 - masterT.y,
+      }
+      // apply with a basic transition
+      elementHolderLayer.transition().duration(300).attr("transform", "translate(" + newT.x + ", " + newT.y + ")");
+      //pass scale=1, since we're using the initial element size
+      this.setZoom([newT.x, newT.y], 1);
+      return true;
+    }
+    else{
+      return false;
+    }
+
+  },
+
+  setZoom: function(center, scale){
+    var zoom = d3.behavior.zoom()
+        .on("zoom", function () {
+        elementHolderLayer.attr("transform", "translate(" + d3.event.translate + ")" +
+            "scale(" + d3.event.scale + ")");
+    })
+    //prevents graph from being zoomed in super close or smaller than the container
+    .scaleExtent([0, 1.5]);
+    svgBackground.call(zoom);
+    // //scale and translate zoom so that it lines up with the graph
+    zoom.scale(scale);
+    zoom.translate(center);
+  },
 
   fitDAG: function(){
     // figure out the scale ratio that will be used to resize the graph.
@@ -281,17 +358,8 @@ var RepoDAGDisplay  = React.createClass({
     // apply the scale and translation in one go.
     elementHolderLayer.attr("transform", "matrix(" + scale + ", 0, 0, " + scale + ", " + xCenterOffset + "," + yCenterOffset + ")");
     // Set up zoom support
-    var zoom = d3.behavior.zoom()
-        .on("zoom", function () {
-        elementHolderLayer.attr("transform", "translate(" + d3.event.translate + ")" +
-            "scale(" + d3.event.scale + ")");
-    })
-    //prevents graph from being zoomed in super close or smaller than the container
-    .scaleExtent([0, 1.5]);
-    svgBackground.call(zoom);
-    //scale and translate zoom so that it lines up with the graph
-    zoom.scale(scale);
-    zoom.translate([xCenterOffset, yCenterOffset]);
+    this.setZoom([xCenterOffset, yCenterOffset], scale)
+
   },
 
   //toggles collapsing and expanding of a parent node
@@ -319,7 +387,6 @@ var RepoDAGDisplay  = React.createClass({
       } else {
           //if no nodes were expanded, it means the graph has been completely expanded.
           this.update();
-          this.fitDAG();
       }
   },
 
@@ -332,9 +399,20 @@ var RepoDAGDisplay  = React.createClass({
       }
     });
     this.update();
-    this.fitDAG();
   },
 
+  expandAndScale: function(){
+    ErrorActions.clear()
+    this.expandGraph();
+    this.fitDAG();
+
+  },
+
+  collapseAndScale: function(){
+    ErrorActions.clear()
+    this.collapseGraph();
+    this.fitDAG();    
+  },
   downloadSVGHandler: function(event) {
     this.fitDAG();
     var e = document.createElement('script');
@@ -392,7 +470,6 @@ var RepoDAGDisplay  = React.createClass({
 
   render: function() {
     var admin = this.context.router.getCurrentQuery().admin;
-
     var branchButton = '';
     var commitButton = '';
     if (admin) {
@@ -409,8 +486,11 @@ var RepoDAGDisplay  = React.createClass({
         <div>
           <button className="btn btn-default" onClick={this.downloadSVGHandler}>Download DAG as SVG</button>
           <button className="btn btn-default" onClick={this.fitDAG}>Fit graph to window</button>
-          <button className="btn btn-default" onClick={this.expandGraph}>Expand graph</button>
-          <button className="btn btn-default" onClick={this.collapseGraph}>Collapse graph</button>
+          <button className="btn btn-default" onClick={this.expandAndScale}>Expand graph</button>
+          <button className="btn btn-default" onClick={this.collapseAndScale}>Collapse graph</button>
+          <button className="btn btn-default master" disabled={!this.props.repoMasterUuuid} onClick={this.scrollToMaster}>Scroll to master</button>
+          <button className="btn btn-default current" onClick={this.scrollToCurrent}>Scroll to current</button>
+
           {branchButton}
           {commitButton}
 
@@ -442,10 +522,6 @@ var RepoDAGDisplay  = React.createClass({
 
 
 class RepoDAG extends React.Component {
-
-  componentDidMount() {
-    ServerActions.fetchTypes();
-  }
 
   render() {
     return (

@@ -119,13 +119,15 @@ class DataInstanceList extends React.Component {
       for (var i = 0; i < sorted.length; i++) {
         var type = sorted[i][1].Base.TypeName;
         var isParent = parents[sorted[i][0] + '_' + type];
+        var isMaster = sorted[i][1].Base.Name === this.props.ServerStore.repoMasterSeg;
         if (!this.state.showSub && sorted[i][2]) {
           // don't add the row as we don't want to draw it.
         } else {
+          var dataInstance = <DataInstance key={sorted[i][0]} instance={sorted[i][1]} isParent={isParent} uuid={this.props.uuid} show={this.state.showSub} isMaster={isMaster}/>; 
           if (type === 'grayscale8' || type === 'multiscale2d' || type === 'uint8blk' || type === 'imagetile' || type === 'googlevoxels' || type === 'labels64' || type === 'labelblk' ) {
-            tileRows.push(<DataInstance key={sorted[i][0]} instance={sorted[i][1]} isParent={isParent} uuid={this.props.uuid} show={this.state.showSub}/>);
+            tileRows.push(dataInstance);
           } else {
-            rows.push(<DataInstance key={sorted[i][0]} instance={sorted[i][1]} isParent={isParent} uuid={this.props.uuid} show={this.state.showSub}/>);
+            rows.push(dataInstance);
           }
         }
       }
@@ -165,9 +167,12 @@ class DataInstance extends React.Component {
     var name = this.props.instance.Base.Name;
     var name_url = '/api/node/' + this.props.uuid + '/' + name + '/';
     var info = 'information';
-
+    var masterMarker = '';
     if (this.props.isParent) {
       name = name + '*';
+    }
+    if (this.props.isMaster){
+      masterMarker = <div className='master-marker'></div>;
     }
 
     if (type == 'keyvalue') {
@@ -197,7 +202,7 @@ class DataInstance extends React.Component {
 
     return (
       <tr>
-        <th><a href={name_url} target="_blank" data-toggle="tooltip" data-placement="right" title={name_tooltip}>{name}</a></th>
+        <th>{masterMarker}<a href={name_url} target="_blank" data-toggle="tooltip" data-placement="right" title={name_tooltip}>{name}</a></th>
         <th><a href={type_url} target="_blank" data-toggle="tooltip" data-placement="right" title={type_tooltip}><span className={label_class}>{type}</span></a></th>
         <td>{tile_input}</td>
         <td>{label_input}</td>

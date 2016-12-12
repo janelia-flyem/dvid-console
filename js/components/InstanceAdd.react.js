@@ -161,7 +161,9 @@ class InstanceAddButton extends React.Component {
 class InstanceAdd extends React.Component {
 
   componentDidMount() {
-    ServerActions.fetchTypes();
+    if(!ServerStore.getState().types){
+      ServerActions.fetchTypes();
+    }
   }
 
   render() {

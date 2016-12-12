@@ -1,7 +1,7 @@
 // Set the base url of the DVID server that you are trying to
 // contact.
-var host = '';
-var port = '';
+var host = 'emdata1';
+var port = '7000';
 
 exports.host = host;
 exports.port = port;

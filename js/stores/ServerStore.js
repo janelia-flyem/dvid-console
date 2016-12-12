@@ -11,6 +11,8 @@ class ServerStore {
     this.stats = null;
     this.api = dvid.connect({host: config.host, port: config.port, username: 'dvidconsole', application: 'dvidconsole'});
     this.repo = null;
+    this.repoMasterUuuid = null;
+    this.repoMasterSeg = null;
     this.types = null;
 
    this.exportPublicMethods({
@@ -136,6 +138,7 @@ class ServerStore {
           if (opts.callback) {
             opts.callback(data);
           }
+          self.repoMasterUuuid = data[0];
           self.emitChange();
         },
         error: function (err) {
@@ -161,6 +164,7 @@ class ServerStore {
           if (opts.callback) {
             opts.callback(data);
           }
+          self.repoMasterSeg = data.label_block;
           self.emitChange();
         },
         error: function (err) {

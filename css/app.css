@@ -302,6 +302,55 @@ g.current > rect {
   stroke: #FAEBCC;
 }
 
+g.master > rect {
+  fill: #D9FCDA;
+  stroke: #8BC34A;
+}
+g.current.master > rect{
+  stroke: #D3FAC3;
+  stroke-width: 3px;
+  fill: #FCF8E3;
+}
+
+button.master{
+  background-color: #D9FCDA;
+}
+
+button.current{
+  background-color: #FCF8E3;
+}
+
+.master-marker{
+  position: absolute;
+  left: -1em;
+}
+
+.master-marker:before {
+  content:"M";
+  padding-left: 5px;
+  position: absolute;
+  left: 0px;
+  top: 0;
+  width: 21px;
+  height: 20px;
+  background: #8BC34A;
+  -moz-border-radius: 50px 30px 30px 50px;
+  border-radius: 50px 30px 30px 50px;
+  -webkit-transform-origin: 0 100%;
+     -moz-transform-origin: 0 100%;
+      -ms-transform-origin: 0 100%;
+       -o-transform-origin: 0 100%;
+          transform-origin: 0 100%;
+} 
+.master-marker:after{
+  position: absolute;
+  left: 17px;
+  top: 0;
+  content: "";
+  border-top: 10px solid transparent;
+  border-left: 10px solid #8BC34A;
+  border-bottom: 10px solid transparent;
+}
 
 .edgePath {
   stroke: #000;

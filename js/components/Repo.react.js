@@ -14,7 +14,6 @@ class RepoDetails extends React.Component {
   render() {
     if (this.props.repo) {
       var repo = this.props.repo;
-
       return (
         <div>
           <ol className="breadcrumb">
@@ -63,9 +62,13 @@ class RepoDetails extends React.Component {
 class Repo extends React.Component {
   componentDidMount() {
     ServerActions.fetch({uuid: this.props.params.uuid});
+    ServerActions.fetchTypes();
+    ServerActions.fetchMaster({uuid: this.props.params.uuid});
+    ServerActions.fetchMasterInfo({uuid: this.props.params.uuid});
   }
 
   render() {
+
     return (
       <AltContainer store={ServerStore} >
         <RepoDetails uuid={this.props.params.uuid}/>
