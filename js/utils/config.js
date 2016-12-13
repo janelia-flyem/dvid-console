@@ -1,7 +1,7 @@
 // Set the base url of the DVID server that you are trying to
 // contact.
-var host = 'emdata1';
-var port = '7000';
+var host = '';
+var port = '';
 
 exports.host = host;
 exports.port = port;
@@ -59,5 +59,9 @@ exports.reposInfoUrl = function(uuid) {
 };
 
 exports.baseUrl = function() {
+  if(!root){
+    var port = window.location.port || "80"
+    root = "http://" + window.location.hostname + ":" + port;
+  }
   return root;
 };
