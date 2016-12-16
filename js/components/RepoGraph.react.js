@@ -6,24 +6,54 @@ import moment from 'moment';
 var RepoGraph  = React.createClass({
   mixins: [Router.Navigation],
 
-  componentWillMount: function() {
-    this.parseCommits(this.props);
-  },
-
   componentDidMount: function(){
     this.drawGraph();
   },
 
-  componentWillUpdate: function(nextProps, nextState) {
-    this.parseCommits(nextProps);
+
+  getInitialState: function() {
+    this.commits = [];
+    return {
+      graphVisible: false
+    };
   },
 
-  componentDidUpdate: function(){
-    this.drawGraph();
+  componentWillUpdate: function(nextProps, nextState){
+    if(nextState.graphVisible){
+      this.prepGraphData(nextProps);
+    }
   },
 
-  parseCommits: function(props){
+  componentDidUpdate: function(props){
 
+    if(this.state.graphVisible){
+      this.drawGraph(props);
+    }
+  },
+
+  hideGraph: function(){
+    this.commits = [];
+    //graph teardown?
+    this.setState({
+      graphVisible: false,
+    });
+  },
+
+  showGraph: function(){
+
+    this.setState({
+      graphVisible: true,
+    });
+
+  },
+
+  drawGraph: function(props) {
+      var converted = generate_graph(this.commits);
+
+      $('.commit-graph').commits({data: converted});
+  },
+
+  prepGraphData(props){
     var entries = [];
     if (props.repo.DAG.Nodes.hasOwnProperty(props.uuid)) {
       var nodes = props.repo.DAG.Nodes;
@@ -60,25 +90,33 @@ var RepoGraph  = React.createClass({
       }
 
     }
+
   },
 
   drawGraph: function() {
       var converted = generate_graph(this.commits);
 
       $('.commit-graph').commits({data: converted});
+
   },
 
   render: function () {
+
+    var toggle_button = '';
+    if(this.state.graphVisible){
+      toggle_button =<button className="btn btn-default" onClick={this.hideGraph}>Hide</button>;
+    }
+    else{
+      toggle_button =<button className="btn btn-default" onClick={this.showGraph}>Show</button>;
+    }
+
     var rows = [];
-    if (this.commits) {
+    var graph = '';
+    if (this.commits && this.state.graphVisible) {
       for (var i = 0; i < this.commits.length; i++) {
         rows.push(<Commit key={i} data={this.commits[i]}/>);
       }
-    }
-
-    return (
-      <div>
-        <h4>Version Graph</h4>
+      graph = (
         <div className="row">
           <div className="col-sm-2">
             <div className="commit-graph"></div>
@@ -87,6 +125,14 @@ var RepoGraph  = React.createClass({
             <ul className="graph_list">{rows}</ul>
           </div>
         </div>
+        );
+    
+    }
+
+    return (
+      <div>
+        <h4>Version Graph: {toggle_button}</h4> 
+        {graph}
       </div>
     );
 
@@ -97,9 +143,6 @@ var RepoGraph  = React.createClass({
 module.exports = RepoGraph;
 
 class Commit extends React.Component {
-  componentDidMount() {
-
-  }
 
   render() {
 
