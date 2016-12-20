@@ -274,7 +274,10 @@ g.type-locked > rect {
   stroke: black;
   stroke-width: 3px;
 }
-
+g.type-locked > rect:before {
+}
+g.type-locked > rect:after {
+}
 g.collapsed > rect {
   fill: #6699FF;
 }
@@ -303,17 +306,22 @@ g.current > rect {
 }
 
 g.master > rect {
+  fill: #8BC34A;
+  stroke: #8BC34A;
+}
+g.master_branch > rect{
   fill: #D9FCDA;
   stroke: #8BC34A;
 }
+
 g.current.master > rect{
-  stroke: #D3FAC3;
+  stroke: #FAEBCC;
   stroke-width: 3px;
-  fill: #FCF8E3;
+  fill: #8BC34A;
 }
 
 button.master{
-  background-color: #D9FCDA;
+  background-color: #8BC34A;
 }
 
 button.current{

@@ -12,6 +12,7 @@ class ServerStore {
     this.api = dvid.connect({host: config.host, port: config.port, username: 'dvidconsole', application: 'dvidconsole'});
     this.repo = null;
     this.repoMasterUuuid = null;
+    this.repoMasterBranchHist = null;
     this.repoMasterSeg = null;
     this.types = null;
 
@@ -139,6 +140,7 @@ class ServerStore {
             opts.callback(data);
           }
           self.repoMasterUuuid = data[0];
+          self.repoMasterBranchHist = data;
           self.emitChange();
         },
         error: function (err) {

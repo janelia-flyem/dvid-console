@@ -103,8 +103,16 @@ var RepoDAGDisplay  = React.createClass({
         var note = null;
         if (n.Note) note = n.Note;
 
-        if(props.repoMasterUuuid && n.UUID.includes(props.repoMasterUuuid)){
+        if(props.repoMasterUuuid && RegExp('^' + props.repoMasterUuuid).test(n.UUID)){
           nodeclass = nodeclass + " " + "master";
+
+        }
+        else if(props.repoMasterBranchHist){
+          props.repoMasterBranchHist.slice(1).forEach(function(masterBranchUuid){
+            if(RegExp('^' + masterBranchUuid).test(n.UUID)){
+              nodeclass += " master_branch";
+            }
+          }.bind(this))
         }
 
         if (n.UUID === props.uuid) {
@@ -186,12 +194,7 @@ var RepoDAGDisplay  = React.createClass({
     dag.graph().transition = function (selection) {
     return selection.transition().duration(300);
     };
-    if(!!props.repoMasterUuuid){
-      this.scrollToMaster();
-    }
-    else{
-      this.scrollToCurrent();
-    }
+    this.scrollToCurrent();
   },
 
   update: function(){
