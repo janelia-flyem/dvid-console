@@ -11,9 +11,10 @@ class ServerStore {
     this.stats = null;
     this.api = dvid.connect({host: config.host, port: config.port, username: 'dvidconsole', application: 'dvidconsole'});
     this.repo = null;
+    //need to add a separate prop: node?
     this.repoMasterUuuid = null;
     this.repoMasterBranchHist = null;
-    this.repoMasterSeg = null;
+    this.repoDefaultInstances = null;
     this.types = null;
 
    this.exportPublicMethods({
@@ -152,7 +153,7 @@ class ServerStore {
     }
   }
   
-  onFetchMasterInfo(opts){
+  onFetchDefaultInstances(opts){
     var self = this;
 
     if (opts && opts.uuid) {
@@ -161,12 +162,12 @@ class ServerStore {
       // else run the error callback.
       self.api.node({
         uuid: opts.uuid,
-        endpoint: 'branches/key/master_info',
+        endpoint: 'default_instances/key/data',
         callback: function(data) {
           if (opts.callback) {
             opts.callback(data);
           }
-          self.repoMasterSeg = data.label_block;
+          self.repoDefaultInstances = data;
           self.emitChange();
         },
         error: function (err) {

@@ -74,6 +74,10 @@ table.datainstances {
   text-align: center;
 }
 
+.datainstances + .btn {
+    margin-left: -6px;
+}
+
 .serverstats .panel-body {
   text-align:center;
   font-size:2em;
@@ -126,10 +130,6 @@ table.datainstances {
 #slider-container {
   width: 750px;
 }
-
-/*#depth {
-  width: 70px;
-}*/
 
 .btn:focus,
 .btn:active:focus,
@@ -304,11 +304,6 @@ text {
   cursor: pointer;
 }
 
-g.current > rect {
-  fill: #FCF8E3;
-  stroke: #FAEBCC;
-}
-
 g.master > rect {
   fill: #8BC34A;
   stroke: #8BC34A;
@@ -318,10 +313,8 @@ g.master_branch > rect{
   stroke: #8BC34A;
 }
 
-g.current.master > rect{
-  stroke: #FAEBCC;
-  stroke-width: 3px;
-  fill: #8BC34A;
+g.current > rect {
+  fill: #FCF8E3;
 }
 
 button.master{
@@ -330,38 +323,6 @@ button.master{
 
 button.current{
   background-color: #FCF8E3;
-}
-
-.master-marker{
-  position: absolute;
-  left: -1em;
-}
-
-.master-marker:before {
-  content:"M";
-  padding-left: 5px;
-  position: absolute;
-  left: 0px;
-  top: 0;
-  width: 21px;
-  height: 20px;
-  background: #8BC34A;
-  -moz-border-radius: 50px 30px 30px 50px;
-  border-radius: 50px 30px 30px 50px;
-  -webkit-transform-origin: 0 100%;
-     -moz-transform-origin: 0 100%;
-      -ms-transform-origin: 0 100%;
-       -o-transform-origin: 0 100%;
-          transform-origin: 0 100%;
-} 
-.master-marker:after{
-  position: absolute;
-  left: 17px;
-  top: 0;
-  content: "";
-  border-top: 10px solid transparent;
-  border-left: 10px solid #8BC34A;
-  border-bottom: 10px solid transparent;
 }
 
 .edgePath {

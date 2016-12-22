@@ -63,18 +63,16 @@ class RepoList extends React.Component {
     if (!hasMaster){
       this._redirectGlancerNoLabel(uuid)
     }
-    ServerActions.fetchMasterInfo({
+    ServerActions.fetchDefaultInstances({
       uuid: uuid,
-      callback: function(masterInfo){
-        console.log(masterInfo)
-        if(masterInfo.label_block){
-          var seg_layer = "_%27" + masterInfo.label_block + "%27:{%27type%27:%27segmentation%27_%27source%27:%27dvid://" + config.baseUrl() + "/"+ uuid + "/" + masterInfo.label_block + "%27}"
+      callback: function(default_instances){
+        if(default_instances.segmentation){
+          var seg_layer = "_%27" + default_instances.segmentation + "%27:{%27type%27:%27segmentation%27_%27source%27:%27dvid://" + config.baseUrl() + "/"+ uuid + "/" + default_instances.segmentation + "%27}"
         }
         var img_layer = "%27grayscale%27:{%27type%27:%27image%27_%27source%27:%27dvid://" + config.baseUrl() + "/"+ uuid + "/grayscale%27}"
         var perspective = "%27perspectiveOrientation%27:[-0.12320884317159653_0.21754156053066254_-0.009492455050349236_0.9681965708732605]_%27perspectiveZoom%27:64"
         var glancer_url = "/neuroglancer/#!{%27layers%27:{" + img_layer + seg_layer + "}_" + perspective +"}"
 
-        // var glancer_url = "/neuroglancer/#!{%27layers%27:{%27grayscale%27:{%27type%27:%27image%27_%27source%27:%27dvid://" + config.baseUrl() + "/"+ uuid + "/grayscale%27}}}"
         window.location.href = glancer_url
       },
       err: function(){

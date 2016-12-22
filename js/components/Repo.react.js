@@ -64,7 +64,7 @@ class Repo extends React.Component {
     ServerActions.fetch({uuid: this.props.params.uuid});
     ServerActions.fetchTypes();
     ServerActions.fetchMaster({uuid: this.props.params.uuid});
-    ServerActions.fetchMasterInfo({uuid: this.props.params.uuid});
+    ServerActions.fetchDefaultInstances({uuid: this.props.params.uuid});
   }
 
   render() {

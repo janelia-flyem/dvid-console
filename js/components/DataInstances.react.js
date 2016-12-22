@@ -8,7 +8,8 @@ class DataInstanceList extends React.Component {
     super(props);
     this.state = {
       showSub: false,
-      nodeRestrict: true
+      nodeRestrict: true,
+      onlyShowDefault: true
     };
   }
 
@@ -28,9 +29,18 @@ class DataInstanceList extends React.Component {
     }
   }
 
+  toggleShowDefault(){
+    this.setState({onlyShowDefault: !this.state.onlyShowDefault})
+  }
+
   render() {
-    var rows = [];
+    var nonDefaultCount = 0;
     var tileRows = [];
+    var defaultInstances = new Array;
+
+    for(var key in this.props.ServerStore.repoDefaultInstances) {
+        defaultInstances.push(this.props.ServerStore.repoDefaultInstances[key]);
+    }
 
     if (this.props.ServerStore && this.props.ServerStore.repo.DataInstances) {
       var instances = this.props.ServerStore.repo.DataInstances;
@@ -110,33 +120,43 @@ class DataInstanceList extends React.Component {
         return 0;
       });
 
-      // at this point loop over each of the sorted elements and place the ones
-      // that are used for the tile viewer in the tileRows array and the others in
-      // the rows array, so that we can push them together later and make sure that
-      // the data instances that are used in the tile viewer are closer to the top
-      // of the page.
+
+      // if onlyShowDefault is set, at this point show only those instances that 
+      // are in our repo's default instance. Otherwise, simply show all in alphabetical order
+      var hasDefaultInstances = defaultInstances.length > 0;
 
       for (var i = 0; i < sorted.length; i++) {
         var type = sorted[i][1].Base.TypeName;
         var isParent = parents[sorted[i][0] + '_' + type];
-        var isMaster = sorted[i][1].Base.Name === this.props.ServerStore.repoMasterSeg;
+        var isDefaultInstance = false;
+        if(hasDefaultInstances){
+          isDefaultInstance = defaultInstances.includes(sorted[i][0]);
+        }
+
         if (!this.state.showSub && sorted[i][2]) {
           // don't add the row as we don't want to draw it.
-        } else {
-          var dataInstance = <DataInstance key={sorted[i][0]} instance={sorted[i][1]} isParent={isParent} uuid={this.props.uuid} show={this.state.showSub} isMaster={isMaster}/>; 
-          if (type === 'grayscale8' || type === 'multiscale2d' || type === 'uint8blk' || type === 'imagetile' || type === 'googlevoxels' || type === 'labels64' || type === 'labelblk' ) {
+        } else if( !hasDefaultInstances || isDefaultInstance || !this.state.onlyShowDefault) {
+            var dataInstance = <DataInstance key={sorted[i][0]} instance={sorted[i][1]} isParent={isParent} uuid={this.props.uuid} show={this.state.showSub}/>;
             tileRows.push(dataInstance);
-          } else {
-            rows.push(dataInstance);
-          }
+        }
+        
+        if (hasDefaultInstances && !isDefaultInstance){
+          nonDefaultCount++;
         }
       }
 
-      tileRows.push.apply(tileRows, rows);
+    }
 
+    var toggleDefault = '';
+    if(nonDefaultCount > 0){
+      toggleDefault = (<div className="btn btn-default btn-xs" 
+                            onClick={this.toggleShowDefault.bind(this)}>
+                            Click to {this.state.onlyShowDefault? 'show': 'hide'} {nonDefaultCount} non-default data instances
+                      </div>);
     }
 
     return (
+      <div>
       <table className="datainstances">
         <thead>
           <tr>
@@ -150,6 +170,8 @@ class DataInstanceList extends React.Component {
           {tileRows}
         </tbody>
       </table>
+        {toggleDefault}
+      </div>
     );
   }
 }
@@ -170,9 +192,6 @@ class DataInstance extends React.Component {
     var masterMarker = '';
     if (this.props.isParent) {
       name = name + '*';
-    }
-    if (this.props.isMaster){
-      masterMarker = <div className='master-marker'></div>;
     }
 
     if (type == 'keyvalue') {

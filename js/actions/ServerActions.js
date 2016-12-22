@@ -16,7 +16,7 @@ class ServerActions {
   fetchMaster(data) {
     this.dispatch(data);
   }
-  fetchMasterInfo(data){
+  fetchDefaultInstances(data){
     this.dispatch(data)
   }
   addLog(entry) {

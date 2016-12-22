@@ -199,9 +199,6 @@ var RepoDAGDisplay  = React.createClass({
 
   update: function(){
     var self = this;
-    //clean up old graph elements before redraw
-    var svg = d3.select("svg > g");
-    svg.selectAll("*").remove();
     //renders the dag
     var dagreRenderer = new dagreD3.render();
     // Add a custom arrow
@@ -317,6 +314,7 @@ var RepoDAGDisplay  = React.createClass({
   scrollToCurrent: function(){
     ErrorActions.clear()
     this.expandGraph()
+
     var success = this.scrollToNode(".node.current");
     if(!success){
       ErrorActions.update('Can\'t find current node');
@@ -411,6 +409,9 @@ var RepoDAGDisplay  = React.createClass({
           this.expandGraph();
       } else {
           //if no nodes were expanded, it means the graph has been completely expanded.
+          //clean up old graph elements before redraw 
+          var svg = d3.select("svg > g");
+          svg.selectAll("*").remove();
           this.update();
       }
   },
