@@ -270,20 +270,24 @@ svg {
   overflow: scroll;
 }
 
-g.type-locked > rect {
-  stroke: black;
-  stroke-width: 3px;
-}
-g.type-locked > rect:before {
-}
-g.type-locked > rect:after {
-}
-g.collapsed > rect {
-  fill: #6699FF;
+.type-locked .lock.glyphicon {
+  position: static;
 }
 
-g.expanded > rect {
-  fill: #99CCFF;
+.expanded.toggle-expand-icon::before,
+.expanded .toggle-expand-icon::before{
+  position: static;
+  color:#6699FF;
+  font-family: "Glyphicons Halflings";
+  content:"\e252";
+}
+.collapsed.toggle-expand-icon::before,
+.collapsed .toggle-expand-icon::before{
+  position: static;
+  color: #99CCFF;
+  font-family: "Glyphicons Halflings";
+  content:"\e253";
+
 }
 
 text {

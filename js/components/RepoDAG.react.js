@@ -235,6 +235,26 @@ var RepoDAGDisplay  = React.createClass({
       .style("visibility", "hidden")
       .text("a simple tooltip");
 
+    //add lock icons
+    elementHolderLayer.selectAll("g.node.type-locked")
+      .append("svg:foreignObject")
+      .attr("width", 20)
+      .attr("height", 20)
+      .attr("y", "-25px")
+      .attr("x", "-45px")
+      .append("xhtml:span")
+      .attr("class", "lock glyphicon glyphicon-lock");
+
+    //add element to hold expand/collapse icon
+    elementHolderLayer.selectAll("g.node.collapsed, g.node.expanded")
+      .append("svg:foreignObject")
+      .attr("width", 20)
+      .attr("height", 20)
+      .attr("y", "2px")
+      .attr("x", "-10px")
+      .append("xhtml:span")
+      .attr("class", "toggle-expand-icon");
+
     elementHolderLayer.selectAll("g.node")
       .on("mouseenter", function (v) {
         if (dag.node(v).note) {
@@ -290,7 +310,7 @@ var RepoDAGDisplay  = React.createClass({
         translateEdge(dag.edge(d.v, d.w), d3.event.dx, d3.event.dy);
         $('#' + dag.edge(d.v, d.w).id + " .path").attr('d', calcPoints(d));
     });
-
+    //add lock icons
     nodeDrag.call(elementHolderLayer.selectAll("g.node"));
     edgeDrag.call(elementHolderLayer.selectAll("g.edgePath"));
   },
@@ -374,6 +394,7 @@ var RepoDAGDisplay  = React.createClass({
         expandChildren(parent)
     }
     this.update();
+    this.scrollToNode('#node' + parent)
   },
 
   //fully expands entire DAG
@@ -486,7 +507,7 @@ var RepoDAGDisplay  = React.createClass({
     return (
       <div>
         <h4>Version DAG <small> (Nodes with thick borders are locked.)</small></h4>
-        <p>Mouse over a node to view the log. <kbd>Shift</kbd> + Click on blue nodes to expand/collapse. Click nodes to navigate to repo.</p>
+        <p>Mouse over a node to view the log. <kbd>Shift</kbd> + Click on <span className="collapsed toggle-expand-icon"></span>/<span className="expanded toggle-expand-icon"></span> nodes to expand/collapse. Click nodes to navigate to repo.</p>
         <div>
           <button className="btn btn-default" onClick={this.downloadSVGHandler}>Download DAG as SVG</button>
           <button className="btn btn-default" onClick={this.fitDAG}>Fit graph to window</button>
