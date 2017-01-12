@@ -31,7 +31,8 @@ var RepoDAGDisplay  = React.createClass({
     return  nextProps.types !== this.props.types ||
             nextProps.repoMasterSeg !== this.props.repoMasterSeg ||
             nextProps.repoMasterUuuid !== this.props.repoMasterUuuid ||
-            nextProps.uuid !== this.props.uuid;
+            nextProps.uuid !== this.props.uuid ||
+            nextState.showCommitModal !== this.state.showCommitModal;
   },
 
   componentWillUpdate: function(props) {
