@@ -6,21 +6,24 @@ import moment from 'moment';
 var RepoGraph  = React.createClass({
   mixins: [Router.Navigation],
 
-  getInitialState: function() {
-    return {
-      commits: []
-    };
+  componentWillMount: function() {
+    this.parseCommits(this.props);
   },
 
-  componentDidMount: function() {
-    this.drawGraph(this.props);
+  componentDidMount: function(){
+    this.drawGraph();
   },
 
-  componentWillUpdate: function(props) {
-    this.drawGraph(props);
+  componentWillUpdate: function(nextProps, nextState) {
+    this.parseCommits(nextProps);
   },
 
-  drawGraph: function(props) {
+  componentDidUpdate: function(){
+    this.drawGraph();
+  },
+
+  parseCommits: function(props){
+
     var entries = [];
     if (props.repo.DAG.Nodes.hasOwnProperty(props.uuid)) {
       var nodes = props.repo.DAG.Nodes;
@@ -56,10 +59,13 @@ var RepoGraph  = React.createClass({
         this.commits.push(commit);
       }
 
+    }
+  },
+
+  drawGraph: function() {
       var converted = generate_graph(this.commits);
 
       $('.commit-graph').commits({data: converted});
-    }
   },
 
   render: function () {
