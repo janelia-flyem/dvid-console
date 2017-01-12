@@ -128,8 +128,8 @@ class InstanceAddButton extends React.Component {
     synced.each(function () {
       selected.push(this.value);
     });
-
-    var versioned = (this.refs.di_versioned.getDOMNode().value === "on")?'1':'0';
+    
+    var versioned = this.refs.di_versioned.getDOMNode().checked ?'1':'0';
     var payload = {
       'typename': this.refs.di_type.getDOMNode().value,
       'dataname': this.refs.di_name.getDOMNode().value,
