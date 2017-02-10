@@ -23,9 +23,9 @@ Usage
   ```bash
     tar -zxvf dvid-console-<version>.tar.gz
   ```
-* Add `-webclient=/path/to/unpacked/dvid-console` when starting the DVID server eg:
+* Make sure to set the `webClient` in `[server]` section of the TOML file when starting the DVID server:
 
-  `dvid -verbose -webclient=/path/to/unpacked/dvid-console serve /path/to/dvid/data`
+  `dvid -verbose serve /path/to/config.toml`
 
 
 ##### For Developers
@@ -44,6 +44,6 @@ Usage
   ```bash
   grunt dist
   ```
-* Add `-webclient=/path/to/dvid-console/dist` when starting the DVID server  
+* Make sure to set the `webClient` in `[server]` section of the TOML file when starting the DVID server  
   
   
