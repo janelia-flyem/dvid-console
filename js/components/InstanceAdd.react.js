@@ -36,15 +36,6 @@ class InstanceAddButton extends React.Component {
         }
       }
 
-      var sync_instances = [];
-
-      for (var key in this.props.repo.DataInstances) {
-        if (this.props.repo.DataInstances.hasOwnProperty(key)) {
-          var instance = this.props.repo.DataInstances[key];
-          sync_instances.push(<option key={key} value={key}>{key}</option>);
-        }
-      }
-
       var alertMsg = '';
 
       if (this.state.errorMsg) {
@@ -82,12 +73,6 @@ class InstanceAddButton extends React.Component {
                   versioned
                 </label>
               </div>
-              <div className="form-group">
-                <label htmlFor="di_sync">Sync with other Instances</label>
-                <select name="di_sync" id="di_sync" ref="di_sync" multiple="multiple" className="form-control">
-                {sync_instances}
-                </select>
-              </div>
 
               <div className="form-group">
                 <button onClick={this.saveDataInstance.bind(this)} className="btn btn-primary">Add</button>
@@ -123,18 +108,12 @@ class InstanceAddButton extends React.Component {
 
   saveDataInstance(e) {
     var self = this;
-    var synced = $(this.refs.di_sync.getDOMNode()).children('option:selected');
-    var selected = [];
-    synced.each(function () {
-      selected.push(this.value);
-    });
-    
+
     var versioned = this.refs.di_versioned.getDOMNode().checked ?'1':'0';
     var payload = {
       'typename': this.refs.di_type.getDOMNode().value,
       'dataname': this.refs.di_name.getDOMNode().value,
-      'versioned': versioned,
-      'sync': selected.join()
+      'versioned': versioned
     };
 
     ServerStore.state.api.repo({
