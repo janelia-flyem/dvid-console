@@ -509,11 +509,14 @@ var RepoDAGDisplay  = React.createClass({
     var admin = this.context.router.getCurrentQuery().admin;
     var branchButton = '';
     var commitButton = '';
+    var scrollToMasterBtn = '';
     if (admin) {
       branchButton = <button className="btn btn-default" onClick={this.branchNode}>Branch</button>
       commitButton = <button className="btn btn-default" onClick={this.openCommitModal}>Commit</button>
     }
-
+    if (this.props.repoMasterUuuid){
+      scrollToMasterBtn = <button className="btn btn-default master" onClick={this.scrollToMaster}>Scroll to master</button>;
+    }
     var modalTitle = <Modal.Title>Commit (lock) node {this.props.uuid}.</Modal.Title>;
 
     return (
@@ -525,7 +528,7 @@ var RepoDAGDisplay  = React.createClass({
           <button className="btn btn-default" onClick={this.fitDAG}>Fit graph to window</button>
           <button className="btn btn-default" onClick={this.expandAndScale}>Expand graph</button>
           <button className="btn btn-default" onClick={this.collapseAndScale}>Collapse graph</button>
-          <button className="btn btn-default master" disabled={!this.props.repoMasterUuuid} onClick={this.scrollToMaster}>Scroll to master</button>
+          {scrollToMasterBtn}
           <button className="btn btn-default current" onClick={this.scrollToCurrent}>Scroll to current</button>
 
           {branchButton}

@@ -180,6 +180,9 @@ class ServerStore {
           self.emitChange();
         },
         error: function (err) {
+          self.repoMasterUuuid = null;
+          self.repoMasterBranchHist = null;
+          self.emitChange();
           if (opts.error) {
             opts.error(err);
           }
