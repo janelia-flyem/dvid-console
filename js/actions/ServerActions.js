@@ -28,6 +28,9 @@ class ServerActions {
   commitNode(data) {
     this.dispatch(data);
   }
+  updateUuuid(data) {
+    this.dispatch(data)
+  }
 }
 
 module.exports = (alt.createActions(ServerActions));

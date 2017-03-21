@@ -60,18 +60,26 @@ class RepoDetails extends React.Component {
 
 
 class Repo extends React.Component {
-  componentDidMount() {
-    ServerActions.fetch({uuid: this.props.params.uuid});
+  refreshServerStore(props){
+    //get data upfront to avoid multiple cascading rerenders
     ServerActions.fetchTypes();
-    ServerActions.fetchMaster({uuid: this.props.params.uuid});
-    ServerActions.fetchDefaultInstances({uuid: this.props.params.uuid});
+    ServerActions.fetch({uuid: props.params.uuid});
+    ServerActions.fetchMaster({uuid: props.params.uuid});
+    ServerActions.fetchDefaultInstances({uuid: props.params.uuid});
+  }
+  componentWillMount() {
+    this.refreshServerStore(this.props)
+  }
+
+  componentWillUpdate(nextProps, nextState){
+    this.refreshServerStore(nextProps)
+
   }
 
   render() {
-
     return (
       <AltContainer store={ServerStore} >
-        <RepoDetails uuid={this.props.params.uuid}/>
+        <RepoDetails />
       </AltContainer>
     );
   }

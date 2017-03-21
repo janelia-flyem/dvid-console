@@ -89,7 +89,18 @@ class RepoList extends React.Component {
     window.location.href = glancer_url
   }
 
-
+  handleRepoNav(root){
+    var self = this;
+    ServerActions.fetchMaster({
+      uuid:root,
+      callback: function(uuids){
+        self.context.router.transitionTo('/repo/' + uuids[0], {uuid: uuids[0]});
+      },
+      error: function(err){
+        self.context.router.transitionTo('/repo/' + root, {uuid: root});
+      }
+    })
+  }
 
   render() {
     if (this.props.repos) {
@@ -147,7 +158,7 @@ class RepoList extends React.Component {
 
                 return (
                   <tr key={i}>
-                    <td><Link to="repo" params={{uuid: repo.Root}}>{repo.Alias}</Link></td>
+                    <td><a to="repo" onClick={this.handleRepoNav.bind(this, repo.Root)}>{repo.Alias}</a></td>
                     <td>{repo.Description}</td>
                     <td><Link to="repo" params={{uuid: repo.Root}}>{repo.Root}</Link></td>
                     <td>{moment(repo.Updated).format("MMM Do YYYY, h:mm:ss a")}</td>
@@ -167,7 +178,10 @@ class RepoList extends React.Component {
     );
   }
 }
-
+//hook RepoList up to the router
+RepoList.contextTypes = {
+  router: React.PropTypes.func.isRequired
+};
 
 class Home extends React.Component {
 
@@ -179,6 +193,7 @@ class Home extends React.Component {
   // this gets called after the fist time the component is loaded into the page.
   componentDidMount() {
     ServerActions.fetch();
+    ServerActions.fetchTypes();
   }
 
   render() {

@@ -12,6 +12,7 @@ class ServerStore {
     this.api = dvid.connect({host: config.host, port: config.port, username: 'dvidconsole', application: 'dvidconsole'});
     this.repo = null;
     //need to add a separate prop: node?
+    this.uuid = null;
     this.repoMasterUuuid = null;
     this.repoMasterBranchHist = null;
     this.repoDefaultInstances = null;
@@ -83,6 +84,9 @@ class ServerStore {
 
   onFetchTypes() {
     var self = this;
+    if (self.types){
+      return false;
+    }
     self.api.serverCompiledTypes({
       callback: function(data) {
         self.types = data;
@@ -94,15 +98,43 @@ class ServerStore {
     });
   }
 
+  getFullUUIDinRepo(repo, shortuuid){
+    if(repo === null){
+      return false;
+    }
+    for(var id in this.repo.DAG.Nodes){
+      if(RegExp('^' + shortuuid).test(id)){
+        //no need to update repo--uuid is in current repo
+        return id;
+      }
+    }
+    return null;
+  }
+
   onFetch(opts) {
     var self = this;
 
     if (opts && opts.uuid) {
+      //check if a repo update is necessary
+      //saves load time when navigating a repo
+      var idInRepo = this.getFullUUIDinRepo(self.repo, opts.uuid)
+      if(idInRepo){
+            //no need to update repo--uuid is in current repo
+            self.uuid = idInRepo;
+            if (opts.callback) {
+              opts.callback(this.repo);
+            }
+            return true;
+      
+      }
+
       self.api.repo({
         uuid: opts.uuid,
         endpoint: 'info',
         callback: function(data) {
           self.repo = data;
+          self.uuid = self.getFullUUIDinRepo(self.repo, opts.uuid);
+
           if (opts.callback) {
             opts.callback(data);
           }
@@ -116,6 +148,8 @@ class ServerStore {
     else {
       self.api.reposInfo({
         callback: function(data) {
+          self.repo = null;
+          self.uuid = null;
           self.repos = data;
           self.emitChange();
         },
@@ -124,6 +158,7 @@ class ServerStore {
         }
       });
     }
+   return false; 
   }
 
   onFetchMaster(opts) {
@@ -171,6 +206,8 @@ class ServerStore {
           self.emitChange();
         },
         error: function (err) {
+          self.repoDefaultInstances = null;
+          self.emitChange();
           if (opts.error) {
             opts.error(err);
           }
@@ -226,6 +263,10 @@ class ServerStore {
         ErrorActions.update(err);
       }
     });
+  }
+
+  onUpdateUuuid(data){
+    this.uuid = data.uuid;
   }
 
 }

@@ -278,6 +278,17 @@ var RepoDAGDisplay  = React.createClass({
           self.transitionTo('repo', {
               uuid: dag.node(v).uuid
           });
+/*          var nextUuid = dag.node(v).uuid;
+          ServerActions.fetch({
+            uuid: nextUuid,
+            callback: function(data){
+              self.transitionTo('repo', {
+                uuid: nextUuid
+              });
+            }//need to bind?
+          });
+*/
+
         }
       });
 

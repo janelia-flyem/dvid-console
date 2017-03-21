@@ -5,9 +5,11 @@ import DataInstances from './DataInstances.react';
 import ErrorActions from '../actions/ErrorActions';
 import InstanceActions from '../actions/InstanceActions';
 import InstanceStore from '../stores/InstanceStore';
+import ServerStore from '../stores/ServerStore';
 import InstanceAdd from './InstanceAdd.React.js';
 import AltContainer from 'alt/AltContainer';
 import config from '../utils/config';
+import ServerActions from '../actions/ServerActions';
 
 var InstanceSelectPanel = React.createClass({
   // have to write this component with the old syntax otherwise we cant use mixins.
@@ -78,14 +80,14 @@ var InstanceSelectPanel = React.createClass({
     label_source = $("#instance_select input:radio[name=label_source]:checked").val();
     if(label_source){
       label_source = label_source.replace('*','');
-      var seg_layer = "_%27" + label_source + "%27:{%27type%27:%27segmentation%27_%27source%27:%27dvid://" + config.baseUrl() + "/"+ this.props.uuid + "/" + label_source + "%27}";
+      var seg_layer = "_%27" + label_source + "%27:{%27type%27:%27segmentation%27_%27source%27:%27dvid://" + config.baseUrl() + "/"+ this.props.ServerStore.uuid + "/" + label_source + "%27}";
     }
     
 
 
     // generate a new url with the choices made and ...
     // redirect the browser
-    var tile_layer = "%27" + tile_source + "%27:{%27type%27:%27image%27_%27source%27:%27dvid://" + config.baseUrl() + "/"+ this.props.uuid + "/" + tile_source + "%27}";
+    var tile_layer = "%27" + tile_source + "%27:{%27type%27:%27image%27_%27source%27:%27dvid://" + config.baseUrl() + "/"+ this.props.ServerStore.uuid + "/" + tile_source + "%27}";
     var perspective = "%27perspectiveOrientation%27:[-0.12320884317159653_0.21754156053066254_-0.009492455050349236_0.9681965708732605]_%27perspectiveZoom%27:64";
     var glancer_url = "/neuroglancer/#!{%27layers%27:{" + tile_layer + seg_layer + "}_" + perspective +"}"
 
@@ -102,7 +104,7 @@ var InstanceSelectPanel = React.createClass({
 
     return (
       <div className="dataselect">
-        <InstanceAdd uuid={this.props.uuid}/>
+        <InstanceAdd uuid={this.props.ServerStore.uuid}/>
         <h4>Data Instances</h4>
         <div className="row">
           <div className="col-sm-3">
@@ -114,7 +116,7 @@ var InstanceSelectPanel = React.createClass({
           </div>
           <div className="col-sm-9">
             <form id="instance_select">
-              <DataInstances repo={this.props.repo} uuid={this.props.uuid}/>
+              <DataInstances repo={this.props.ServerStore.repo} uuid={this.props.ServerStore.uuid}/>
             </form>
           </div>
         </div>
@@ -127,8 +129,8 @@ var InstanceSelectPanel = React.createClass({
 class InstanceSelect extends React.Component {
   render() {
     return (
-      <AltContainer store={InstanceStore}>
-        <InstanceSelectPanel repo={this.props.repo} uuid={this.props.uuid}/>
+      <AltContainer stores={{InstanceStore: InstanceStore, ServerStore:ServerStore}}>
+        <InstanceSelectPanel />
       </AltContainer>
     );
   }

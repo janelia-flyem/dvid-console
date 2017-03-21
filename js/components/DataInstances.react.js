@@ -42,10 +42,10 @@ class DataInstanceList extends React.Component {
         defaultInstances.push(this.props.ServerStore.repoDefaultInstances[key]);
     }
 
-    if (this.props.ServerStore && this.props.ServerStore.repo.DataInstances) {
+    if (this.props.ServerStore.uuid && this.props.ServerStore.repo.DataInstances) {
       var instances = this.props.ServerStore.repo.DataInstances;
 
-      var chosen_node = this.props.uuid;
+      var chosen_node = this.props.ServerStore.uuid;
       var dagNodes = this.props.ServerStore.repo.DAG.Nodes;
 
       // create a lookup and reverse lookup for all of the nodes so we can get parents.
@@ -136,7 +136,7 @@ class DataInstanceList extends React.Component {
         if (!this.state.showSub && sorted[i][2]) {
           // don't add the row as we don't want to draw it.
         } else if( !hasDefaultInstances || isDefaultInstance || !this.state.onlyShowDefault) {
-            var dataInstance = <DataInstance key={sorted[i][0]} instance={sorted[i][1]} isParent={isParent} uuid={this.props.uuid} show={this.state.showSub}/>;
+            var dataInstance = <DataInstance key={sorted[i][0]} instance={sorted[i][1]} isParent={isParent} uuid={this.props.ServerStore.uuid} show={this.state.showSub}/>;
             tileRows.push(dataInstance);
         }
         
@@ -251,7 +251,7 @@ class DataInstances extends React.Component {
   render() {
     return (
       <AltContainer stores={{ServerStore: ServerStore, InstanceStore: InstanceStore}}>
-        <DataInstanceList uuid={this.props.uuid}/>
+        <DataInstanceList/>
       </AltContainer>
     );
   }
