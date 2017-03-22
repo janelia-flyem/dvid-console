@@ -45,7 +45,7 @@ class InstanceAddButton extends React.Component {
       var button = <Button bsSize="xsmall" bsStyle="default" onClick={this.openDataInstanceModal.bind(this)}>Add Data Instance</Button>;
 
       if (this.props.repo.DAG.Nodes[this.props.uuid] && this.props.repo.DAG.Nodes[this.props.uuid].Locked) {
-        button = <a role="button" tabIndex="0" className="btn btn-xs btn-default" data-toggle="popover" data-placement="left" data-trigger="focus" title="Action not permitted" data-content="It is not possible to add a data instance to a locked node. Please select an unlocked node (white) from the DAG above." onClick={this.isLocked.bind(this)}>Add Data Instance</a>;
+        button = <a role="button" tabIndex="0" className="btn btn-xs btn-default" data-toggle="popover" data-placement="left" data-trigger="focus" title="Action not permitted" data-content="It is not possible to add a data instance to a locked node. Please select an unlocked node from the DAG above." onClick={this.isLocked.bind(this)}>Add Data Instance</a>;
       }
 
       return (

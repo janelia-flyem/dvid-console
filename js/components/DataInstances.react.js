@@ -130,12 +130,13 @@ class DataInstanceList extends React.Component {
         var isParent = parents[sorted[i][0] + '_' + type];
         var isDefaultInstance = false;
         if(hasDefaultInstances){
-          isDefaultInstance = defaultInstances.includes(sorted[i][0]);
+          isDefaultInstance = defaultInstances.includes(sorted[i][0]) || (sorted[i][2] && defaultInstances.includes(sorted[i][0].split('_')[0]))
         }
 
-        if (!this.state.showSub && sorted[i][2]) {
-          // don't add the row as we don't want to draw it.
-        } else if( !hasDefaultInstances || isDefaultInstance || !this.state.onlyShowDefault) {
+
+        var isChild = !!sorted[i][2] ;
+        var defaultOrShowDefault = !hasDefaultInstances || isDefaultInstance || !this.state.onlyShowDefault;
+        if(  ((isChild  && this.state.showSub) || !isChild) && defaultOrShowDefault ) {
             var dataInstance = <DataInstance key={sorted[i][0]} instance={sorted[i][1]} isParent={isParent} uuid={this.props.ServerStore.uuid} show={this.state.showSub}/>;
             tileRows.push(dataInstance);
         }
