@@ -8,10 +8,15 @@ module.exports = function(grunt) {
         //transform:  [ require('grunt-react').browserify ]
         transform:  [ "babelify" ]
       },
-      app:          {
+      full:          {
         src:        'js/app.js',
         dest:       'build/bundle.js'
+      },
+      lite:          {
+        src:        'js/lite-main.js',
+        dest:       'build/bundle-lite.js'
       }
+
     },
     uglify: {
       options: {
@@ -78,11 +83,28 @@ module.exports = function(grunt) {
       }
     },
     connect: {
-        server: {
-            options: {
-              port: 4000
-            }
+      full: {
+        options: {
+          port: 8500,
+          base:  {
+                path: '.',
+                options: {
+                  index: 'index.html'
+                }
+          }
         }
+      },
+      lite: {
+        options: {
+          port: 8500,
+          base:  {
+                path: '.',
+                options: {
+                  index: 'index-lite.html'
+                }
+          }
+        }
+      }
     },
   });
 
@@ -95,7 +117,10 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-connect');
 
   // Default task(s).
-  grunt.registerTask('default', ['browserify']);
-  grunt.registerTask('dev', ['browserify', 'connect', 'watch'])
-  grunt.registerTask('dist', ['browserify','uglify','copy', 'compress']);
+  grunt.registerTask('default', ['browserify:full']);
+  grunt.registerTask('dev', ['browserify:full', 'connect:full', 'watch'])
+  grunt.registerTask('dist', ['browserify:full','uglify','copy', 'compress']);
+  //lite builds
+  grunt.registerTask('dev-lite', ['browserify:lite', 'connect:lite', 'watch'])
+  // grunt.registerTask('dist-lite', ['browserify','uglify','copy', 'compress']);
 };
