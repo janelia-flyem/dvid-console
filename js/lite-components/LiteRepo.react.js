@@ -2,6 +2,7 @@ import React from 'react';
 import AltContainer from 'alt/AltContainer';
 import ServerStore from '../stores/ServerStore';
 import ServerActions from '../actions/ServerActions';
+import RepoTabs from '../lite-components/RepoTabs.react.js';
 
 class LiteRepo extends React.Component {
 
@@ -15,26 +16,32 @@ class LiteRepo extends React.Component {
   render(){
     if(!this.props.repo){
       return (
-        <div className="container">
+        <div className='row'>
           <div className="col-md-6 text-muted">
             Loading...
           </div>
-       </div>
+        </div>
        );
     }
     return (
-      <div className="container">
-
-        <div className="col-md-12">
-        </div>
-        <div className="col-md-4">
-          <div className="center-block">
-            <h2> Repo: {this.props.repo.Alias}</h2>
-
+      <div >
+      
+        <div className='row'>
+          <div className="col-xs-4">
+              <h3> {this.props.repo.Alias}</h3>
           </div>
+          <div className="col-xs-4"></div>
+                  <div className="col-xs-4">
+          </div>
+
         </div>
-        <div className="col-md-4"></div>
+
+        <div className='row'>
+          <RepoTabs/>
+        </div>
+
       </div>
+
     );
   }
 

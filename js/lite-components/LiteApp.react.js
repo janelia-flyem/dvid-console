@@ -14,7 +14,6 @@ import ErrorActions from '../actions/ErrorActions';
 import ServerStore from '../stores/ServerStore';
 import NoRepo from './NoRepo.react.js';
 import LiteRepo from './LiteRepo.react.js';
-  // RepoSelect    = require('./RepoSelect.react');
 import RepoSelect from './RepoSelect.react.js';
 
 class LiteApp extends React.Component {
