@@ -1,1 +1,23 @@
 /* dvid-lite specific styles */
+.navbar-default {
+    color: rgba(255,255,255,0.75);
+    background-color: #24292e;
+    border-radius: 0px;
+    border: 0px;
+}
+
+.navbar-default select{
+    min-width: 300px;
+
+}
+
+.navbar-default .form-control {
+    border: 0px;
+    background-color: rgba(255,255,255,0.125);
+    color: rgba(255,255,255,0.75);
+    margin-left: .5em;
+}
+
+.text-muted {
+    color: rgba(119, 119, 119, 0.41);
+}

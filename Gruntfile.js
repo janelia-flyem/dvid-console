@@ -79,7 +79,7 @@ module.exports = function(grunt) {
     watch: {
       scripts: {
         files: ['js/**/*.js', 'css/app.css'],
-        tasks: ['browserify']
+        tasks: ['browserify:lite']
       }
     },
     connect: {
@@ -121,6 +121,7 @@ module.exports = function(grunt) {
   grunt.registerTask('dev', ['browserify:full', 'connect:full', 'watch'])
   grunt.registerTask('dist', ['browserify:full','uglify','copy', 'compress']);
   //lite builds
+  //TODO: watch is browserifying all... maybe try http://stackoverflow.com/questions/20841623/grunt-contrib-watch-targets-and-recursion/21744582#21744582
   grunt.registerTask('dev-lite', ['browserify:lite', 'connect:lite', 'watch'])
   // grunt.registerTask('dist-lite', ['browserify','uglify','copy', 'compress']);
 };
