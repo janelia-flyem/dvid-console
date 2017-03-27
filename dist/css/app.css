@@ -1,0 +1,387 @@
+.usageChart {
+  height: 200px;
+  width: 90%;
+  margin:auto;
+}
+
+#forkme_banner {
+  display: block;
+  position: absolute;
+  top: 0;
+  right: 45%;
+  z-index: 10;
+  padding: 10px 50px 10px 10px;
+  color: #FFF;
+  background: url('/img/blacktocat.png') #0090FF no-repeat 95% 50%;
+  font-weight: 700;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  border-bottom-left-radius: 2px;
+  border-bottom-right-radius: 2px;
+}
+
+.empty {
+  padding: 8em;
+}
+
+.log .timestamp {
+  width: 14em;
+}
+
+.log {
+  overflow: auto;
+  height: 10.6em;
+}
+
+.log {
+  padding: 0;
+}
+
+.log-meta button {
+  margin-bottom:0;
+  margin-top: -5px;
+}
+
+.repometa {
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 1em;
+}
+
+.repometa h3 {
+  margin-top: 0;
+}
+
+.dataselect {
+  margin-top: 1em;
+}
+
+.newrepo {
+  padding-top: 1em;
+}
+
+table.datainstances {
+  border-collapse: collapse;
+  margin: 5px 0 5px 0;
+}
+
+.datainstances th {
+  padding: 3px 15px 0 0;
+  text-align: left;
+  font-weight: normal;
+}
+
+.datainstances td {
+  padding: 3px 15px 0 0;
+  text-align: center;
+}
+
+.datainstances + .btn {
+    margin-left: -6px;
+}
+
+.serverstats .panel-body {
+  text-align:center;
+  font-size:2em;
+  color:#666;
+  height:70px;
+}
+
+.serverstats .glyphicon {
+  margin-right: 0.5em;
+  float:right;
+  color: #666;
+}
+
+.serverstats .smaller {
+  font-size: 1em;
+  padding-top: 1.9em;
+}
+
+.serverstats small {
+  font-size: 0.5em;
+}
+
+/*** tileviewer styling ***/
+
+.openseadragon, .data-missing {
+  background: #000;
+  width:800px;
+  height:800px;
+  margin: 0.3em 0;
+}
+
+.data-missing {
+  padding-top:45%;
+  text-align:center;
+  color:#fff;
+}
+
+.subtle {
+  color:#999;
+}
+
+.btn {
+  margin: 0 0.3em 0.3em 0;
+}
+
+.cut_plane {
+  margin-top: -4px;
+}
+
+#slider-container {
+  width: 750px;
+}
+
+.btn:focus,
+.btn:active:focus,
+.btn.active:focus,
+.btn.focus,
+.btn:active.focus,
+.btn.active.focus {
+  outline: none;
+}
+
+#volume_viewer {
+  position: absolute;
+  height: 735px;
+  width: 703px;
+  background: #000;
+  z-index: 3;
+  border: 1px solid #FF0;
+  color: #FF0;
+  top: 2.5em;
+  left: 2.5em;
+}
+
+.closelink {
+  float:right;
+}
+
+.bodymeta {
+  float: left;
+}
+
+#coordinates .form-group {
+  margin-right: 0.3em;
+}
+
+#coordinates label {
+  margin-right: 0.3em;
+}
+
+#coords-tip p {
+  margin: 0;
+}
+
+#coords-tip {
+  padding: 0.3em;
+  background: rgba(0,0,0,0.2);
+  border-radius: 5px;
+  color: rgba(255,255,0,0.8);
+}
+
+#viewer {
+  position: relative;
+}
+
+#viewer-console {
+  width:100%;
+  color:#ff0;
+  background: rgba(0,0,0,0.3);
+  position:absolute;
+  z-index: 20;
+  margin: 0 0;
+}
+
+#viewer-console p {
+  margin: 0.3em;
+  font-size: 0.9em;
+}
+/*** end tileviewer ***/
+
+
+/* Overrides of bootstrap */
+
+.label {
+  background-color: #666666;
+  color: #fff;
+}
+
+.lbl-grayscale8 {
+  background-color: #666699;
+  color: #fff;
+}
+.lbl-imagetile {
+  background-color: #006400;
+  color: #fff;
+}
+.lbl-keyvalue {
+  background-color: #993300;
+  color: #fff;
+}
+.lbl-labelblk {
+  background-color: #202f9f;
+  color: #fff;
+}
+.lbl-labelgraph {
+  background-color: #339999;
+  color: #fff;
+}
+.lbl-labelmap {
+  background-color: #330066;
+  color: #fff;
+}
+.lbl-labelvol {
+  background-color: #daa520;
+  color: #fff;
+}
+.lbl-labels64 {
+  background-color: #3333cc;
+  color: #fff;
+}
+.lbl-multiscale2d {
+  background-color: #9933cc;
+  color: #fff;
+}
+.lbl-rgba8 {
+  background-color: #660066;
+  color: #fff;
+}
+.lbl-roi {
+  background-color: #46b933;
+  color: #fff;
+}
+.lbl-uint8blk {
+  background-color: #ff6722;
+  color: #fff;
+}
+
+/* dagre-d3 */
+
+.dag div {
+  width:90%;
+  border: 1px solid #ccc;
+  margin: auto;
+}
+.dag {
+  text-align: center;
+}
+
+svg {
+  overflow: scroll;
+}
+
+.type-locked .lock.glyphicon {
+  position: static;
+}
+
+.expanded.toggle-expand-icon::before,
+.expanded .toggle-expand-icon::before{
+  position: static;
+  color:#6699FF;
+  font-family: "Glyphicons Halflings";
+  content:"\e252";
+}
+.collapsed.toggle-expand-icon::before,
+.collapsed .toggle-expand-icon::before{
+  position: static;
+  color: #99CCFF;
+  font-family: "Glyphicons Halflings";
+  content:"\e253";
+
+}
+
+text {
+  font-weight: 300;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serf;
+  font-size: 10pt;
+  pointer-events: none;
+}
+
+.node > rect {
+  stroke: #000;
+  stroke-width: 1.5px;
+  fill: #fff;
+  cursor: pointer;
+}
+
+g.master > rect {
+  fill: #8BC34A;
+  stroke: #8BC34A;
+}
+g.master_branch > rect{
+  fill: #D9FCDA;
+  stroke: #8BC34A;
+}
+
+g.current > rect {
+  fill: #FCF8E3;
+}
+
+button.master{
+  background-color: #8BC34A;
+}
+
+button.current{
+  background-color: #FCF8E3;
+}
+
+.edgePath {
+  stroke: #000;
+  stroke-width: 1.5px;
+  fill: none;
+  cursor: pointer;
+}
+.node, .edgePath:focus {
+    outline: none;
+}
+
+#arrowhead15 path {
+  fill: #111;
+}
+
+.dag_note {
+  font-weight: bold;
+  text-shadow: 0 1px 0 #fff, 0 -1px 0 #fff, 1px 0 0 #fff, -1px 0 0 #fff;
+  border: 2px solid #444;
+  border-radius: 5px;
+  background: #fff;
+  padding: 0.3em 1em;
+}
+
+.tooltip-inner {
+  max-width: 400px;
+}
+
+.graph_list {
+  list-style:none;
+  padding-left: 0;
+}
+
+.graph_list .uuid {
+  width: 8em;
+  display: inline-block;
+}
+
+.commitCreated {
+  width: 14em;
+  display: inline-block;
+}
+
+.lockStatus {
+  width: 1em;
+  display: inline-block;
+}
+
+.fixed_alert {
+  position: fixed;
+  top: 1em;
+  left: 1em;
+  width: 100%;
+  padding-right: 2em;
+  z-index: 100;
+}
+
+.leaflet-control-container .leaflet-top .leaflet-control-zoom {
+  margin-top: 2.5em;
+}
+
