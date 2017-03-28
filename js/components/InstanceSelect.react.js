@@ -37,12 +37,12 @@ var InstanceSelectPanel = React.createClass({
     // redirect the browser
     if (!label_source) {
       this.transitionTo('tileonly', {
-        uuid : this.props.uuid,
+        uuid : this.props.ServerStore.uuid,
         tileSource : tile_source
       });
     } else {
       // label source has been selected, so lets try and center on the ROI.
-      var label_meta = this.props.repo.DataInstances[label_source];
+      var label_meta = this.props.ServerStore.repo.DataInstances[label_source];
       // first grab the min and max points from the Extended meta data
       var minPoint = label_meta.Extended.MinPoint;
       var maxPoint = label_meta.Extended.MaxPoint;
@@ -52,7 +52,7 @@ var InstanceSelectPanel = React.createClass({
       var z = Math.round((maxPoint[2] + minPoint[2]) / 2);
 
       this.transitionTo('tilemapwithcoords', {
-        uuid : this.props.uuid,
+        uuid : this.props.ServerStore.uuid,
         tileSource : tile_source,
         labelSource : label_source,
         plane: 'xy',
@@ -98,7 +98,7 @@ var InstanceSelectPanel = React.createClass({
 
     var button = <p>Showing all data instances. <button className="btn btn-default btn-xs" onClick={this.showAllHandler}>Show Select Data Instances</button></p>
 
-    if (this.props.nodeRestrict) {
+    if (this.props.InstanceStore.nodeRestrict) {
       button = <p>Showing data instances created on this node or its ancestors. <button className="btn btn-default btn-xs" onClick={this.showAllHandler}>Show All Data Instances</button></p>
     }
 
