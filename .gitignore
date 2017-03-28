@@ -3,3 +3,4 @@ node_modules
 build
 *.swp
 *.tar.gz
+npm-debug.log
