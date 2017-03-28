@@ -76,10 +76,16 @@ module.exports = function(grunt) {
         ]
       }
     },
-    watch: {
+    watchlite: {
       scripts: {
         files: ['js/**/*.js', 'css/app.css'],
         tasks: ['browserify:lite']
+      }
+    },
+    watch: {
+      scripts: {
+        files: ['js/**/*.js', 'css/app.css'],
+        tasks: ['browserify:full']
       }
     },
     connect: {
@@ -111,17 +117,22 @@ module.exports = function(grunt) {
   // Load the plugins
   grunt.loadNpmTasks('grunt-browserify');
   grunt.loadNpmTasks('grunt-contrib-uglify');
-  grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-compress');
   grunt.loadNpmTasks('grunt-contrib-connect');
+
+  //allow for two different watch targets
+  //see http://stackoverflow.com/questions/20841623/grunt-contrib-watch-targets-and-recursion/21744582#21744582
+  grunt.loadNpmTasks('grunt-contrib-watch');
+  // Rename watch to watchdev and load it again
+  grunt.renameTask('watch', 'watchlite');
+  grunt.loadNpmTasks('grunt-contrib-watch');
 
   // Default task(s).
   grunt.registerTask('default', ['browserify:full']);
   grunt.registerTask('dev', ['browserify:full', 'connect:full', 'watch'])
   grunt.registerTask('dist', ['browserify:full','uglify','copy', 'compress']);
   //lite builds
-  //TODO: watch is browserifying all... maybe try http://stackoverflow.com/questions/20841623/grunt-contrib-watch-targets-and-recursion/21744582#21744582
-  grunt.registerTask('dev-lite', ['browserify:lite', 'connect:lite', 'watch'])
+  grunt.registerTask('dev-lite', ['browserify:lite', 'connect:lite', 'watchlite'])
   // grunt.registerTask('dist-lite', ['browserify','uglify','copy', 'compress']);
 };
