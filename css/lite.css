@@ -21,3 +21,35 @@
 .text-muted {
     color: rgba(119, 119, 119, 0.41);
 }
+
+.lite-padding {
+    padding: 40px;
+}
+
+.RepoTabs li:first-of-type{
+    padding-left:40px;
+}
+
+.dag div{
+    border-radius: 3px;
+}
+
+div.dag-tools{
+    border: 0;
+    position: absolute;
+    padding: 5px 30px 0px 0px;
+}
+
+button {
+    cursor:pointer;
+}
+
+/*span.lock{
+
+}*/
+span.branch{
+    cursor:pointer;
+}
+span.unlocked{
+    cursor:pointer;
+}

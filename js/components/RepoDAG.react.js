@@ -99,7 +99,11 @@ var RepoDAGDisplay  = React.createClass({
         var log = '';
         if (n.Log.length) log = (n.Log);
         var nodeclass = "";
-        if (n.Locked) nodeclass = "type-locked";
+        if (n.Locked){
+          nodeclass = "type-locked";
+        }else{
+          nodeclass = "type-unlocked";
+        }
         var note = null;
         if (n.Note) note = n.Note;
 
@@ -237,22 +241,32 @@ var RepoDAGDisplay  = React.createClass({
       .append("svg:foreignObject")
       .attr("width", 20)
       .attr("height", 20)
-      .attr("y", "-25px")
-      .attr("x", "-45px")
+      .attr("y", "-34px")
+      .attr("x", "-35px")
       .append("xhtml:span")
-      .attr("class", "lock glyphicon glyphicon-lock");
+      .attr("class", "lock fa fa-lock");
 
-    //add element to hold expand/collapse icon
-    elementHolderLayer.selectAll("g.node.collapsed, g.node.expanded")
+    //add branch icons
+    elementHolderLayer.selectAll("g.node.type-locked")
       .append("svg:foreignObject")
       .attr("width", 20)
       .attr("height", 20)
-      .attr("y", "2px")
-      .attr("x", "-10px")
+      .attr("y", "-34px")
+      .attr("x", "-45px")
       .append("xhtml:span")
-      .attr("class", "toggle-expand-icon");
+      .attr("class", "branch fa fa-code-fork");
 
-    elementHolderLayer.selectAll("g.node")
+    elementHolderLayer.selectAll("g.node.type-unlocked")
+      .append("svg:foreignObject")
+      .attr("width", 20)
+      .attr("height", 20)
+      .attr("y", "-34px")
+      .attr("x", "-40px")
+      .append("xhtml:span")
+      .attr("class", "unlocked fa fa-unlock");
+
+
+    elementHolderLayer.selectAll("g.node rect")
       .on("mouseenter", function (v) {
         if (dag.node(v).note) {
           tooltip.style("visibility", "visible");
@@ -278,16 +292,6 @@ var RepoDAGDisplay  = React.createClass({
           self.transitionTo('repo', {
               uuid: dag.node(v).uuid
           });
-/*          var nextUuid = dag.node(v).uuid;
-          ServerActions.fetch({
-            uuid: nextUuid,
-            callback: function(data){
-              self.transitionTo('repo', {
-                uuid: nextUuid
-              });
-            }//need to bind?
-          });
-*/
 
         }
       });
@@ -521,19 +525,9 @@ var RepoDAGDisplay  = React.createClass({
 
     return (
       <div>
-        <h4>Version DAG <small> (Nodes with thick borders are locked.)</small></h4>
-        <p>Mouse over a node to view the log. <kbd>Shift</kbd> + Click on <span className="collapsed toggle-expand-icon"></span>/<span className="expanded toggle-expand-icon"></span> nodes to expand/collapse. Click nodes to navigate to repo.</p>
+        <h4>Version History</h4>
+
         <div>
-          <button className="btn btn-default" onClick={this.downloadSVGHandler}>Download DAG as SVG</button>
-          <button className="btn btn-default" onClick={this.fitDAG}>Fit graph to window</button>
-          <button className="btn btn-default" onClick={this.expandAndScale}>Expand graph</button>
-          <button className="btn btn-default" onClick={this.collapseAndScale}>Collapse graph</button>
-          {scrollToMasterBtn}
-          <button className="btn btn-default current" onClick={this.scrollToCurrent}>Scroll to current</button>
-
-          {branchButton}
-          {commitButton}
-
           <Modal show={this.state.showCommitModal} onHide={this.closeCommitModal}>
             <Modal.Header closeButton>
             {modalTitle}
@@ -547,14 +541,20 @@ var RepoDAGDisplay  = React.createClass({
               </div>
             </Modal.Body>
           </Modal>
-
-
         </div>
+
         <div className="dag">
           <div>
+            <div className='dag-tools'>
+              <button className="btn btn-default pull-right"><span className="fa fa-question"></span></button>
+              <button className="btn btn-default pull-right" onClick={this.fitDAG}><span className="fa fa-arrows-alt"></span></button>
+              <button className="btn btn-default current pull-right" onClick={this.scrollToCurrent}><span className="fa fa-crosshairs"></span></button>
+              <button className="btn btn-default pull-right" onClick={this.downloadSVGHandler}><span className="fa fa-download"></span></button>
+            </div>
             <svg width="100%" height="500" ref="DAGimage"><g/></svg>
           </div>
         </div>
+
       </div>
     );
   }
