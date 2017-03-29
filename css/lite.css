@@ -26,12 +26,25 @@
     padding: 40px;
 }
 
+.repo-title h4{
+    display:inline;
+}
+
+.repo-title{
+    margin-bottom: 8px;
+}
+
 .RepoTabs li:first-of-type{
     padding-left:40px;
 }
 
 .dag div{
     border-radius: 3px;
+}
+
+#dag-header{
+    width: 90%;
+    margin: auto;
 }
 
 div.dag-tools{
@@ -54,4 +67,13 @@ span.unlocked{
 #repoAddBtn {
     margin-top: -8px;
     padding-left: 20px;
+}
+
+.data-badge-container{
+    display: inline;
+    margin-left: 2px;
+}
+
+.data-icon{
+    color: #6b97b8
 }

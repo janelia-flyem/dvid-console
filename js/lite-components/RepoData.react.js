@@ -6,9 +6,24 @@ import RepoDAG from '../components/RepoDAG.react.js';
 import InstanceStore from '../stores/InstanceStore';
 import InstanceAdd from '../components/InstanceAdd.react.js';
 import FileList from '../lite-components/FileList.react.js';
-
+import {datatype_labels, label_properties} from '../utils/datalabels.js';
 
 class RepoData extends React.Component {
+
+  getLabels(datatype, dataTypeInfo){
+    var labels = datatype_labels[datatype];
+    return (
+      <div className='data-badge-container'>
+        {
+          labels.map( label => {
+            var color = label_properties[label].color;
+            return <span key={label} className='badge' style={{backgroundColor:color}}>{label}</span>;
+          })
+        }
+      </div>
+    );
+    
+  }
 
   render(){
     var [dataInstances, parents] = InstanceStore.dataInstancesForInstance(
@@ -29,20 +44,24 @@ class RepoData extends React.Component {
        data = (
           <ul className="list-group">
             {raw_data.map( instance => {
-              return <li className="list-group-item" key={instance[0]}>{instance[0]} ({instance[1].Base.TypeName})</li>
-            })}
+              return (
+                <li className="list-group-item" key={instance[0]}>
+                  {instance[0]} 
+                  {this.getLabels(instance[1].Base.TypeName,instance[1])}
+                </li>
+            );})}
           </ul>);
     }
     return (
       <div className='row'>
         <div className='col-xs-6'>
-          <h5><span className="fa fa-th-large" aria-hidden="true"></span> Raw Data</h5>
+          <h5><span className="fa fa-th-large data-icon" aria-hidden="true"></span> Arrays</h5>
           {data}
           <InstanceAdd/>
           
           <br/>
           
-          <h5><span className="fa fa-folder-open-o" aria-hidden="true"></span> Files</h5>
+          <h5><span className="fa fa-folder-open data-icon" aria-hidden="true"></span> Files</h5>
           <FileList hasFiles={hasFiles} uuid={this.props.uuid}/>
           
         </div>

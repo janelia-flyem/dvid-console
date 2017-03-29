@@ -523,10 +523,16 @@ var RepoDAGDisplay  = React.createClass({
       scrollToMasterBtn = <button className="btn btn-default master" onClick={this.scrollToMaster}>Scroll to master</button>;
     }
     var modalTitle = <Modal.Title>Commit (lock) node {this.props.uuid}.</Modal.Title>;
-
+    
+    var headline = <h4>Version History</h4>;
+    var dagHeight = "500"
+    if(this.props.lite==="1"){
+      dagHeight = "400"
+      headline = <div id='dag-header'><h5>Version History</h5></div>;
+    }
     return (
       <div>
-        <h4>Version History</h4>
+        {headline}
 
         <div>
           <Modal show={this.state.showCommitModal} onHide={this.closeCommitModal}>
@@ -552,7 +558,7 @@ var RepoDAGDisplay  = React.createClass({
               <button className="btn btn-default current pull-right" onClick={this.scrollToCurrent}><span className="fa fa-crosshairs"></span></button>
               <button className="btn btn-default pull-right" onClick={this.downloadSVGHandler}><span className="fa fa-download"></span></button>
             </div>
-            <svg width="100%" height="500" ref="DAGimage"><g/></svg>
+            <svg width="100%" height={dagHeight} ref="DAGimage"><g/></svg>
           </div>
         </div>
 
@@ -567,7 +573,7 @@ class RepoDAG extends React.Component {
   render() {
     return (
       <AltContainer store={ServerStore}>
-        <RepoDAGDisplay uuid={this.props.uuid}/>
+        <RepoDAGDisplay uuid={this.props.uuid} lite={this.props.lite}/>
       </AltContainer>
     );
   }

@@ -27,11 +27,11 @@ class LiteRepo extends React.Component {
       <div >
       
         <div className='row'>
-          <div className="col-xs-4">
-              <h3> {this.props.repo.Alias}</h3>
-          </div>
-          <div className="col-xs-4"></div>
-                  <div className="col-xs-4">
+          <div className="col-xs-12 ">
+              <div className="repo-title">
+              <h4 > {this.props.repo.Alias}</h4>
+              <span className="pull-right"> {this.props.repo.Description}</span>
+              </div>
           </div>
 
         </div>
