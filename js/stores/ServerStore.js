@@ -118,7 +118,7 @@ class ServerStore {
       //check if a repo update is necessary
       //saves load time when navigating a repo
       var idInRepo = this.getFullUUIDinRepo(self.repo, opts.uuid)
-      if(idInRepo){
+      if(idInRepo  && opts.norefresh){
             //no need to update repo--uuid is in current repo
             self.uuid = idInRepo;
             if (opts.callback) {

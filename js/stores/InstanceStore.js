@@ -15,6 +15,7 @@ class InstanceStore {
     }
   }
 
+/* Instance utility functions */
   static dataInstancesForInstance(ServerStore, nodeRestrict){
       var instances = ServerStore.repo.DataInstances;
       var chosen_node = ServerStore.uuid;

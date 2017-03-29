@@ -4,6 +4,7 @@ var React       = require('react'),
   NotFoundRoute = Router.NotFoundRoute,
   DefaultRoute  = Router.DefaultRoute,
   RouteHandler  = Router.RouteHandler,
+  Link          = Router.Link,
   NotFound      = require('../components/NotFound.react'),
   Nav           = require('../components/Navigation.react'),
   About         = require('../components/About.react'),
@@ -26,9 +27,13 @@ class LiteApp extends React.Component {
     return (
       <div>
         <Nav lite="1">
-        <form className="navbar-form navbar-left">
-          <RepoSelect/>
-        </form>
+          <div className="navbar-left">
+            <form className="navbar-form">
+              <RepoSelect/>
+              <Link to="newrepo" id="repoAddBtn" className="navbar-brand pull-right"><span className="glyphicon glyphicon-plus-sign" aria-hidden="true"></span></Link>
+
+            </form>
+          </div>
         </Nav>
         <div className="container-fluid">
           <Error/>

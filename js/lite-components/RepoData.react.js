@@ -4,6 +4,9 @@ import ServerStore from '../stores/ServerStore';
 import ServerActions from '../actions/ServerActions';
 import RepoDAG from '../components/RepoDAG.react.js';
 import InstanceStore from '../stores/InstanceStore';
+import InstanceAdd from '../components/InstanceAdd.react.js';
+import FileList from '../lite-components/FileList.react.js';
+
 
 class RepoData extends React.Component {
 
@@ -17,17 +20,31 @@ class RepoData extends React.Component {
       return typeName === "uint8blk" || typeName === "labelblk"
     });
 
+    let hasFiles = dataInstances.some(function(el){
+      return el[0] === ".files";
+    })
+
+    var data = <p><em>No data found.</em></p>
+    if(raw_data){
+       data = (
+          <ul className="list-group">
+            {raw_data.map( instance => {
+              return <li className="list-group-item" key={instance[0]}>{instance[0]} ({instance[1].Base.TypeName})</li>
+            })}
+          </ul>);
+    }
     return (
       <div className='row'>
         <div className='col-xs-6'>
-          <h5>Raw Data</h5>
-          <ul>
-            {raw_data.map( instance => {
-              return <li key={instance[0]}>{instance[0]} ({instance[1].Base.TypeName})</li>
-            })}
-          </ul>
-          <h5>Files</h5>
-          <FileList/>
+          <h5><span className="fa fa-th-large" aria-hidden="true"></span> Raw Data</h5>
+          {data}
+          <InstanceAdd/>
+          
+          <br/>
+          
+          <h5><span className="fa fa-folder-open-o" aria-hidden="true"></span> Files</h5>
+          <FileList hasFiles={hasFiles} uuid={this.props.uuid}/>
+          
         </div>
         <div className='col-xs-6'>
           <RepoDAG lite="1"/>
@@ -38,19 +55,8 @@ class RepoData extends React.Component {
 
 }
 
-class FileList extends React.Component {
-  render(){
-
-    return (
-      <div>
-        No files found. Upload files to the dvid .files keyvalue
-      </div>
-    );
-  }
-}
 
 class ConnectedRepoData extends React.Component {
-
 
   render() {
     return (
