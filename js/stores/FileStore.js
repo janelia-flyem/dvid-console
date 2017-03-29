@@ -51,7 +51,7 @@ class FileStore {
           self.emitChange();
         },
         error: function (err) {
-          self.readme = null
+          self.readme = 'none'
           self.emitChange();
           if (opts.error) {
             opts.error(err);
