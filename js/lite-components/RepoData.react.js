@@ -4,7 +4,6 @@ import ServerStore from '../stores/ServerStore';
 import ServerActions from '../actions/ServerActions';
 import RepoDAG from '../components/RepoDAG.react.js';
 import InstanceStore from '../stores/InstanceStore';
-import InstanceAdd from '../components/InstanceAdd.react.js';
 import FileList from '../lite-components/FileList.react.js';
 import {datatype_labels, label_properties} from '../utils/datalabels.js';
 
@@ -57,9 +56,6 @@ class RepoData extends React.Component {
         <div className='col-xs-6'>
           <h5><span className="fa fa-th-large data-icon" aria-hidden="true"></span> Arrays</h5>
           {data}
-          <InstanceAdd/>
-          
-          <br/>
           
           <h5><span className="fa fa-folder-open data-icon" aria-hidden="true"></span> Files</h5>
           <FileList hasFiles={hasFiles} uuid={this.props.uuid}/>
