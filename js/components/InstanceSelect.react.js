@@ -7,7 +7,7 @@ import InstanceActions from '../actions/InstanceActions';
 import InstanceStore from '../stores/InstanceStore';
 import ServerStore from '../stores/ServerStore';
 import InstanceAdd from './InstanceAdd.React.js';
-import AltContainer from 'alt/AltContainer';
+import AltContainer from 'alt-container';
 import config from '../utils/config';
 import ServerActions from '../actions/ServerActions';
 

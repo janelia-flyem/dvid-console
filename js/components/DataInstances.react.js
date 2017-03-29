@@ -1,7 +1,7 @@
 import React from 'react';
 import ServerStore from '../stores/ServerStore';
 import InstanceStore from '../stores/InstanceStore';
-import AltContainer from 'alt/AltContainer';
+import AltContainer from 'alt-container';
 
 class DataInstanceList extends React.Component {
   constructor(props) {

@@ -1,22 +1,23 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import moment from 'moment';
 import {Modal, Table, Button} from 'react-bootstrap';
 import LogStore from '../stores/LogStore';
 import LogActions from '../actions/LogActions';
 import ServerActions from '../actions/ServerActions';
-import AltContainer from 'alt/AltContainer';
+import AltContainer from 'alt-container';
 import ErrorActions from '../actions/ErrorActions';
 
 class LogEntry extends React.Component {
 
   componentDidMount() {
-    $(React.findDOMNode(this)).tooltip({
+    $(ReactDOM.findDOMNode(this)).tooltip({
       selector: '[data-toggle="tooltip"]'
     });
   }
 
   componentDidUpdate() {
-    var tips = $(React.findDOMNode(this)).find('[data-toggle="tooltip"]');
+    var tips = $(ReactDOM.findDOMNode(this)).find('[data-toggle="tooltip"]');
     tips.tooltip('destroy');
     tips.tooltip();
   }
@@ -69,7 +70,7 @@ class LogTable extends React.Component {
     var uuid = self.props.uuid || self.props.repo_uuid;
 
     // get the new log entry out of the form
-    var logEntry = React.findDOMNode(this.refs.newLog).value;
+    var logEntry = ReactDOM.findDOMNode(this.refs.newLog).value;
     // call method on the dvid api to save the log
     // trigger a re-render of the table.
     ServerActions.addLog({

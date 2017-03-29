@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import Router from 'react-router';
 import {OverlayTrigger} from 'react-bootstrap';
 import {Modal, Tooltip} from 'react-bootstrap';
@@ -7,7 +8,7 @@ import dagreD3 from 'dagre-d3';
 import LogActions from '../actions/LogActions';
 import ServerActions from '../actions/ServerActions';
 import ServerStore from '../stores/ServerStore';
-import AltContainer from 'alt/AltContainer';
+import AltContainer from 'alt-container';
 import ErrorActions from '../actions/ErrorActions';
 import moment from 'moment';
 
@@ -482,7 +483,7 @@ var RepoDAGDisplay  = React.createClass({
     var self = this;
     event.preventDefault();
 
-    var logEntry = React.findDOMNode(this.refs.commitLog).value;
+    var logEntry = ReactDOM.findDOMNode(this.refs.commitLog).value;
 
     //update the log with the new log message.
     var currentLog = self.props.repo.DAG.Nodes[self.props.uuid].Log;

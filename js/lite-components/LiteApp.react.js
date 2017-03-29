@@ -16,6 +16,7 @@ import ServerStore from '../stores/ServerStore';
 import NoRepo from './NoRepo.react.js';
 import LiteRepo from './LiteRepo.react.js';
 import RepoSelect from './RepoSelect.react.js';
+import ReactDOM from 'react-dom';
 
 class LiteApp extends React.Component {
 
@@ -56,7 +57,7 @@ var routes = (
 );
 
 Router.run(routes, function (Handler) {
-  React.render(<Handler/>, document.body);
+  ReactDOM.render(<Handler/>, document.getElementById('dvid-console-app'));
 });
 
 module.exports = LiteApp;

@@ -1,5 +1,5 @@
 import React from 'react';
-import AltContainer from 'alt/AltContainer';
+import AltContainer from 'alt-container';
 import FileStore from '../stores/FileStore';
 import FileActions from '../actions/FileActions';
 

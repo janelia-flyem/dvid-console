@@ -1,5 +1,5 @@
 import React from 'react';
-import AltContainer from 'alt/AltContainer';
+import AltContainer from 'alt-container';
 import Markdown from 'react-markdown';
 import FileStore from '../stores/FileStore';
 import ServerStore from '../stores/ServerStore';

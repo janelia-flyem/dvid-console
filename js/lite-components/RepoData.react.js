@@ -1,5 +1,5 @@
 import React from 'react';
-import AltContainer from 'alt/AltContainer';
+import AltContainer from 'alt-container';
 import ServerStore from '../stores/ServerStore';
 import ServerActions from '../actions/ServerActions';
 import RepoDAG from '../components/RepoDAG.react.js';

@@ -1,8 +1,9 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import Router from 'react-router';
 import ServerActions from '../actions/ServerActions';
 import ServerStore from '../stores/ServerStore';
-import AltContainer from 'alt/AltContainer';
+import AltContainer from 'alt-container';
 import {Alert, Glyphicon, Button, Modal, Input} from 'react-bootstrap';
 
 
@@ -17,7 +18,7 @@ class InstanceAddButton extends React.Component {
   }
 
   componentDidMount() {
-    $(React.findDOMNode(this)).popover({
+    $(ReactDOM.findDOMNode(this)).popover({
       selector: '[data-toggle="popover"]'
     });
   }

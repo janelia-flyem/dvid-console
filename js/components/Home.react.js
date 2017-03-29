@@ -3,7 +3,7 @@ import {Router, Link} from 'react-router';
 import ServerActions from '../actions/ServerActions';
 import ErrorActions from '../actions/ErrorActions';
 import ServerStore from '../stores/ServerStore';
-import AltContainer from 'alt/AltContainer';
+import AltContainer from 'alt-container';
 import moment from 'moment';
 import {Table, Button, Glyphicon} from 'react-bootstrap';
 import config from '../utils/config';
