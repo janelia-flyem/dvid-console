@@ -2,6 +2,7 @@ import React from 'react';
 import AltContainer from 'alt-container';
 import FileStore from '../stores/FileStore';
 import FileActions from '../actions/FileActions';
+import config from '../utils/config'
 
 class FileList extends React.Component {
 
@@ -25,9 +26,10 @@ class FileList extends React.Component {
     return (
       <ul className="list-group">
         {this.props.filenames.map( (name, i) => {
+          var download_link = `${config.baseUrl()}/api/node/${this.props.uuid}/.files/key/${name}`;
           return (
             <li className="list-group-item" key={i}>
-            <span className="fa fa-file-text-o"></span> {name}
+            <span className="fa fa-file-text-o"></span> <a href={download_link} download="true">{name}</a>
           </li>
           );
         })}
