@@ -40,6 +40,9 @@ class ServerStore {
       endpoint: 'branch',
       method:'POST',
       callback: function(data) {
+        if(opts.callback){
+          opts.callback()
+        }
         self.onFetch(opts);
       },
       error: function(err) {
@@ -69,7 +72,12 @@ class ServerStore {
       endpoint: 'commit',
       payload: JSON.stringify(payload),
       method:'POST',
-      callback: cb,
+      callback: function(data) {
+        if(cb){
+          cb();
+        }
+        self.onFetch(opts);
+      },
       error: err
     });
   }

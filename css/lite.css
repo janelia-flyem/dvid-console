@@ -47,12 +47,6 @@
     margin: auto;
 }
 
-div.dag-tools{
-    border: 0;
-    position: absolute;
-    padding: 5px 30px 0px 0px;
-}
-
 button {
     cursor:pointer;
 }

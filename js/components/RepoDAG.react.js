@@ -19,21 +19,14 @@ var RepoDAGDisplay  = React.createClass({
   mixins: [Router.Navigation],
 
   getInitialState: function() {
-    return {showCommitModal: false};
+    return {
+      showCommitModal: false,
+      showBranchModal: false
+    };
   },
 
   componentDidMount: function() {
     this.drawGraph(this.props);
-  },
-
-  shouldComponentUpdate: function(nextProps, nextState) {
-    //avoid over-aggressive rendering of component that was causing perf issues
-    //note that we will need to update this when adding further props to the component
-    return  nextProps.types !== this.props.types ||
-            nextProps.repoMasterSeg !== this.props.repoMasterSeg ||
-            nextProps.repoMasterUuuid !== this.props.repoMasterUuuid ||
-            nextProps.uuid !== this.props.uuid ||
-            nextState.showCommitModal !== this.state.showCommitModal;
   },
 
   componentWillUpdate: function(props) {
@@ -203,6 +196,7 @@ var RepoDAGDisplay  = React.createClass({
   },
 
   update: function(){
+    var admin = this.context.router.getCurrentQuery().admin;
     var self = this;
     //renders the dag
     var dagreRenderer = new dagreD3.render();
@@ -247,15 +241,17 @@ var RepoDAGDisplay  = React.createClass({
       .append("xhtml:span")
       .attr("class", "lock fa fa-lock");
 
-    //add branch icons
-    elementHolderLayer.selectAll("g.node.type-locked")
-      .append("svg:foreignObject")
-      .attr("width", 20)
-      .attr("height", 20)
-      .attr("y", "-34px")
-      .attr("x", "-45px")
-      .append("xhtml:span")
-      .attr("class", "branch fa fa-code-fork");
+    if(admin || this.props.lite){
+      //add branch icons
+      elementHolderLayer.selectAll("g.node.type-locked")
+        .append("svg:foreignObject")
+        .attr("width", 20)
+        .attr("height", 20)
+        .attr("y", "-34px")
+        .attr("x", "-45px")
+        .append("xhtml:span")
+        .attr("class", "branch fa fa-code-fork");
+    }
 
     elementHolderLayer.selectAll("g.node.type-unlocked")
       .append("svg:foreignObject")
@@ -290,12 +286,48 @@ var RepoDAGDisplay  = React.createClass({
           self.toggleChildren(v);
         }else{
           //loads the node's data into page (updates tile viewer link)
-          self.transitionTo('repo', {
-              uuid: dag.node(v).uuid
-          });
-
+          self.navigateDAG(dag.node(v).uuid)
         }
       });
+
+    //add commit and branch actions, if allowed
+    if(admin || this.props.lite){
+      elementHolderLayer.selectAll("g.node foreignObject span")
+        //want to add tooltips?
+        .on("mouseenter", function (v) {
+        })
+        .on("mouseleave", function (v) {
+        })
+        .on("mousemove", function() {
+        })
+        .on("click", function (v) {
+          // prevents a drag from being registered as a click
+          if (d3.event.defaultPrevented) return;
+          else{
+            //loads the node's data into page 
+            var uuid = dag.node(v).uuid;
+            var classList = d3.event.path[0].classList;
+
+            //figure out what action to take based on the icon class
+            var action = null;
+            if (classList.contains("unlocked")){
+              action = self.openCommitModal;
+            }
+            else if(classList.contains("branch")){
+              action = self.openBranchModal;
+            }
+
+            //determine if a navigation is also needed
+            if(self.uuid !== uuid){
+              //it's not the current node--navigate to the node
+              self.navigateDAG(uuid, action)
+            }
+            else if (action){
+              action();
+            }
+          }
+        });
+    }
 
     var nodeDrag = d3.behavior.drag()
         .on("drag", function (d) {
@@ -326,6 +358,19 @@ var RepoDAGDisplay  = React.createClass({
     //add lock icons
     nodeDrag.call(elementHolderLayer.selectAll("g.node"));
     edgeDrag.call(elementHolderLayer.selectAll("g.edgePath"));
+  },
+  navigateDAG: function(uuid, callback){
+    if(this.props.lite){
+      ServerActions.fetch({uuid:uuid});
+    }
+    else{
+      this.transitionTo('repo', {
+          uuid: uuid
+      });
+    }
+    if(callback){
+      setTimeout(function(){callback();}, 0)
+    }
   },
   scrollToCurrent: function(){
     ErrorActions.clear()
@@ -463,19 +508,26 @@ var RepoDAGDisplay  = React.createClass({
     document.body.appendChild(e);
   },
 
-  branchNode: function(event) {
+  openBranchModal: function(){
+    this.setState({showBranchModal: true})
+  },
+
+  closeBranchModal: function(){
+    this.setState({showBranchModal: false})
+  },
+
+  branchNode: function() {
     ServerActions.branchNode({
-      uuid: this.props.uuid
+      uuid: this.props.uuid,
+      callback: this.closeBranchModal
     });
   },
 
-  openCommitModal: function(e) {
-    e.preventDefault();
+  openCommitModal: function() {
     this.setState({showCommitModal: true});
   },
 
-  closeCommitModal: function(e) {
-    e.preventDefault();
+  closeCommitModal: function() {
     this.setState({showCommitModal: false});
   },
 
@@ -511,16 +563,10 @@ var RepoDAGDisplay  = React.createClass({
   },
 
   render: function() {
-    var admin = this.context.router.getCurrentQuery().admin;
-    var branchButton = '';
-    var commitButton = '';
     var scrollToMasterBtn = '';
-    if (admin) {
-      branchButton = <button className="btn btn-default" onClick={this.branchNode}>Branch</button>
-      commitButton = <button className="btn btn-default" onClick={this.openCommitModal}>Commit</button>
-    }
+
     if (this.props.repoMasterUuuid){
-      scrollToMasterBtn = <button className="btn btn-default master" onClick={this.scrollToMaster}>Scroll to master</button>;
+      scrollToMasterBtn = <button className="btn btn-default master pull-right" onClick={this.scrollToMaster}><span className="fa fa-crosshairs"></span></button>
     }
     var modalTitle = <Modal.Title>Commit (lock) node {this.props.uuid}.</Modal.Title>;
     
@@ -550,12 +596,27 @@ var RepoDAGDisplay  = React.createClass({
           </Modal>
         </div>
 
+        <div>
+          <Modal show={this.state.showBranchModal} onHide={this.closeBranchModal}>
+            <Modal.Header closeButton>
+            <Modal.Title>Branch node {this.props.uuid}</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <p> Are you sure you want to branch this node? This will create a new unlocked child node.</p>
+              <div className="form-group">
+                <button onClick={this.branchNode} className="btn btn-primary">Branch</button>
+              </div>
+            </Modal.Body>
+          </Modal>
+        </div>
+
         <div className="dag">
           <div>
             <div className='dag-tools'>
               <button className="btn btn-default pull-right"><span className="fa fa-question"></span></button>
               <button className="btn btn-default pull-right" onClick={this.fitDAG}><span className="fa fa-arrows-alt"></span></button>
               <button className="btn btn-default current pull-right" onClick={this.scrollToCurrent}><span className="fa fa-crosshairs"></span></button>
+              {scrollToMasterBtn}
               <button className="btn btn-default pull-right" onClick={this.downloadSVGHandler}><span className="fa fa-download"></span></button>
             </div>
             <svg width="100%" height={dagHeight} ref="DAGimage"><g/></svg>

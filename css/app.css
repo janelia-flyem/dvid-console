@@ -266,6 +266,12 @@ table.datainstances {
   text-align: center;
 }
 
+div.dag-tools{
+    border: 0;
+    position: absolute;
+    padding: 5px 30px 0px 0px;
+}
+
 svg {
   overflow: scroll;
 }
@@ -299,9 +305,13 @@ text {
 
 .node > rect {
   stroke: #000;
-  stroke-width: 1.5px;
+  stroke-width: .5px;
   fill: #fff;
   cursor: pointer;
+}
+.node > rect:hover{
+  fill: #e6e6e6;
+  /*border-color: #adadad;*/
 }
 
 g.master > rect {

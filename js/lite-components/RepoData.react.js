@@ -2,12 +2,17 @@ import React from 'react';
 import AltContainer from 'alt-container';
 import ServerStore from '../stores/ServerStore';
 import ServerActions from '../actions/ServerActions';
+import FileActions from '../actions/FileActions'
 import RepoDAG from '../components/RepoDAG.react.js';
 import InstanceStore from '../stores/InstanceStore';
 import FileList from '../lite-components/FileList.react.js';
 import {datatype_labels, label_properties} from '../utils/datalabels.js';
 
 class RepoData extends React.Component {
+
+  componentWillUpdate(nextProps, nextState){
+    FileActions.fetchFileNames(nextProps.uuid)
+  }
 
   getLabels(datatype, dataTypeInfo){
     var labels = datatype_labels[datatype];

@@ -1,5 +1,4 @@
 import React from 'react';
-// import  Router from 'react-router',
 import {Router, browserHistory } from 'react-router';
 
 class About extends React.Component {
@@ -15,7 +14,7 @@ class About extends React.Component {
   render() {
     return (
       <div>
-		    <a id="forkme_banner" href="https://github.com/janelia-flyem/dvid">View DVID on GitHub</a>
+        <a id="forkme_banner" href="https://github.com/janelia-flyem/dvid">View DVID on GitHub</a>
         <ol className="breadcrumb">
           <li><a onClick={this.back.bind(this)}>Back</a></li>
         </ol>
