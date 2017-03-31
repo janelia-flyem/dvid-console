@@ -2,14 +2,27 @@ import React from 'react';
 import AltContainer from 'alt-container';
 import ServerStore from '../stores/ServerStore';
 import ServerActions from '../actions/ServerActions';
+import ErrorActions from '../actions/ErrorActions';
 import RepoTabs from '../lite-components/RepoTabs.react.js';
 
 class LiteRepo extends React.Component {
 
+  componentDidMount(){
+    this.onUpdate();
+  }
+  componentDidUpdate(preProps, prevState){
+    this.onUpdate();
+  }
 
-  componentWillReceiveProps(nextProps){
-    if(nextProps.repos && (!this.props.repo || this.props.repo.Root != nextProps.repo.Root)){
-      ServerActions.fetch({uuid: this.props.urlRootID});
+  onUpdate(){
+    if(this.props.repos){
+      var rootId = ServerStore.getRepoRootFromAlias(this.props.repos, this.props.alias)
+      if(!rootId){
+        ErrorActions.update(`Repo named "${this.props.alias}" not found`)
+      }
+      else if(!ServerStore.IdInCurrentRepo(this.props.repo, rootId)){
+        ServerActions.fetch({uuid: rootId});
+      }
     }
   }
 
@@ -47,19 +60,16 @@ class LiteRepo extends React.Component {
 
 }
 
+LiteRepo.contextTypes = {
+  router: React.PropTypes.func.isRequired
+};
 
 class ConnectedLiteRepo extends React.Component {
-
-  componentWillMount() {
-    if(ServerStore.state.repos){
-      ServerActions.fetch({uuid: this.props.params.uuid});
-    }
-  }
 
   render() {
     return (
       <AltContainer store={ServerStore}>
-        <LiteRepo  urlRootID={this.props.params.uuid}/>
+        <LiteRepo alias={this.props.params.alias}/>
       </AltContainer>
     );
   }

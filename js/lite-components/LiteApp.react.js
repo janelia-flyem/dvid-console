@@ -51,7 +51,7 @@ var routes = (
     <DefaultRoute handler={NoRepo}/>
     <Route name="about" path="about" handler={About}/>
     <Route name="newrepo"  path="repo"  handler={NewRepo}/>
-    <Route name="repo"  path="repo/:uuid"  handler={LiteRepo}/>
+    <Route name="repo"  path="repo/:alias"  handler={LiteRepo}/>
     <NotFoundRoute handler={NotFound}/>
   </Route>
 );

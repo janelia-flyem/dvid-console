@@ -4,6 +4,9 @@ class ServerActions {
   update(data) {
     this.dispatch(data);
   }
+  clearRepo(){
+    this.dispatch();
+  }
   fetchStats() {
     this.dispatch();
   }

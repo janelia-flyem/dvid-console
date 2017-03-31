@@ -42,7 +42,6 @@ var NewRepo = React.createClass({
         alias: this.state.alias,
         description: this.state.desc,
         callback: function(res){
-          console.log(res);
           self.transitionTo('repo', {
             uuid : res.root,
           });

@@ -6,15 +6,20 @@ import {Router} from 'react-router';
 
 class RepoSelect extends React.Component {
 
+  componentWillMount(props){
+    ServerActions.fetch();
+  }
+
   handleSelect(event){
-    var repoid = event.target.value;
-    //update the store
-    ServerActions.fetch({'uuid': repoid})
+    var alias = event.target.value;
     //update the route
-    if(repoid){
-      this.context.router.transitionTo('/repo/' + repoid);
+    if(alias){
+      //LiteRepo will update the store
+      this.context.router.transitionTo('/repo/' + alias);
+
     }
     else{
+      //Home updates store
       this.context.router.transitionTo('/');
     }
   }
@@ -25,16 +30,19 @@ class RepoSelect extends React.Component {
       repo_list = ServerStore.sortRepolist(this.props.repos)
 
     }
+    var alias = this.context.router.getCurrentParams().alias;
+    if(alias === undefined){
+      alias = "";
+    }
     return (
       <div className="form-group">
-
           <label>Repo </label>
-          <select className="form-control" onChange={this.handleSelect.bind(this)} value={this.props.repo && this.props.repo.Root}>
+          <select className="form-control" onChange={this.handleSelect.bind(this)} value={alias}>
             <option value="">Please select a repo</option>
             {
               repo_list.map((repo, i) => {
 
-                return <option key={repo.Alias} value={repo.Root}>{repo.Alias}</option>;
+                return <option key={repo.Alias} value={repo.Alias}>{repo.Alias}</option>;
               })
             }
           </select>
@@ -51,10 +59,6 @@ RepoSelect.contextTypes = {
 
 
 class ConnectedRepoSelect extends React.Component {
-
-  componentWillMount() {
-      ServerActions.fetch();
-  }
 
   render() {
     return (

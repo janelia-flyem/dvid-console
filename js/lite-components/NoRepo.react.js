@@ -1,6 +1,10 @@
 import React from 'react';
+import ServerActions from '../actions/ServerActions';
 
 class NoRepo extends React.Component {
+  componentWillMount(){
+      ServerActions.clearRepo();
+  }
 
   render(){
     return (

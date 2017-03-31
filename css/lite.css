@@ -77,3 +77,7 @@ span.unlocked{
 .data-icon{
     color: #6b97b8
 }
+
+.fixed_alert{
+    top:5em;
+}

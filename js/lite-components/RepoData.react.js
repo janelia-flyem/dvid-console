@@ -39,7 +39,7 @@ class RepoData extends React.Component {
     })
 
     var data = <p><em>No data found.</em></p>
-    if(raw_data){
+    if(raw_data.length !== 0){
        data = (
           <ul className="list-group">
             {raw_data.map( instance => {
@@ -51,6 +51,7 @@ class RepoData extends React.Component {
             );})}
           </ul>);
     }
+
     return (
       <div className='row'>
         <div className='col-xs-6'>

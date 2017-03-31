@@ -24,6 +24,11 @@ class ServerStore {
 
   }
   
+  onClearRepo(){
+    this.repo = null;
+    this.uuid = null;
+  }
+
   onUpdate() {
     var self = this;
   }
@@ -98,42 +103,19 @@ class ServerStore {
     });
   }
 
-  getFullUUIDinRepo(repo, shortuuid){
-    if(repo === null){
-      return false;
-    }
-    for(var id in this.repo.DAG.Nodes){
-      if(RegExp('^' + shortuuid).test(id)){
-        //no need to update repo--uuid is in current repo
-        return id;
-      }
-    }
-    return null;
-  }
-
   onFetch(opts) {
     var self = this;
 
     if (opts && opts.uuid) {
       //check if a repo update is necessary
       //saves load time when navigating a repo
-      var idInRepo = this.getFullUUIDinRepo(self.repo, opts.uuid)
-      if(idInRepo  && opts.norefresh){
-            //no need to update repo--uuid is in current repo
-            self.uuid = idInRepo;
-            if (opts.callback) {
-              opts.callback(this.repo);
-            }
-            return true;
-      
-      }
 
       self.api.repo({
         uuid: opts.uuid,
         endpoint: 'info',
         callback: function(data) {
           self.repo = data;
-          self.uuid = self.getFullUUIDinRepo(self.repo, opts.uuid);
+          self.uuid = ServerStore.getFullUUIDinRepo(self.repo, opts.uuid);
 
           if (opts.callback) {
             opts.callback(data);
@@ -294,6 +276,45 @@ class ServerStore {
 
       return repo_list;
   }
+
+  static getFullUUIDinRepo(repo, shortuuid){
+    if(repo === null){
+      return false;
+    }
+    for(var id in repo.DAG.Nodes){
+      if(RegExp('^' + shortuuid).test(id)){
+        //no need to update repo--uuid is in current repo
+        return id;
+      }
+    }
+    return null;
+  }
+
+  static IdInCurrentRepo(repo, uuid){
+
+    var idInRepo = ServerStore.getFullUUIDinRepo(repo, uuid)
+    if(idInRepo){
+      return true;
+    }
+    return false;
+  }
+
+  static getRepoAliasFromRoot(repos, rootId){
+     if (repos.hasOwnProperty(rootId)) {
+      return repos[rootId].Alias;
+    }
+    return '';
+  }
+
+  static getRepoRootFromAlias(repos, alias){
+    for (var key in repos) {
+      if (repos[key].Alias === alias) {
+        return key;
+      }
+    }
+    return null;
+  }
+
 }
 
 module.exports = (alt.createStore(ServerStore));
