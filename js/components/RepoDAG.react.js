@@ -1,15 +1,17 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import Router from 'react-router';
 import {OverlayTrigger} from 'react-bootstrap';
-import {Modal, Tooltip} from 'react-bootstrap';
 import d3 from 'd3';
 import dagreD3 from 'dagre-d3';
 import LogActions from '../actions/LogActions';
 import ServerActions from '../actions/ServerActions';
 import ServerStore from '../stores/ServerStore';
-import AltContainer from 'alt/AltContainer';
+import AltContainer from 'alt-container';
 import ErrorActions from '../actions/ErrorActions';
-import moment from 'moment';
+import ModalActions from '../actions/ModalActions';
+import {ModalTypes} from '../stores/ModalStore';
+import DAGmodals from '../components/DAGmodals.react.js';
 
 var dag, elementHolderLayer, svgBackground;
 
@@ -17,26 +19,20 @@ var dag, elementHolderLayer, svgBackground;
 var RepoDAGDisplay  = React.createClass({
   mixins: [Router.Navigation],
 
-  getInitialState: function() {
-    return {showCommitModal: false};
-  },
-
   componentDidMount: function() {
     this.drawGraph(this.props);
-  },
-
-  shouldComponentUpdate: function(nextProps, nextState) {
-    //avoid over-aggressive rendering of component that was causing perf issues
-    //note that we will need to update this when adding further props to the component
-    return  nextProps.types !== this.props.types ||
-            nextProps.repoMasterSeg !== this.props.repoMasterSeg ||
-            nextProps.repoMasterUuuid !== this.props.repoMasterUuuid ||
-            nextProps.uuid !== this.props.uuid ||
-            nextState.showCommitModal !== this.state.showCommitModal;
+    $(ReactDOM.findDOMNode(this)).tooltip({
+      selector: '[data-toggle="tooltip"]'
+    });
   },
 
   componentWillUpdate: function(props) {
     this.drawGraph(props);
+  },
+
+  componentWillUnmount() {
+    var tips = $(ReactDOM.findDOMNode(this)).find('[data-toggle="tooltip"]');
+    tips.tooltip('destroy');
   },
 
   drawGraph: function(props) {
@@ -99,7 +95,11 @@ var RepoDAGDisplay  = React.createClass({
         var log = '';
         if (n.Log.length) log = (n.Log);
         var nodeclass = "";
-        if (n.Locked) nodeclass = "type-locked";
+        if (n.Locked){
+          nodeclass = "type-locked";
+        }else{
+          nodeclass = "type-unlocked";
+        }
         var note = null;
         if (n.Note) note = n.Note;
 
@@ -198,6 +198,7 @@ var RepoDAGDisplay  = React.createClass({
   },
 
   update: function(){
+    var admin = this.context.router.getCurrentQuery().admin;
     var self = this;
     //renders the dag
     var dagreRenderer = new dagreD3.render();
@@ -237,22 +238,34 @@ var RepoDAGDisplay  = React.createClass({
       .append("svg:foreignObject")
       .attr("width", 20)
       .attr("height", 20)
-      .attr("y", "-25px")
-      .attr("x", "-45px")
+      .attr("y", "-34px")
+      .attr("x", "-35px")
       .append("xhtml:span")
-      .attr("class", "lock glyphicon glyphicon-lock");
+      .attr("class", "lock fa fa-lock");
 
-    //add element to hold expand/collapse icon
-    elementHolderLayer.selectAll("g.node.collapsed, g.node.expanded")
+    if(admin || this.props.lite){
+      //add branch icons
+      elementHolderLayer.selectAll("g.node.type-locked")
+        .append("svg:foreignObject")
+        .attr("width", 20)
+        .attr("height", 20)
+        .attr("y", "-34px")
+        .attr("x", "-45px")
+        .append("xhtml:span")
+        .attr("class", "branch fa fa-code-fork");
+    }
+
+    elementHolderLayer.selectAll("g.node.type-unlocked")
       .append("svg:foreignObject")
       .attr("width", 20)
       .attr("height", 20)
-      .attr("y", "2px")
-      .attr("x", "-10px")
+      .attr("y", "-34px")
+      .attr("x", "-40px")
       .append("xhtml:span")
-      .attr("class", "toggle-expand-icon");
+      .attr("class", "unlocked fa fa-unlock");
 
-    elementHolderLayer.selectAll("g.node")
+
+    elementHolderLayer.selectAll("g.node rect")
       .on("mouseenter", function (v) {
         if (dag.node(v).note) {
           tooltip.style("visibility", "visible");
@@ -275,22 +288,56 @@ var RepoDAGDisplay  = React.createClass({
           self.toggleChildren(v);
         }else{
           //loads the node's data into page (updates tile viewer link)
-          self.transitionTo('repo', {
-              uuid: dag.node(v).uuid
-          });
-/*          var nextUuid = dag.node(v).uuid;
-          ServerActions.fetch({
-            uuid: nextUuid,
-            callback: function(data){
-              self.transitionTo('repo', {
-                uuid: nextUuid
-              });
-            }//need to bind?
-          });
-*/
-
+          self.navigateDAG(dag.node(v).uuid)
         }
       });
+
+    //add commit and branch actions, if allowed
+    if(admin || this.props.lite){
+      elementHolderLayer.selectAll("g.node foreignObject span")
+        //want to add tooltips?
+        .on("mouseenter", function (v) {
+        })
+        .on("mouseleave", function (v) {
+        })
+        .on("mousemove", function() {
+        })
+        .on("click", function (v) {
+          // prevents a drag from being registered as a click
+          if (d3.event.defaultPrevented) return;
+          else{
+            //loads the node's data into page 
+            var uuid = dag.node(v).uuid;
+            var classList = d3.event.path[0].classList;
+
+            //figure out what action to take based on the icon class
+            var action = null;
+            if (classList.contains("unlocked")){
+              action = ModalActions.openModal.bind({}, 
+                {
+                  MODAL_TYPE: ModalTypes.COMMIT_MODAL, 
+                  uuid: uuid
+                });
+            }
+            else if(classList.contains("branch")){
+              action = ModalActions.openModal.bind({},  
+                {
+                  MODAL_TYPE: ModalTypes.BRANCH_MODAL, 
+                  uuid: uuid
+                });
+            }
+
+            //determine if a navigation is also needed
+            if(self.uuid !== uuid){
+              //it's not the current node--navigate to the node
+              self.navigateDAG(uuid, action)
+            }
+            else if (action){
+              action();
+            }
+          }
+        });
+    }
 
     var nodeDrag = d3.behavior.drag()
         .on("drag", function (d) {
@@ -321,6 +368,21 @@ var RepoDAGDisplay  = React.createClass({
     //add lock icons
     nodeDrag.call(elementHolderLayer.selectAll("g.node"));
     edgeDrag.call(elementHolderLayer.selectAll("g.edgePath"));
+  },
+  navigateDAG: function(uuid, callback){
+    if(uuid !== this.props.uuid){
+      if(this.props.lite){
+        ServerActions.fetch({uuid:uuid});
+      }
+      else{
+        this.transitionTo('repo', {
+            uuid: uuid
+        });
+      }
+    }
+    if(callback){
+      setTimeout(function(){callback();}, 0)
+    }
   },
   scrollToCurrent: function(){
     ErrorActions.clear()
@@ -388,6 +450,8 @@ var RepoDAGDisplay  = React.createClass({
     // work out the offsets needed to center the graph
     var xCenterOffset = Math.abs(((dag.graph().width * scale) - $("svg").width()) / 2);
     var yCenterOffset = Math.abs(((dag.graph().height * scale) - $("svg").height()) / 2);
+    //nudge the y down a bit
+    yCenterOffset += 5;
     // apply the scale and translation in one go.
     elementHolderLayer.attr("transform", "matrix(" + scale + ", 0, 0, " + scale + ", " + xCenterOffset + "," + yCenterOffset + ")");
     // Set up zoom support
@@ -458,103 +522,46 @@ var RepoDAGDisplay  = React.createClass({
     document.body.appendChild(e);
   },
 
-  branchNode: function(event) {
-    ServerActions.branchNode({
-      uuid: this.props.uuid
-    });
-  },
-
-  openCommitModal: function(e) {
-    e.preventDefault();
-    this.setState({showCommitModal: true});
-  },
-
-  closeCommitModal: function(e) {
-    e.preventDefault();
-    this.setState({showCommitModal: false});
-  },
-
-  commitNode: function(event) {
-    var self = this;
-    event.preventDefault();
-
-    var logEntry = React.findDOMNode(this.refs.commitLog).value;
-
-    //update the log with the new log message.
-    var currentLog = self.props.repo.DAG.Nodes[self.props.uuid].Log;
-    // need a timestamp. It will be close to the server one, but off by a little
-    // until the page reloads and fetches the data from the server. Important?
-    var now = moment();
-    currentLog.unshift(now.format() + '  ' + logEntry);
-
-    ServerActions.commitNode({
-      uuid: this.props.uuid,
-      entry: logEntry,
-      callback: function(data) {
-        self.setState({showCommitModal: false});
-          LogActions.update({log: currentLog, uuid: self.props.uuid});
-      },
-      error: function(err) {
-        self.setState({showCommitModal: false});
-        if (/locked node/.test(err)) {
-          ErrorActions.update(new Error('You can not lock a node that is locked already.'));
-        } else {
-          ErrorActions.update(err);
-        }
-      }
-    });
-  },
-
   render: function() {
-    var admin = this.context.router.getCurrentQuery().admin;
-    var branchButton = '';
-    var commitButton = '';
     var scrollToMasterBtn = '';
-    if (admin) {
-      branchButton = <button className="btn btn-default" onClick={this.branchNode}>Branch</button>
-      commitButton = <button className="btn btn-default" onClick={this.openCommitModal}>Commit</button>
-    }
-    if (this.props.repoMasterUuuid){
-      scrollToMasterBtn = <button className="btn btn-default master" onClick={this.scrollToMaster}>Scroll to master</button>;
-    }
-    var modalTitle = <Modal.Title>Commit (lock) node {this.props.uuid}.</Modal.Title>;
 
+    if (this.props.repoMasterUuuid){
+      scrollToMasterBtn = <button className="btn btn-default master pull-right" data-container="body" data-toggle="tooltip" data-placement="bottom" 
+                title="scroll to master node" onClick={this.scrollToMaster}><span className="fa fa-crosshairs"></span></button>
+    }
+    
+    var headline = <h4>Version History</h4>;
+    var dagHeight = "500"
+    if(this.props.lite==="1"){
+      dagHeight = "400"
+      headline = <div id='dag-header'><h5>Version History</h5></div>;
+    }
     return (
       <div>
-        <h4>Version DAG <small> (Nodes with thick borders are locked.)</small></h4>
-        <p>Mouse over a node to view the log. <kbd>Shift</kbd> + Click on <span className="collapsed toggle-expand-icon"></span>/<span className="expanded toggle-expand-icon"></span> nodes to expand/collapse. Click nodes to navigate to repo.</p>
-        <div>
-          <button className="btn btn-default" onClick={this.downloadSVGHandler}>Download DAG as SVG</button>
-          <button className="btn btn-default" onClick={this.fitDAG}>Fit graph to window</button>
-          <button className="btn btn-default" onClick={this.expandAndScale}>Expand graph</button>
-          <button className="btn btn-default" onClick={this.collapseAndScale}>Collapse graph</button>
-          {scrollToMasterBtn}
-          <button className="btn btn-default current" onClick={this.scrollToCurrent}>Scroll to current</button>
-
-          {branchButton}
-          {commitButton}
-
-          <Modal show={this.state.showCommitModal} onHide={this.closeCommitModal}>
-            <Modal.Header closeButton>
-            {modalTitle}
-            </Modal.Header>
-            <Modal.Body>
-              <div className="form-group">
-                <input className="form-control" type="text" ref="commitLog" name="commit_log" id="commit_log" placeholder="Enter your new log message"/>
-              </div>
-              <div className="form-group">
-                <button onClick={this.commitNode} className="btn btn-primary">Commit</button>
-              </div>
-            </Modal.Body>
-          </Modal>
-
-
-        </div>
+        {headline}
         <div className="dag">
           <div>
-            <svg width="100%" height="500" ref="DAGimage"><g/></svg>
+            <div className='dag-tools'>
+              <button className="btn btn-default pull-right" data-container="body" data-toggle="tooltip" data-placement="bottom" 
+                title="Help" onClick={ModalActions.openModal.bind({}, 
+                {
+                  MODAL_TYPE: ModalTypes.DAGINFO_MODAL, 
+                  uuid: null
+                })}><span className="fa fa-question"></span></button>
+              <button className="btn btn-default pull-right" data-container="body" data-toggle="tooltip" data-placement="bottom" 
+                title="fit graph to window" onClick={this.fitDAG}>
+                <span className="fa fa-arrows-alt"></span>
+              </button>
+              <button className="btn btn-default current pull-right" data-container="body" data-toggle="tooltip" data-placement="bottom" 
+                title="scroll to current node" onClick={this.scrollToCurrent}><span className="fa fa-crosshairs"></span></button>
+              {scrollToMasterBtn}
+              <button className="btn btn-default pull-right" data-container="body" data-toggle="tooltip" data-placement="bottom" 
+                title="download version history as svg" onClick={this.downloadSVGHandler}><span className="fa fa-download"></span></button>
+            </div>
+            <svg width="100%" height={dagHeight} ref="DAGimage"><g/></svg>
           </div>
         </div>
+        <DAGmodals/>
       </div>
     );
   }
@@ -566,7 +573,7 @@ class RepoDAG extends React.Component {
   render() {
     return (
       <AltContainer store={ServerStore}>
-        <RepoDAGDisplay uuid={this.props.uuid}/>
+        <RepoDAGDisplay uuid={this.props.uuid} lite={this.props.lite}/>
       </AltContainer>
     );
   }

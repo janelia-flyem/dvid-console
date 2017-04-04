@@ -23,6 +23,11 @@ class ServerStore {
    });
 
   }
+  
+  onClearRepo(){
+    this.repo = null;
+    this.uuid = null;
+  }
 
   onUpdate() {
     var self = this;
@@ -35,6 +40,9 @@ class ServerStore {
       endpoint: 'branch',
       method:'POST',
       callback: function(data) {
+        if(opts.callback){
+          opts.callback()
+        }
         self.onFetch(opts);
       },
       error: function(err) {
@@ -64,7 +72,12 @@ class ServerStore {
       endpoint: 'commit',
       payload: JSON.stringify(payload),
       method:'POST',
-      callback: cb,
+      callback: function(data) {
+        if(cb){
+          cb();
+        }
+        self.onFetch(opts);
+      },
       error: err
     });
   }
@@ -98,42 +111,19 @@ class ServerStore {
     });
   }
 
-  getFullUUIDinRepo(repo, shortuuid){
-    if(repo === null){
-      return false;
-    }
-    for(var id in this.repo.DAG.Nodes){
-      if(RegExp('^' + shortuuid).test(id)){
-        //no need to update repo--uuid is in current repo
-        return id;
-      }
-    }
-    return null;
-  }
-
   onFetch(opts) {
     var self = this;
 
     if (opts && opts.uuid) {
       //check if a repo update is necessary
       //saves load time when navigating a repo
-      var idInRepo = this.getFullUUIDinRepo(self.repo, opts.uuid)
-      if(idInRepo){
-            //no need to update repo--uuid is in current repo
-            self.uuid = idInRepo;
-            if (opts.callback) {
-              opts.callback(this.repo);
-            }
-            return true;
-      
-      }
 
       self.api.repo({
         uuid: opts.uuid,
         endpoint: 'info',
         callback: function(data) {
           self.repo = data;
-          self.uuid = self.getFullUUIDinRepo(self.repo, opts.uuid);
+          self.uuid = ServerStore.getFullUUIDinRepo(self.repo, opts.uuid);
 
           if (opts.callback) {
             opts.callback(data);
@@ -152,6 +142,9 @@ class ServerStore {
           self.uuid = null;
           self.repos = data;
           self.emitChange();
+          if (opts && opts.callback) {
+            opts.callback(data);
+          }
         },
         error: function (err) {
           ErrorActions.update(err);
@@ -270,6 +263,67 @@ class ServerStore {
 
   onUpdateUuuid(data){
     this.uuid = data.uuid;
+  }
+
+
+
+  /** utility functions **/
+
+  static sortRepolist(repos){
+    let repo_list = []
+      for (var key in repos) {
+        if (repos.hasOwnProperty(key)) {
+          if (repos[key]) {
+            repo_list.push(repos[key]);
+          }
+        }
+      }
+
+      // sort the list so that the repositories with the most recent
+      // changes are at the top.
+      repo_list.sort(function(a,b){
+        return new Date(b.Updated) - new Date(a.Updated);
+      });
+
+      return repo_list;
+  }
+
+  static getFullUUIDinRepo(repo, shortuuid){
+    if(repo === null){
+      return false;
+    }
+    for(var id in repo.DAG.Nodes){
+      if(RegExp('^' + shortuuid).test(id)){
+        //no need to update repo--uuid is in current repo
+        return id;
+      }
+    }
+    return null;
+  }
+
+  static IdInCurrentRepo(repo, uuid){
+
+    var idInRepo = ServerStore.getFullUUIDinRepo(repo, uuid)
+    if(idInRepo){
+      return true;
+    }
+    return false;
+  }
+
+  static getRepoAliasFromRoot(repos, rootId){
+     if (repos.hasOwnProperty(rootId)) {
+      return repos[rootId].Alias;
+    }
+    return '';
+  }
+
+  static getRepoRootFromAlias(repos, alias){
+    for (var key in repos) {
+      if (repos[key].Alias === alias) {
+        return key;
+      }
+    }
+    return null;
   }
 
 }

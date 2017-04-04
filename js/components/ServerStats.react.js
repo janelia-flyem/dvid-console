@@ -2,7 +2,7 @@ import React from 'react';
 import Router from 'react-router';
 import ServerActions from '../actions/ServerActions';
 import ServerStore from '../stores/ServerStore';
-import AltContainer from 'alt/AltContainer';
+import AltContainer from 'alt-container';
 import {Glyphicon} from 'react-bootstrap';
 import pjson from '../../package.json';
 

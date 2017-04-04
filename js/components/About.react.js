@@ -1,26 +1,22 @@
-var React = require('react'),
-  Router = require('react-router'),
-  Link   = Router.Link;
+import React from 'react';
+import {Router, browserHistory } from 'react-router';
 
+class About extends React.Component {
 
-var About = React.createClass({
-  getInitialState: function() {
-    return {
-    };
-  },
+  back(){
+    var hasHistory = this.context.router.goBack()
+    if(!hasHistory){
+      this.context.router.transitionTo('/')
+    }
 
-  // this gets called after the fist time the component is loaded into the page.
-  componentDidMount: function () {
-    return;
-  },
+  }
 
-  render: function () {
+  render() {
     return (
-      <div>
-		    <a id="forkme_banner" href="https://github.com/janelia-flyem/dvid">View DVID on GitHub</a>
+      <div className='container'><div className='row'>
+        <a id="forkme_banner" href="https://github.com/janelia-flyem/dvid">View DVID on GitHub</a>
         <ol className="breadcrumb">
-          <li><Link to="consoleapp">Home</Link></li>
-          <li className="active">Admin</li>
+          <li><a onClick={this.back.bind(this)}>Back</a></li>
         </ol>
         <h3>Welcome to DVID</h3>
 
@@ -40,9 +36,13 @@ var About = React.createClass({
         <p>DVID is released under the <a href="http://janelia-flyem.github.com/janelia_farm_license.html">Janelia
         Farm license</a>, a <a href="http://en.wikipedia.org/wiki/BSD_license#3-clause_license_.28.22New_BSD_License.22_or_.22Modified_BSD_License.22.29"> 3-clause
         BSD license</a>.</p>
-      </div>
+      </div></div>
     );
   }
-});
+}
+
+About.contextTypes = {
+  router: React.PropTypes.func.isRequired
+};
 
 module.exports = About;

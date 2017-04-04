@@ -54,7 +54,7 @@ var routes = (
 );
 
 Router.run(routes, function (Handler) {
-  React.render(<Handler/>, document.body);
+  React.render(<Handler/>, document.getElementById('dvid-console-app'));
 });
 
 module.exports = ConsoleApp;

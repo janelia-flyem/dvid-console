@@ -2,7 +2,7 @@ import React from 'react';
 import {Alert} from 'react-bootstrap';
 import ErrorStore from '../stores/ErrorStore';
 import ErrorActions from '../actions/ErrorActions';
-import AltContainer from 'alt/AltContainer';
+import AltContainer from 'alt-container';
 
 class ErrorMessage extends React.Component {
   render() {
