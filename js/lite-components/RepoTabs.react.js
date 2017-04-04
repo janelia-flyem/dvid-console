@@ -24,16 +24,12 @@ class RepoTabs extends React.Component {
       if(this.state.activeTab === "1"){
         tabcontent = <RepoData/>
         panelHeader = (<div><span className="fa fa-database"></span> Data</div>);
-      }else{
-        tabcontent= "TODO: Viewer selection";
-        panelHeader = (<div><span className="fa fa-picture-o"></span> Select data to view</div>);
       }
       return (
         <div>
           <div className='container-fluid'><div className='row'>
             <Nav className="RepoTabs" bsStyle="tabs" activeKey={this.state.activeTab} onSelect={this.handleSelect.bind(this)}>
               <NavItem eventKey="1" title="Data">Data</NavItem>
-              <NavItem eventKey="2" title="Viewer">Viewer</NavItem>
             </Nav>
           </div></div>
           
