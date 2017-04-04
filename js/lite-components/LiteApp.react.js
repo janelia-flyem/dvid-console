@@ -15,6 +15,7 @@ import ErrorActions from '../actions/ErrorActions';
 import ServerStore from '../stores/ServerStore';
 import NoRepo from './NoRepo.react.js';
 import LiteRepo from './LiteRepo.react.js';
+import LiteHome from './LiteHome.react.js';
 import RepoSelect from './RepoSelect.react.js';
 import ReactDOM from 'react-dom';
 
@@ -31,13 +32,13 @@ class LiteApp extends React.Component {
           <div className="navbar-left">
             <form className="navbar-form">
               <RepoSelect/>
-              <Link to="newrepo" id="repoAddBtn" className="navbar-brand pull-right"><span className="glyphicon glyphicon-plus-sign" aria-hidden="true"></span></Link>
-
             </form>
           </div>
         </Nav>
-        <div className="container-fluid">
-          <Error/>
+        <div>
+          <div className="container">
+            <Error/>
+          </div>
           {/* this is the important part for route handling */}
           <RouteHandler dvid={ServerStore.state.api}/>
         </div>
@@ -48,7 +49,7 @@ class LiteApp extends React.Component {
 
 var routes = (
   <Route name="consoleapp" path="/" handler={LiteApp}>
-    <DefaultRoute handler={NoRepo}/>
+    <DefaultRoute handler={LiteHome}/>
     <Route name="about" path="about" handler={About}/>
     <Route name="newrepo"  path="repo"  handler={NewRepo}/>
     <Route name="repo"  path="repo/:alias"  handler={LiteRepo}/>

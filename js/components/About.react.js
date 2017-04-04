@@ -13,7 +13,7 @@ class About extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className='container'><div className='row'>
         <a id="forkme_banner" href="https://github.com/janelia-flyem/dvid">View DVID on GitHub</a>
         <ol className="breadcrumb">
           <li><a onClick={this.back.bind(this)}>Back</a></li>
@@ -36,7 +36,7 @@ class About extends React.Component {
         <p>DVID is released under the <a href="http://janelia-flyem.github.com/janelia_farm_license.html">Janelia
         Farm license</a>, a <a href="http://en.wikipedia.org/wiki/BSD_license#3-clause_license_.28.22New_BSD_License.22_or_.22Modified_BSD_License.22.29"> 3-clause
         BSD license</a>.</p>
-      </div>
+      </div></div>
     );
   }
 }

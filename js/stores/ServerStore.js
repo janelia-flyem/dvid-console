@@ -142,6 +142,9 @@ class ServerStore {
           self.uuid = null;
           self.repos = data;
           self.emitChange();
+          if (opts && opts.callback) {
+            opts.callback(data);
+          }
         },
         error: function (err) {
           ErrorActions.update(err);

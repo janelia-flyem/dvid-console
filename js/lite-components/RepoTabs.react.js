@@ -30,27 +30,30 @@ class RepoTabs extends React.Component {
       }
       return (
         <div>
+          <div className='container-fluid'><div className='row'>
+            <Nav className="RepoTabs" bsStyle="tabs" activeKey={this.state.activeTab} onSelect={this.handleSelect.bind(this)}>
+              <NavItem eventKey="1" title="Data">Data</NavItem>
+              <NavItem eventKey="2" title="Viewer">Viewer</NavItem>
+            </Nav>
+          </div></div>
           
-          <Nav className="RepoTabs" bsStyle="tabs" activeKey={this.state.activeTab} onSelect={this.handleSelect.bind(this)}>
-            <NavItem eventKey="1" title="Data">Data</NavItem>
-            <NavItem eventKey="2" title="Viewer">Viewer</NavItem>
-          </Nav>
-          
-          <div className='lite-padding'>
-            <div className='col-xs-12'>
-              <div className="panel panel-default">
-                <div className="panel-heading">
-                  <h3 className="panel-title">{panelHeader}</h3>
+          <div className='container'><div className='row'>
+            <div className='lite-padding'>
+              <div className='col-xs-12'>
+                <div className="panel panel-default">
+                  <div className="panel-heading">
+                    <h3 className="panel-title">{panelHeader}</h3>
+                  </div>
+                  <div className="panel-body">
+                    {tabcontent}
+                  </div>
                 </div>
-                <div className="panel-body">
-                  {tabcontent}
                 </div>
+              <div className='col-xs-12'>
+                {this.state.activeTab === "1" && <ReadMe/>}
               </div>
-              </div>
-            <div className='col-xs-12'>
-              {this.state.activeTab === "1" && <ReadMe/>}
             </div>
-          </div>
+          </div></div>
         </div>
       );
   }

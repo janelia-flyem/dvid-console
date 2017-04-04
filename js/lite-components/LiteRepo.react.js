@@ -38,20 +38,18 @@ class LiteRepo extends React.Component {
     }
     return (
       <div >
-      
-        <div className='row'>
-          <div className="col-xs-12 ">
-              <div className="repo-title">
-              <h4 > {this.props.repo.Alias}</h4>
-              <span className="pull-right"> {this.props.repo.Description}</span>
-              </div>
+        <div className='container-fluid'>
+          <div className='row'>
+            <div className="col-xs-12 ">
+                <div className="repo-title">
+                <h4 > {this.props.repo.Alias}</h4>
+                <span className="pull-right"> {this.props.repo.Description}</span>
+                </div>
+            </div>
           </div>
-
         </div>
 
-        <div className='row'>
           <RepoTabs/>
-        </div>
 
       </div>
 

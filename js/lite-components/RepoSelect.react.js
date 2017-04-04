@@ -38,7 +38,7 @@ class RepoSelect extends React.Component {
       <div className="form-group">
           <label>Repo </label>
           <select className="form-control" onChange={this.handleSelect.bind(this)} value={alias}>
-            <option value="">Please select a repo</option>
+            <option value="">Select a repository</option>
             {
               repo_list.map((repo, i) => {
 
