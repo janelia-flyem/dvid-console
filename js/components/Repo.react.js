@@ -26,7 +26,7 @@ class RepoDetails extends React.Component {
 
           <div className="row">
             <div className="col-sm-12">
-              <RepoDAG repo={repo} uuid={this.props.uuid}/>
+              {/*<RepoDAG repo={repo} uuid={this.props.uuid}/>*/}
             </div>
           </div>
 

@@ -1,4 +1,5 @@
 var React       = require('react'),
+  ReactDOM      = require('react-dom'),
   Router        = require('react-router'),
   Route         = Router.Route,
   NotFoundRoute = Router.NotFoundRoute,
@@ -54,7 +55,7 @@ var routes = (
 );
 
 Router.run(routes, function (Handler) {
-  React.render(<Handler/>, document.getElementById('dvid-console-app'));
+  ReactDOM.render(<Handler/>, document.getElementById('dvid-console-app'));
 });
 
 module.exports = ConsoleApp;

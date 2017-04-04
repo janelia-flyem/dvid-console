@@ -22,47 +22,95 @@ module.exports = function(grunt) {
       options: {
         banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
       },
-      build: {
+      full: {
         src: 'build/bundle.js',
         dest: 'build/bundle.min.js'
+      },
+      lite:{
+        src: 'build/bundle-lite.js',
+        dest: 'build/bundle-lite.min.js'
       }
     },
     copy: {
-      main: {
-        expand: true,
-        cwd: 'build/',
-        src: '*.min.js',
-        flatten: true,
-        dest: 'dist/js/'
+      full:{
+        files: [
+          {
+            expand: true,
+            cwd: 'build/',
+            src: '*.min.js',
+            flatten: true,
+            dest: 'dist/js/'
+          },
+          {
+            expand: true,
+            src: 'js/vendor/**',
+            dest: 'dist/'
+          },
+          {
+            src: 'css/**',
+            dest: 'dist/',
+            expand: true
+          },
+          {
+            src: 'fonts/**',
+            dest: 'dist/',
+            expand: true
+          },
+          {
+            src: 'img/**',
+            dest: 'dist/',
+            expand: true
+          },
+          {
+            src: 'neuroglancer/**',
+            dest: 'dist',
+            expand: true
+          },
+          {
+            src: 'dist.html',
+            dest: 'dist/index.html'
+          }
+        ]
       },
-      vendor: {
-        expand: true,
-        src: 'js/vendor/**',
-        dest: 'dist/'
-      },
-      css: {
-        src: 'css/**',
-        dest: 'dist/',
-        expand: true
-      },
-      fonts: {
-        src: 'fonts/**',
-        dest: 'dist/',
-        expand: true
-      },
-      img: {
-        src: 'img/**',
-        dest: 'dist/',
-        expand: true
-      },
-      neuroglancer: {
-        src: 'neuroglancer/**',
-        dest: 'dist',
-        expand: true
-      },
-      index: {
-        src: 'dist.html',
-        dest: 'dist/index.html'
+      lite: {
+        files:[
+          {
+            expand: true,
+            cwd: 'build/',
+            src: '*.min.js',
+            flatten: true,
+            dest: 'lite-dist/js/'
+          },
+          {
+            expand: true,
+            src: 'js/vendor/**',
+            dest: 'lite-dist/'
+          },
+          {
+            src: 'css/**',
+            dest: 'lite-dist/',
+            expand: true
+          },
+          {
+            src: 'fonts/**',
+            dest: 'lite-dist/',
+            expand: true
+          },
+          {
+            src: 'img/**',
+            dest: 'lite-dist/',
+            expand: true
+          },
+          {
+            src: 'neuroglancer/**',
+            dest: 'lite-dist',
+            expand: true
+          },
+          {
+            src: 'dist-lite.html',
+            dest: 'lite-dist/index.html'
+          }
+        ]
       }
     },
     compress: {
@@ -131,8 +179,8 @@ module.exports = function(grunt) {
   // Default task(s).
   grunt.registerTask('default', ['browserify:full']);
   grunt.registerTask('dev', ['browserify:full', 'connect:full', 'watch'])
-  grunt.registerTask('dist', ['browserify:full','uglify','copy', 'compress']);
+  grunt.registerTask('dist', ['browserify:full','uglify:full','copy:full', 'compress']);
   //lite builds
   grunt.registerTask('dev-lite', ['browserify:lite', 'connect:lite', 'watchlite'])
-  // grunt.registerTask('dist-lite', ['browserify','uglify','copy', 'compress']);
+  grunt.registerTask('dist-lite', ['browserify:lite','uglify:lite','copy:lite']);
 };
