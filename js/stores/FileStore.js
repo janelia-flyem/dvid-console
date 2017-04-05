@@ -20,6 +20,11 @@ class FileStore {
         uuid: opts.uuid,
         endpoint: '.files/keys',
         callback: function(data) {
+          //sort the filenames
+          data = data.sort(function(a, b){
+            return a.localeCompare(b);
+          })
+
           if (opts.callback) {
             opts.callback(data);
           }
