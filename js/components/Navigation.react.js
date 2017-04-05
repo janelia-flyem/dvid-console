@@ -1,15 +1,15 @@
-var React = require('react'),
-  Router = require('react-router'),
-  Link   = Router.Link;
+import React from 'react';
+import {Link} from 'react-router';
+import {wording} from '../utils/config.js';
+
 
 var Navigation = React.createClass({
-  mixins: [Router.State],
   render: function () {
     return (
 <nav className="navbar navbar-default">
   <div className="container-fluid">
     <div className="navbar-header">
-      <Link to="consoleapp" className="navbar-brand">DVID</Link>
+      <Link to="consoleapp" className="navbar-brand">{wording.app_name}</Link>
     </div>
 
       {this.props.children}

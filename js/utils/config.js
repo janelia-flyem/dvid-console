@@ -65,3 +65,16 @@ exports.baseUrl = function() {
   }
   return root;
 };
+
+//cheap language switches for lite vs. full app
+var wording;
+if(window.DVID_LITE){
+  wording = {
+    app_name: 'DICED + DVID'
+  }
+}else{
+  wording = {
+    app_name: 'DVID'
+  }
+}
+exports.wording = wording;

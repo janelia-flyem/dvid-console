@@ -75,7 +75,7 @@ var NewRepo = React.createClass({
           <div className="col-xs-6">
             <h3>Create a New Repository</h3>
             <form onSubmit={this.handleRepoCreate}>
-              <Input type="text" value={this.state.alias} label="Alias" ref="alias" onChange={this.handleAliasChange}/>
+              <Input type="text" value={this.state.alias} label="Name" ref="alias" onChange={this.handleAliasChange}/>
               <Input type="text" value={this.state.desc} label="Description" ref="desc" onChange={this.handleDescChange}/>
               <Button type='submit' bsStyle='primary' >Create</Button>
               <Link to="consoleapp" className="btn btn-default" activeClassName="current">Cancel</Link>

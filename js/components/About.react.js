@@ -1,5 +1,6 @@
 import React from 'react';
 import {Router, browserHistory } from 'react-router';
+import {wording} from '../utils/config.js';
 
 class About extends React.Component {
 
@@ -14,11 +15,12 @@ class About extends React.Component {
   render() {
     return (
       <div className='container'><div className='row'>
-        <a id="forkme_banner" href="https://github.com/janelia-flyem/dvid">View DVID on GitHub</a>
+
+        {this.props.lite && <a id="forkme_banner" href="https://github.com/janelia-flyem/dvid">View DVID on GitHub</a>}
         <ol className="breadcrumb">
           <li><a onClick={this.back.bind(this)}>Back</a></li>
         </ol>
-        <h3>Welcome to DVID</h3>
+        <h3>Welcome to {wording.app_name}</h3>
 
         <p>DVID documentation can be found on <a href="https://github.com/janelia-flyem/dvid">github</a> as
           well as the automatically updated <a href="https://godoc.org/github.com/janelia-flyem/dvid">Go Doc
