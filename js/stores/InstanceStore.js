@@ -1,17 +1,69 @@
 import alt from '../alt';
 import InstanceActions from '../actions/InstanceActions';
+import dvid from 'dvid';
+import config from '../utils/config';
 
 class InstanceStore {
+
   constructor() {
     this.bindActions(InstanceActions);
     this.nodeRestrict = true;
+    this.neuroglancerInstances = null;
+    this.restrictions = null;
+    this.api = dvid.connect({host: config.host, port: config.port, username: 'dvidconsole', application: 'dvidconsole'});
   }
+
   onToggle() {
     if (this.nodeRestrict === true) {
       this.nodeRestrict = false;
     }
     else {
       this.nodeRestrict = true;
+    }
+  }
+
+  onFetchMeta(opts){
+    /**
+     * Fetches neuroglancer and restrictions key values
+     * from the meta endpoint. Makes two separate http requests
+     */
+    var self = this;
+
+    function fetchNeuroglancerInstances(opts){
+      self.api.node({
+        uuid: opts.uuid,
+        endpoint: '.meta/key/neuroglancer',
+        callback: function(data) {
+          self.neuroglancerInstances = data;
+          self.emitChange();
+          if (opts.callback) {
+            opts.callback(data);
+          }
+        },
+        error: err
+      });
+    }
+
+
+    function err(error){
+        self.neuroglancerInstances = null;
+        self.restrictions = null;
+        self.emitChange();
+        if (opts.error) {
+          opts.error(err);
+        }
+    }
+
+    if (opts && opts.uuid) {
+      self.api.node({
+        uuid: opts.uuid,
+        endpoint: '.meta/key/restrictions',
+        callback: function(data) {
+          self.restrictions = data;
+          fetchNeuroglancerInstances(opts)
+        },
+        error: err
+      });
     }
   }
 
