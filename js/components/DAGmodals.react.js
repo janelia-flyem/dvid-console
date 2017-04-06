@@ -7,7 +7,7 @@ import {ModalTypes} from '../stores/ModalStore';
 import ModalActions from '../actions/ModalActions';
 import ServerActions from '../actions/ServerActions';
 import ServerStore from '../stores/ServerStore'
-import ErrorActions from '../actions/ServerActions';
+import ErrorActions from '../actions/ErrorActions';
 import LogActions from '../actions/LogActions';
 import moment from 'moment';
 

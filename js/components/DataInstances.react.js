@@ -43,7 +43,7 @@ class DataInstanceList extends React.Component {
     }
 
     if (this.props.ServerStore.uuid && this.props.ServerStore.repo.DataInstances) {
-      var [sorted, parents] = InstanceStore.dataInstancesForInstance(this.props.ServerStore, this.props.InstanceStore.nodeRestrict);
+      var [sorted, parents] = InstanceStore.dataInstancesForNode(this.props.ServerStore, this.props.InstanceStore.nodeRestrict);
 
 
       // if onlyShowDefault is set, at this point show only those instances that 

@@ -68,7 +68,7 @@ class InstanceStore {
   }
 
 /* Instance utility functions */
-  static dataInstancesForInstance(ServerStore, nodeRestrict){
+  static dataInstancesForNode(ServerStore, nodeRestrict){
       var instances = ServerStore.repo.DataInstances;
       var chosen_node = ServerStore.uuid;
       var dagNodes = ServerStore.repo.DAG.Nodes;

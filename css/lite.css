@@ -42,6 +42,11 @@
     padding-left:40px;
 }
 
+.data-footer{
+    padding-bottom: 12px;
+    margin-top: -10px;
+}
+
 .dag div{
     border-radius: 3px;
 }
