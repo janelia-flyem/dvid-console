@@ -22,14 +22,40 @@ class InstanceStore {
     }
   }
 
-  onFetchMeta(opts){
+  onFetchRestrictions(opts){
     /**
      * Fetches neuroglancer and restrictions key values
      * from the meta endpoint. Makes two separate http requests
      */
     var self = this;
 
-    function fetchNeuroglancerInstances(opts){
+    if (opts && opts.uuid) {
+      self.api.node({
+        uuid: opts.uuid,
+        endpoint: '.meta/key/restrictions',
+        callback: function(data) {
+          self.restrictions = data;
+          self.emitChange();
+          if (opts.callback) {
+            opts.callback(data);
+          }
+        },
+        error: function (err){
+          self.restrictions = [];
+          self.emitChange();
+          if (opts.error) {
+            opts.error(err);
+          }
+        }
+      });
+    }
+  }
+
+  onFetchNeuroglancer(opts){
+    var self = this;
+    
+    if (opts && opts.uuid) {
+
       self.api.node({
         uuid: opts.uuid,
         endpoint: '.meta/key/neuroglancer',
@@ -40,31 +66,26 @@ class InstanceStore {
             opts.callback(data);
           }
         },
-        error: err
-      });
-    }
-
-
-    function err(error){
-        self.neuroglancerInstances = null;
-        self.restrictions = null;
-        self.emitChange();
-        if (opts.error) {
-          opts.error(err);
+        error: function (error){
+          self.neuroglancerInstances = [];
+          self.emitChange();
+          if (opts.error) {
+            opts.error(err);
+          }
         }
-    }
-
-    if (opts && opts.uuid) {
-      self.api.node({
-        uuid: opts.uuid,
-        endpoint: '.meta/key/restrictions',
-        callback: function(data) {
-          self.restrictions = data;
-          fetchNeuroglancerInstances(opts)
-        },
-        error: err
       });
     }
+  }
+
+  onClearMeta(){
+    this.neuroglancerInstances = null;
+    this.restrictions = null;
+  }
+
+  onSetMetaEmpty(){
+    this.neuroglancerInstances = null;
+    this.restrictions = null;
+
   }
 
 /* Instance utility functions */

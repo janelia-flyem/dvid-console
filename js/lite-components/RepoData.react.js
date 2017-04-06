@@ -17,18 +17,28 @@ class RepoData extends React.Component {
     const repo = this.props.ServerStore.repo;
 
     if(repo && repo.DataInstances.hasOwnProperty('.meta')){
-        InstanceActions.fetchMeta({uuid: this.props.ServerStore.uuid});
+      InstanceActions.fetchNeuroglancer({uuid: this.props.ServerStore.uuid});
+      InstanceActions.fetchRestrictions({uuid: this.props.ServerStore.uuid});
+    }
+    else if(repo){
+      InstanceActions.setMetaEmpty();
     }
   }
 
   componentWillUpdate(nextProps, nextState){
     if(nextProps.ServerStore.uuid !== this.props.ServerStore.uuid){
+      InstanceActions.clearMeta();
       const repo = nextProps.ServerStore.repo;
 
       if(repo && repo.DataInstances.hasOwnProperty('.meta')){
-        InstanceActions.fetchMeta({uuid: nextProps.ServerStore.uuid});
+        InstanceActions.fetchNeuroglancer({uuid: nextProps.ServerStore.uuid});
+        InstanceActions.fetchRestrictions({uuid: nextProps.ServerStore.uuid});
+      }
+      else if(repo){
+        InstanceActions.setMetaEmpty();
       }
     }
+
   }
 
   openNeuroG(e){
@@ -78,8 +88,10 @@ class RepoData extends React.Component {
     var hasMeta = dataInstances.some(function(el){
       return el[0] === ".meta";
     });
+    const allMetaFetched = this.props.InstanceStore.restrictions !== null && 
+      this.props.InstanceStore.neuroglancerInstances !== null;
 
-    if(repo && (!hasMeta || this.props.InstanceStore.restrictions !== null)){
+    if(repo && (!hasMeta || allMetaFetched)){
       //retrictions have been fetched, so it's ok to render the data instances
 
       //filter out the restricted section

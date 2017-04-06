@@ -13,6 +13,12 @@ class FileList extends React.Component {
     }
   }
 
+  componentWillUpdate(nextProps, nextState){
+    if(nextProps.hasFiles && this.props.uuid !== nextProps.uuid){
+      FileActions.fetchFileNames(nextProps.uuid)
+    }
+  }
+
   render(){
     if(!this.props.hasFiles || this.props.filenames === []){
       return (

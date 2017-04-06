@@ -4,8 +4,17 @@ class InstanceActions {
   toggle() {
     this.dispatch();
   }
-  fetchMeta(opts){
+  fetchRestrictions(opts){
     this.dispatch(opts)
+  }
+  fetchNeuroglancer(opts){
+    this.dispatch(opts)
+  }
+  clearMeta(){
+    this.dispatch()
+  }
+  setMetaEmpty(){
+    this.dispatch()
   }
 }
 
