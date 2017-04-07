@@ -16,6 +16,14 @@ class LiteHome extends React.Component {
     }
 
     let repo_list = ServerStore.sortRepolist(this.props.repos);
+    let newRepoButton = '';
+    let serverInfo = this.props.serverInfo;
+
+    if(serverInfo !== null && (!serverInfo.Mode || serverInfo.Mode!=='read only')){
+      newRepoButton = (<Link to="newrepo" id="repoAddBtn" className="btn btn-success">
+          <span className="fa fa-plus" aria-hidden="true"></span> New
+        </Link>);
+    }
 
     return (
       <div className='container'>
@@ -25,8 +33,7 @@ class LiteHome extends React.Component {
             <h3>Repositories</h3>
           </div>
           <div className="col-xs-3">
-            <Link to="newrepo" id="repoAddBtn" className="btn btn-success">
-            <span className="fa fa-plus" aria-hidden="true"></span> New</Link>
+            {newRepoButton}
           </div>
 
         </div>

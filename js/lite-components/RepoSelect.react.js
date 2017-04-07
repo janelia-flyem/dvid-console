@@ -8,6 +8,7 @@ class RepoSelect extends React.Component {
 
   componentWillMount(props){
     ServerActions.fetch();
+    ServerActions.fetchServerInfo();
   }
 
   handleSelect(event){

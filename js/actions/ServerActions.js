@@ -32,7 +32,10 @@ class ServerActions {
     this.dispatch(data);
   }
   updateUuuid(data) {
-    this.dispatch(data)
+    this.dispatch(data);
+  }
+  fetchServerInfo(data){
+    this.dispatch(data);
   }
 }
 

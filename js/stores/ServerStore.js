@@ -5,6 +5,7 @@ import dvid from 'dvid';
 import config from '../utils/config';
 
 class ServerStore {
+
   constructor() {
     this.bindActions(ServerActions);
     this.repos = null;
@@ -17,6 +18,7 @@ class ServerStore {
     this.repoMasterBranchHist = null;
     this.repoDefaultInstances = null;
     this.types = null;
+    this.serverInfo = null;
 
    this.exportPublicMethods({
      getLoad: this.getLoad
@@ -213,7 +215,26 @@ class ServerStore {
 
   }
 
+  onFetchServerInfo(opts){
+    var self = this;
 
+    self.api.serverInfo({
+      callback: function(data) {
+
+        self.serverInfo = data;
+        self.emitChange();
+        if (opts && opts.callback) {
+          opts.callback(data);
+        }
+      },
+      error: function (err) {
+        if(opts.error){
+          opts.error(err);
+        }
+      }
+    });
+    return false;
+  }
 
   onAddLog(data) {
     var self = this,
