@@ -14,31 +14,37 @@ import {datatype_labels, label_properties} from '../utils/datalabels.js';
 class RepoData extends React.Component {
 
   componentWillMount(){
-    const repo = this.props.ServerStore.repo;
-
-    if(repo && repo.DataInstances.hasOwnProperty('.meta')){
-      InstanceActions.fetchNeuroglancer({uuid: this.props.ServerStore.uuid});
-      InstanceActions.fetchRestrictions({uuid: this.props.ServerStore.uuid});
-    }
-    else if(repo){
-      InstanceActions.setMetaEmpty();
-    }
+    this.updateMeta(this.props)
   }
 
   componentWillUpdate(nextProps, nextState){
     if(nextProps.ServerStore.uuid !== this.props.ServerStore.uuid){
-      InstanceActions.clearMeta();
-      const repo = nextProps.ServerStore.repo;
+      this.updateMeta(nextProps);
+    }
+  }
 
-      if(repo && repo.DataInstances.hasOwnProperty('.meta')){
-        InstanceActions.fetchNeuroglancer({uuid: nextProps.ServerStore.uuid});
-        InstanceActions.fetchRestrictions({uuid: nextProps.ServerStore.uuid});
+  updateMeta(props){
+    const repo = props.ServerStore.repo;
+
+    if(repo && repo.DataInstances.hasOwnProperty('.meta')){
+      //make sure the meta property exists on this node
+      const [dataInstances, parents] = InstanceStore.dataInstancesForNode(
+        props.ServerStore, true
+      );
+      const hasMeta = dataInstances.some(function(el){
+        return el[0] === ".meta";
+      });
+      if(hasMeta){
+        InstanceActions.fetchNeuroglancer({uuid: props.ServerStore.uuid});
+        InstanceActions.fetchRestrictions({uuid: props.ServerStore.uuid});
       }
-      else if(repo){
+      else{
         InstanceActions.setMetaEmpty();
       }
     }
-
+    else if(repo){
+      InstanceActions.setMetaEmpty();
+    }
   }
 
   openNeuroG(e){
@@ -84,7 +90,6 @@ class RepoData extends React.Component {
     let [dataInstances, parents] = InstanceStore.dataInstancesForNode(
       this.props.ServerStore, true
     );
-    
     var hasMeta = dataInstances.some(function(el){
       return el[0] === ".meta";
     });
@@ -111,16 +116,13 @@ class RepoData extends React.Component {
 
       if(raw_data.length !== 0){
 
-        //set value to let DataInstance know if this instance can be viewed in neuroglancer
-        if(this.props.InstanceStore.neuroglancerInstances){
-          raw_data = raw_data.map(function(instance){
-            instance[1].Base.useNeuroG = this.props.InstanceStore.neuroglancerInstances.includes(instance[0]);
-            return instance;
-          }.bind(this));
-        }
-
         //only show the neuroglancer button if there are some instances that can be viewed in neuroglancer
-        if(raw_data.some(function(instance){return instance[1].Base.useNeuroG})){
+        const someInstanceUsesNeuroG = this.props.InstanceStore.neuroglancerInstances && 
+          raw_data.some(function(neuroglancerInstances, instance){
+            return neuroglancerInstances.includes(instance[0]);
+          }.bind({}, this.props.InstanceStore.neuroglancerInstances));
+
+        if(someInstanceUsesNeuroG){
           neuroGButton = (<button className='btn btn-success btn-xs pull-right' onClick={this.openNeuroG.bind(this)}>
             <span className="fa fa-picture-o"></span> View Selected
           </button>);
@@ -130,8 +132,9 @@ class RepoData extends React.Component {
           <div>
             <ul className="list-group" ref='instanceList'>
               {raw_data.map( instance => {
-
-                return <DataInstance instance={instance} hasMeta={hasMeta} key={instance[0]} />;
+                //can be opened in neuroglancer
+                const useNeuroG = this.props.InstanceStore.neuroglancerInstances && this.props.InstanceStore.neuroglancerInstances.includes(instance[0]);
+                return <DataInstance useNeuroG={useNeuroG} instance={instance} hasMeta={hasMeta} uuid={this.props.ServerStore.uuid} key={instance[0]} />;
               })}
             </ul>
             <div className='data-footer'>
@@ -167,7 +170,59 @@ class RepoData extends React.Component {
 }
 
 class DataInstance extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      ndims: null
+    }
+  }
+
+  componentWillMount(){
+    if(this.props.hasMeta){
+      this.getNdims(this.props)
+    }
+  }
+
+  componentWillUpdate(nextProps){
+    if(this.props.uuid !== nextProps.uuid){
+      if(nextProps.hasMeta){
+        this.getNdims(nextProps);
+      }
+      else{
+        this.setState({ndims:null})
+      }
+    }
+  }
+
+  /**
+   * Get the ndims for an instance
+   * /api/node/a0325/.meta/key/instance:alt-segmetation:b66b5635ee334419b12d83476f61e1b4
+   */
+  getNdims(props){
+    const api = InstanceStore.state.api;
+    const dataUuid = props.instance[1].Base.DataUUID;
+    const name = props.instance[0];
+
+    api.node({
+        uuid: props.uuid,
+        endpoint: `.meta/key/instance:${name}:${dataUuid}`,
+        callback: function(data) {
+          if(data.numdims){
+            this.setState({ndims: data.numdims});
+          }
+        }.bind(this),
+        error: function(data){
+          this.setState({ndims: null});
+        }.bind(this)
+    });
+  }
+
   getLabels(datatype, dataTypeInfo){
+    let nDimsLabel = '';
+    if(this.state.ndims){
+       nDimsLabel = <span className='badge' style={{backgroundColor:'#202f9f'}}>{`${this.state.ndims}d`}</span>;
+    }
+
     var labels = datatype_labels[datatype];
     return (
       <div className='data-badge-container'>
@@ -177,6 +232,7 @@ class DataInstance extends React.Component {
             return <span key={label} className='badge' style={{backgroundColor:color}}>{label}</span>;
           })
         }
+        {nDimsLabel}
       </div>
     );
     
@@ -184,7 +240,7 @@ class DataInstance extends React.Component {
 
   render(){
     let neuroGCheckBox = '';
-    if(this.props.instance[1].Base.useNeuroG){
+    if(this.props.useNeuroG){
       neuroGCheckBox = <input className="pull-right" type="checkbox" id={this.props.instance[0]}/>;
     }
     return (

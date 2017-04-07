@@ -53,7 +53,7 @@ class InstanceStore {
 
   onFetchNeuroglancer(opts){
     var self = this;
-    
+
     if (opts && opts.uuid) {
 
       self.api.node({
@@ -89,6 +89,7 @@ class InstanceStore {
   }
 
 /* Instance utility functions */
+
   static dataInstancesForNode(ServerStore, nodeRestrict){
       var instances = ServerStore.repo.DataInstances;
       var chosen_node = ServerStore.uuid;
