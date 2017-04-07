@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import AltContainer from 'alt-container';
 import ServerStore from '../stores/ServerStore';
 import ServerActions from '../actions/ServerActions';
@@ -9,6 +10,18 @@ class RepoSelect extends React.Component {
   componentWillMount(props){
     ServerActions.fetch();
     ServerActions.fetchServerInfo();
+    ServerActions.fetchDataSource();
+  }
+
+  componentDidMount() {
+    $(ReactDOM.findDOMNode(this)).tooltip({
+      selector: '[data-toggle="tooltip"]'
+    });
+  }
+
+  componentWillUnmount() {
+    var tips = $(ReactDOM.findDOMNode(this)).find('[data-toggle="tooltip"]');
+    tips.tooltip('destroy');
   }
 
   handleSelect(event){
@@ -26,6 +39,20 @@ class RepoSelect extends React.Component {
   }
 
   render(){
+    let dataSource = '';
+    if(this.props.dataSource){
+      dataSource = (
+        <div className="form-group diced-data-source">
+          <label>Data Source:</label> 
+          <div type='text' className="form-control" readOnly>{this.props.dataSource}</div>
+          <a href='https://github.com/janelia-flyem/diced/blob/master/README.md#accessing-fly-em-public-data' 
+            target='blank' className="btn btn-default" data-container="body" data-toggle="tooltip" data-placement="bottom" 
+            title="instructions to access data">
+            <span className='fa fa-external-link'></span> Get Data
+          </a>
+        </div>
+      );
+    }
     var repo_list = []
     if(this.props.repos){
       repo_list = ServerStore.sortRepolist(this.props.repos)
@@ -47,7 +74,7 @@ class RepoSelect extends React.Component {
               })
             }
           </select>
-
+          {dataSource}
       </div>
     );
   }

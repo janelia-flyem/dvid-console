@@ -19,6 +19,7 @@ class ServerStore {
     this.repoDefaultInstances = null;
     this.types = null;
     this.serverInfo = null;
+    this.dataSource = null;
 
    this.exportPublicMethods({
      getLoad: this.getLoad
@@ -234,6 +235,24 @@ class ServerStore {
       }
     });
     return false;
+  }
+
+  onFetchDataSource(opts){
+    const url = this.api.createUrl('api/server/note');
+    fetch(url)
+      .then(function(response){
+        if(response.ok) {
+          return response.json();
+        }
+      })
+      .then(function(json){
+        this.dataSource = json.source;
+        this.emitChange();
+      }.bind(this))
+      .catch(function(error){
+        this.dataSource = null;
+        this.emitChange();
+      }.bind(this))
   }
 
   onAddLog(data) {

@@ -37,6 +37,9 @@ class ServerActions {
   fetchServerInfo(data){
     this.dispatch(data);
   }
+  fetchDataSource(data){
+    this.dispatch(data);
+  }
 }
 
 module.exports = (alt.createActions(ServerActions));
