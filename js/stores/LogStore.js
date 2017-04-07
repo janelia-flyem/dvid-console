@@ -28,4 +28,4 @@ class LogStore {
   }
 }
 
-module.exports = (alt.createStore(LogStore));
+module.exports = (alt.createStore(LogStore,'LogStore'));

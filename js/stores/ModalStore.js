@@ -33,4 +33,4 @@ class ModalStore {
   }
 }
 
-export default (alt.createStore(ModalStore));
+export default (alt.createStore(ModalStore,'ModalStore'));

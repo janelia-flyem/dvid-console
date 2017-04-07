@@ -26,7 +26,7 @@ class ServerStore {
    });
 
   }
-  
+
   onClearRepo(){
     this.repo = null;
     this.uuid = null;
@@ -368,4 +368,4 @@ class ServerStore {
 
 }
 
-module.exports = (alt.createStore(ServerStore));
+module.exports = (alt.createStore(ServerStore, 'ServerStore'));

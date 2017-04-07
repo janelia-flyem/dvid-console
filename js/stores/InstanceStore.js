@@ -164,4 +164,4 @@ class InstanceStore {
   } 
 }
 
-module.exports = (alt.createStore(InstanceStore));
+module.exports = (alt.createStore(InstanceStore, 'InstanceStore'));

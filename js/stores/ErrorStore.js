@@ -15,4 +15,4 @@ class ErrorStore {
   }
 }
 
-module.exports = (alt.createStore(ErrorStore));
+module.exports = (alt.createStore(ErrorStore, 'ErrorStore'));

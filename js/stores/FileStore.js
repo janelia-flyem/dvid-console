@@ -69,4 +69,4 @@ class FileStore {
 
 }
 
-module.exports = (alt.createStore(FileStore));
+module.exports = (alt.createStore(FileStore, 'FileStore'));
