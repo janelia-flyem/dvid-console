@@ -49,6 +49,7 @@ class InstanceStore {
         }
       });
     }
+    return false;
   }
 
   onFetchNeuroglancer(opts){
@@ -75,6 +76,7 @@ class InstanceStore {
         }
       });
     }
+    return false;
   }
 
   onClearMeta(){
@@ -83,9 +85,8 @@ class InstanceStore {
   }
 
   onSetMetaEmpty(){
-    this.neuroglancerInstances = null;
-    this.restrictions = null;
-
+    this.neuroglancerInstances = '';
+    this.restrictions = '';
   }
 
 /* Instance utility functions */

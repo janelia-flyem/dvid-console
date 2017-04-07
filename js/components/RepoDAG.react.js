@@ -6,6 +6,7 @@ import d3 from 'd3';
 import dagreD3 from 'dagre-d3';
 import LogActions from '../actions/LogActions';
 import ServerActions from '../actions/ServerActions';
+import InstanceActions from '../actions/InstanceActions';
 import ServerStore from '../stores/ServerStore';
 import AltContainer from 'alt-container';
 import ErrorActions from '../actions/ErrorActions';
@@ -372,6 +373,7 @@ var RepoDAGDisplay  = React.createClass({
   navigateDAG: function(uuid, callback){
     if(uuid !== this.props.uuid){
       if(this.props.lite){
+        InstanceActions.clearMeta();
         ServerActions.fetch({uuid:uuid});
       }
       else{
@@ -385,7 +387,7 @@ var RepoDAGDisplay  = React.createClass({
     }
   },
   scrollToCurrent: function(){
-    ErrorActions.clear()
+    ErrorActions.clear.defer()
     this.expandGraph()
 
     var success = this.scrollToNode(".node.current");

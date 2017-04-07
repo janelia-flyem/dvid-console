@@ -181,17 +181,7 @@ class DataInstance extends React.Component {
     if(this.props.hasMeta){
       this.getNdims(this.props)
     }
-  }
 
-  componentWillUpdate(nextProps){
-    if(this.props.uuid !== nextProps.uuid){
-      if(nextProps.hasMeta){
-        this.getNdims(nextProps);
-      }
-      else{
-        this.setState({ndims:null})
-      }
-    }
   }
 
   /**

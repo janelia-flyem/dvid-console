@@ -2,13 +2,17 @@ import React from 'react';
 import AltContainer from 'alt-container';
 import ServerStore from '../stores/ServerStore';
 import ServerActions from '../actions/ServerActions';
+import InstanceActions from '../actions/InstanceActions';
 import ErrorActions from '../actions/ErrorActions';
 import {Link} from 'react-router';
 import moment from 'moment';
 
 class LiteHome extends React.Component {
 
-
+  componentWillMount(){
+    ServerActions.fetch();
+    InstanceActions.clearMeta();
+  }
 
   render(){
     if(this.props.repos === null){

@@ -2,25 +2,27 @@ import React from 'react';
 import AltContainer from 'alt-container';
 import ServerStore from '../stores/ServerStore';
 import ServerActions from '../actions/ServerActions';
+import InstanceActions from '../actions/InstanceActions';
 import ErrorActions from '../actions/ErrorActions';
 import RepoTabs from '../lite-components/RepoTabs.react.js';
 
 class LiteRepo extends React.Component {
 
   componentDidMount(){
-    this.onUpdate();
+    this.onUpdate(this.props);
   }
-  componentDidUpdate(preProps, prevState){
-    this.onUpdate();
+  componentWillUpdate(nextProps, nextState){
+    this.onUpdate(nextProps);
   }
 
-  onUpdate(){
-    if(this.props.repos){
-      var rootId = ServerStore.getRepoRootFromAlias(this.props.repos, this.props.alias)
+  onUpdate(props){
+    if(props.repos){
+      var rootId = ServerStore.getRepoRootFromAlias(props.repos, props.alias)
       if(!rootId){
         ErrorActions.update(`Repo named "${this.props.alias}" not found`)
       }
-      else if(!ServerStore.IdInCurrentRepo(this.props.repo, rootId)){
+      else if(!ServerStore.IdInCurrentRepo(props.repo, rootId)){
+        InstanceActions.clearMeta();
         ServerActions.fetch({uuid: rootId});
       }
     }
@@ -49,7 +51,7 @@ class LiteRepo extends React.Component {
           </div>
         </div>
 
-          <RepoTabs/>
+        <RepoTabs/>
 
       </div>
 
