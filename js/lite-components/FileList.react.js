@@ -35,7 +35,7 @@ class FileList extends React.Component {
           var download_link = `${config.baseUrl()}/api/node/${this.props.uuid}/.files/key/${name}`;
           return (
             <li className="list-group-item" key={i}>
-            <span className="fa fa-file-text-o"></span> <a href={download_link} download="{name}">{name}</a>
+            <span className="fa fa-file-text-o"></span> <a href={download_link} download={name}>{name}</a>
           </li>
           );
         })}
