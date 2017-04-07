@@ -31,12 +31,24 @@ var NewRepo = React.createClass({
   handleRepoCreate: function(e) {
     var self = this;
     e.preventDefault();
+
+    let aliases = [];
+
+    for(var key in ServerStore.state.repos){
+      if(ServerStore.state.repos[key] && ServerStore.state.repos[key].Alias){
+        aliases.push(ServerStore.state.repos[key].Alias.trim())
+      }
+    }
+
     // validate the input
     if (/^$/.test(this.state.alias)  ) {
-      ErrorActions.update('Please supply an alias for this repository');
+      ErrorActions.update('Please supply a name for this repository');
     }
     else if (/^$/.test(this.state.desc)) {
       ErrorActions.update('Please supply a simple description for this repository');
+    }
+    else if(aliases.includes(this.state.alias.trim())){
+      ErrorActions.update(`A repo named ${this.state.alias} already exists. Please choose a different name.`);
     }
     else {
       let callback = function(res){
