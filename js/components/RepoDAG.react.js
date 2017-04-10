@@ -545,7 +545,7 @@ var RepoDAGDisplay  = React.createClass({
           <div>
             <div className='dag-tools'>
               <button className="btn btn-default pull-right" data-container="body" data-toggle="tooltip" data-placement="bottom" 
-                title="Help" onClick={ModalActions.openModal.bind({}, 
+                title="help" onClick={ModalActions.openModal.bind({}, 
                 {
                   MODAL_TYPE: ModalTypes.DAGINFO_MODAL, 
                   uuid: null

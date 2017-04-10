@@ -96,6 +96,10 @@ span.unlocked{
     margin-left: 2px;
 }
 
+.extents{
+    cursor: pointer;
+}
+
 .data-icon{
     color: #6b97b8
 }
