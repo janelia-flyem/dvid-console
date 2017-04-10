@@ -76,6 +76,15 @@ class RepoData extends React.Component {
       return;
     }
 
+    //make sure segmentation layers come last, as these need to do so for proper alpha rendering
+    layers = layers.sort(function(a, b){
+      if(a.includes("segmentation")){
+        return 1;
+      }else{
+        return -1;
+      }
+    })
+
     var perspective = "%27perspectiveOrientation%27:[-0.12320884317159653_0.21754156053066254_-0.009492455050349236_0.9681965708732605]_%27perspectiveZoom%27:64";
     var glancer_url = `/neuroglancer/#!{%27layers%27:{${layers.join('_')}}_${perspective}}`;
 
