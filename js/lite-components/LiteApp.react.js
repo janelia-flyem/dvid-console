@@ -18,8 +18,19 @@ import LiteRepo from './LiteRepo.react.js';
 import LiteHome from './LiteHome.react.js';
 import RepoSelect from './RepoSelect.react.js';
 import ReactDOM from 'react-dom';
+import Clipboard from 'clipboard';
 
 class LiteApp extends React.Component {
+
+  componentWillMount(){
+    //instantiate clipboard, which uses event delegation to handle all
+    //copy btns
+    new Clipboard('.copy-btn',{
+      target: function(trigger) {
+          return trigger.nextElementSibling;
+      }
+    });
+  }
 
   componentWillReceiveProps() {
     ErrorActions.clear();

@@ -40,7 +40,7 @@ class RepoSelect extends React.Component {
 
   render(){
     let dataSource = '';
-    if(this.props.dataSource){
+    if(false){//this.props.dataSource){
       dataSource = (
         <div className="form-group diced-data-source">
           <label>Data Source:</label> 
@@ -50,6 +50,7 @@ class RepoSelect extends React.Component {
             title="instructions to access data">
             <span className='fa fa-external-link'></span> Get Data
           </a>
+          
         </div>
       );
     }

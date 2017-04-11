@@ -133,7 +133,7 @@ class RepoData extends React.Component {
 
         if(someInstanceUsesNeuroG){
           neuroGButton = (<button className='btn btn-success btn-xs pull-right' onClick={this.openNeuroG.bind(this)}>
-            <span className="fa fa-picture-o"></span> View Selected
+            <span className="fa fa-picture-o"></span> View selected
           </button>);
         }
 
@@ -148,6 +148,9 @@ class RepoData extends React.Component {
             </ul>
             <div className='data-footer'>
             {neuroGButton}
+            <a className='btn btn-success btn-xs pull-right' >
+              Get arrays <span className="caret"></span>
+            </a>
             </div>
           </div>
         );
