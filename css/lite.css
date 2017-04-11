@@ -6,9 +6,8 @@
     border: 0px;
 }
 
-.navbar-default select{
-    min-width: 300px;
-
+.navbar-form .form-control{
+    min-width: 200px;
 }
 
 .navbar-default .btn-default{
@@ -24,7 +23,8 @@
 }
 
 .navbar-default .navbar-form {
-    border-color: none;
+    border-top: 1px solid transparent;
+    border-bottom: 1px solid transparent;
 }
 
 .navbar-default .form-control {
@@ -43,7 +43,7 @@
 }
 
 .lite-padding {
-    padding: 40px;
+    padding-top: 40px;
 }
 
 .repo-title h4{

@@ -33,23 +33,32 @@ class RepoTabs extends React.Component {
             </Nav>
           </div></div>
           
-          <div className='container'><div className='row'>
-            <div className='lite-padding'>
-              <div className='col-xs-12'>
-                <div className="panel panel-default">
-                  <div className="panel-heading">
-                    <h3 className="panel-title">{panelHeader}</h3>
+          <div className='container'>
+            <div className='row'>
+              <div className='lite-padding'>
+                <div className="col-md-1 col-xs-hide"></div>
+                <div className='col-md-10 col-xs-12'>
+                  <div className="panel panel-default">
+                    <div className="panel-heading">
+                      <h3 className="panel-title">{panelHeader}</h3>
+                    </div>
+                    <div className="panel-body">
+                      {tabcontent}
+                    </div>
                   </div>
-                  <div className="panel-body">
-                    {tabcontent}
                   </div>
-                </div>
-                </div>
-              <div className='col-xs-12'>
-                {this.state.activeTab === "1" && <ReadMe/>}
+                <div className="col-md-1 col-xs-hide"></div>
               </div>
             </div>
-          </div></div>
+            <div className='row'>
+                <div className="col-md-1 col-xs-hide"></div>
+                <div className='col-md-10 col-xs-12'>
+                  {this.state.activeTab === "1" && <ReadMe/>}
+                </div>
+                <div className="col-md-1 col-xs-hide"></div>
+
+            </div>
+          </div>
         </div>
       );
   }

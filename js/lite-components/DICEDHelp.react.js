@@ -1,5 +1,5 @@
 import React from 'react';
-import Prism from 'prismjs';
+import {highlight} from 'prismjs';
 import 'prismjs/components/prism-python';
 
 class DICEDHelp extends React.Component{
@@ -67,9 +67,8 @@ class DICEDHelp extends React.Component{
 
 class CodeOutput extends React.Component{
   render(){
-    const highlightedCode = Prism.highlight(this.props.lines.join('\n'), Prism.languages.python);
+    const highlightedCode = highlight(this.props.lines.join('\n'), Prism.languages.python);
     const html = `<pre><code class="language-python">${highlightedCode}</code></pre>`;
-
     return(
       <div>
         <a className='copy-btn btn btn-default btn-xs'>

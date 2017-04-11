@@ -169,7 +169,7 @@ class RepoData extends React.Component {
 
     return (
       <div className='row'>
-        <div className='col-xs-6'>
+        <div className='col-md-6'>
           <h5><span className="fa fa-th-large data-icon" aria-hidden="true"></span> Arrays</h5>
           {data}
           
@@ -177,7 +177,7 @@ class RepoData extends React.Component {
           <FileList hasFiles={hasFiles} uuid={this.props.ServerStore.uuid}/>
           
         </div>
-        <div className='col-xs-6'>
+        <div className='col-md-6'>
           <RepoDAG lite="1"/>
         </div>
       </div>
