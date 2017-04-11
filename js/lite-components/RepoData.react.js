@@ -8,6 +8,7 @@ import ErrorActions from '../actions/ErrorActions';
 import RepoDAG from '../components/RepoDAG.react.js';
 import InstanceStore from '../stores/InstanceStore';
 import FileList from '../lite-components/FileList.react.js';
+import {DICEDHelp} from './DICEDHelp.react.js';
 import config from '../utils/config.js'
 import {datatype_labels, label_properties} from '../utils/datalabels.js';
 
@@ -136,6 +137,12 @@ class RepoData extends React.Component {
             <span className="fa fa-picture-o"></span> View selected
           </button>);
         }
+        const pythonHelpLines = [
+          `from diced import DicedStore`,
+          `store = DicedStore("${this.props.ServerStore.dataSource || '<data source>'}")`,
+          `repo = store.open_repo("${this.props.ServerStore.repo.Alias}", "${this.props.ServerStore.uuid}")`,
+          `my_array = repo.get_array("<array_name>")`
+        ];
 
         data = (
           <div>
@@ -148,9 +155,7 @@ class RepoData extends React.Component {
             </ul>
             <div className='data-footer'>
             {neuroGButton}
-            <a className='btn btn-success btn-xs pull-right' >
-              Get arrays <span className="caret"></span>
-            </a>
+            <DICEDHelp className='pull-right' btnText="Get arrays" lines={pythonHelpLines}/>
             </div>
           </div>
         );

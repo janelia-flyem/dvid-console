@@ -3,7 +3,7 @@ import AltContainer from 'alt-container';
 import ServerStore from '../stores/ServerStore';
 import ServerActions from '../actions/ServerActions';
 import InstanceActions from '../actions/InstanceActions';
-import DICEDHelp from './DICEDHelp.react.js';
+import {DICEDHelp, CodeOutput} from './DICEDHelp.react.js';
 import ErrorActions from '../actions/ErrorActions';
 import {Link} from 'react-router';
 import moment from 'moment';
@@ -48,8 +48,8 @@ class LiteHome extends React.Component {
               {repo_list.map( (repo) =>{
                 const last_updated = moment(repo.Updated).fromNow();
                 const codeLines = [`from diced import DicedStore`,
-                                   `store = DicedStore(${this.props.dataSource || '<data source>'})`,
-                                   `repo = store.open_repo(${repo.Alias || '<data source>'})`];
+                                   `store = DicedStore("${this.props.dataSource || '<data source>'}")`,
+                                   `repo = store.open_repo("${repo.Alias || '<data source>'}")`];
 
                 return (
                   <div className='repo-summary' key={repo.Alias}>
@@ -76,13 +76,7 @@ class LiteHome extends React.Component {
                 <div className="form-group">
                   <label>Data Source</label>
                   <div className='main-help'>
-
-                    <a className='copy-btn btn btn-default btn-xs'>
-
-                        <span className="fa fa-clipboard"></span>
-                    </a>
-
-                    <pre>{this.props.dataSource}</pre>
+                    <CodeOutput lines={[this.props.dataSource||'Not configured properly']}/>
                   </div>
 
                 </div>
@@ -98,23 +92,15 @@ class LiteHome extends React.Component {
                       <li>
                         Run DICED in Python
                           <div className='main-help'>
-                            <a className='copy-btn btn btn-default btn-xs'>
-                                <span className="fa fa-clipboard"></span>
-                            </a>
-                            <pre>
-                            {`from diced import DicedStore\nstore = DicedStore(${this.props.dataSource})\n`}
-                            </pre>
+                            <CodeOutput lines={[`from diced import DicedStore`,`store = DicedStore("${this.props.dataSource || '<data source>'}")`]}/>
                           </div>
                         </li>
                       <li>
                         Get data
                           <div className='main-help'>
-                          <a className='copy-btn btn btn-default btn-xs'>
-                              <span className="fa fa-clipboard"></span>
-                          </a>
-                          <pre>
-                          {`# open repo\nrepo = store.open_repo(<reponame>)\n# get array\nmy_array = repo.get_array(<array_name>)`}
-                          </pre>
+                          <CodeOutput lines={[`# open repo`,`repo = store.open_repo("<reponame>")`,
+                                              `# get array`,`my_array = repo.get_array("<array_name>")`]}/>
+                         
                           </div>
                       </li>
                     </ol>

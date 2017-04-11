@@ -1,4 +1,6 @@
 import React from 'react';
+import Prism from 'prismjs';
+import 'prismjs/components/prism-python';
 
 class DICEDHelp extends React.Component{
 
@@ -42,26 +44,45 @@ class DICEDHelp extends React.Component{
   }
 
   render(){
+    let btnText = "Access from Python";
+    if(this.props.btnText){
+      btnText = this.props.btnText;
+    }
 
     return (
-    <div className="DICEDHelp-container">
-      <a ref="helpBtn" className='btn btn-success btn-xs' tabIndex="0" role="button" data-toggle="popover"
-        data-placement="bottom" title="Execute in Python:" data-container="body" data-trigger="manual"
-        onClick={this.togglePopover.bind(this)}>
-        Access from Python <span className="caret"></span>
-      </a>
-      <div className='popover-content hide'>
-        <a className='copy-btn btn btn-default btn-xs'>
-            <span className="fa fa-clipboard"></span>
+      <div className={`DICEDHelp-container ${this.props.className}`}>
+        <a ref="helpBtn" className='btn btn-success btn-xs' tabIndex="0" role="button" data-toggle="popover"
+          data-placement="bottom" title="Execute in Python:" data-container="body" data-trigger="manual"
+          onClick={this.togglePopover.bind(this)}>
+          {btnText} <span className="caret"></span>
         </a>
-        <pre className="python-diced"> 
-        {this.props.lines.join('\n')}
-        </pre>
+        <div className='popover-content hide'>
+          <CodeOutput lines={this.props.lines}/>
+        </div>
       </div>
-    </div>
     );
   }
 
 }
 
-module.exports = DICEDHelp;
+class CodeOutput extends React.Component{
+  render(){
+    const highlightedCode = Prism.highlight(this.props.lines.join('\n'), Prism.languages.python);
+    const html = `<pre><code class="language-python">${highlightedCode}</code></pre>`;
+
+    return(
+      <div>
+        <a className='copy-btn btn btn-default btn-xs'>
+            <span className="fa fa-clipboard"></span>
+        </a>
+        <div className="python-diced" 
+          dangerouslySetInnerHTML={{__html: html}}>
+
+        </div>
+      </div>
+    );
+  }
+
+}
+
+export {DICEDHelp, CodeOutput};
