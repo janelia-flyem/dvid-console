@@ -25,16 +25,16 @@ class DICEDHelp extends React.Component{
     }.bind(this)
 
     $(this.refs.helpBtn).on('shown.bs.popover', function(e){
-      //make the body watch for a click event so we can hide the popover
+      //make the page watch for a click event so we can hide the popover
       //if user clicks outside of popover
-      $('body').on('click', closeOnBodyClick)
+      $('html').on('click', closeOnBodyClick)
 
     })
 
     $(this.refs.helpBtn).on('hidden.bs.popover', function(e){
-      //deregister the body click event
+      //deregister the page click event
       e.preventDefault()
-      $('body').off('click', closeOnBodyClick)
+      $('html').off('click', closeOnBodyClick)
     });
 
   }

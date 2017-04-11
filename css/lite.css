@@ -106,6 +106,10 @@ span.unlocked{
 .DICEDHelp-container{
     display: inline;
 }
+/* let pre handle overflow */
+code[class*="language"] {
+    overflow: visible; 
+}
 .data-badge-container{
     display: inline;
     margin-left: 2px;

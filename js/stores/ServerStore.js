@@ -246,7 +246,7 @@ class ServerStore {
         }
       })
       .then(function(json){
-        this.dataSource = json.source;
+        this.dataSource = null;//json.source;
         this.emitChange();
       }.bind(this))
       .catch(function(error){
