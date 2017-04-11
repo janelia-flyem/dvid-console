@@ -91,9 +91,29 @@ span.unlocked{
     padding-top: 10px;
 }
 
+.main-help{
+    position: relative;
+}
+
+.main-help .copy-btn{
+    right: 0px;
+    top: 5px;
+}
+
+.popover{
+    min-width: 400px;
+}
+.DICEDHelp-container{
+    display: inline;
+}
 .data-badge-container{
     display: inline;
     margin-left: 2px;
+}
+.copy-btn{
+    position: absolute;
+    right: 15px;
+    top: 45px;
 }
 
 .extents{
