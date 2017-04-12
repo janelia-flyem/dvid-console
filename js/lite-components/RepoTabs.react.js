@@ -33,7 +33,7 @@ class RepoTabs extends React.Component {
             </Nav>
           </div></div>
           
-          <div className='container'>
+          <div className='container-fluid'>
             <div className='row'>
               <div className='lite-padding'>
                 <div className="col-md-1 col-xs-hide"></div>

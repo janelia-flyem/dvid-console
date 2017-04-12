@@ -25,7 +25,7 @@ class LiteHome extends React.Component {
     let serverInfo = this.props.serverInfo;
 
     if(serverInfo !== null && (!serverInfo.Mode || serverInfo.Mode!=='read only')){
-      newRepoButton = (<Link to="newrepo" id="repoAddBtn" className="btn btn-success">
+      newRepoButton = (<Link to="newrepo" id="repoAddBtn" className="btn btn-success btn-sm pull-right">
           <span className="fa fa-plus" aria-hidden="true"></span> New
         </Link>);
     }
@@ -44,7 +44,7 @@ class LiteHome extends React.Component {
 
           <div className="col-md-7">
 
-              <h4>Repositories</h4>{newRepoButton}
+              <h4>Repositories {newRepoButton}</h4>
               {repo_list.map( (repo) =>{
                 const last_updated = moment(repo.Updated).fromNow();
                 const codeLines = [`from diced import DicedStore`,
@@ -76,7 +76,7 @@ class LiteHome extends React.Component {
                 <div className="form-group">
                   <label>Data Source</label>
                   <div className='main-help'>
-                    <CodeOutput lines={[this.props.dataSource||'Not configured properly']}/>
+                    <CodeOutput lines={[this.props.dataSource||'Unavailable']}/>
                   </div>
 
                 </div>
