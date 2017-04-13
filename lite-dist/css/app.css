@@ -280,6 +280,17 @@ svg {
   position: static;
 }
 
+span.branch{
+    cursor:pointer;
+}
+span.unlocked{
+    cursor:pointer;
+}
+
+span.forbidden{
+    cursor: not-allowed;
+}
+
 .expanded.toggle-expand-icon::before,
 .expanded .toggle-expand-icon::before{
   position: static;
