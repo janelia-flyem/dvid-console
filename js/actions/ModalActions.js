@@ -4,7 +4,8 @@ class ModalActions {
   openModal(opts){
     this.dispatch({
       MODAL_TYPE: opts.MODAL_TYPE, 
-      uuid: opts.uuid
+      uuid: opts.uuid,
+      isEditable: opts.isEditable
     });
   }
   closeModal() {

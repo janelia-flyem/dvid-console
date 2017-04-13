@@ -19,17 +19,20 @@ class ModalStore {
     this.bindActions(ModalActions);
     this.currentModal = null;
     this.uuid = null;
+    this.isEditable = null;
   }
 
   onOpenModal(opts){
     this.currentModal = opts.MODAL_TYPE;
     this.uuid = opts.uuid;
+    this.isEditable = opts.isEditable;
 
   }
 
   onCloseModal(){
     this.currentModal = null;
     this.uuid = null;
+    this.isEditable = null;
   }
 }
 
