@@ -21,6 +21,20 @@ var dag, elementHolderLayer, svgBackground;
 var RepoDAGDisplay  = React.createClass({
   mixins: [Router.Navigation],
 
+  getInitialState(){
+    return {
+      isAdmin: !!this.context.router.getCurrentQuery().admin
+    }
+  },
+
+  componentWillReceiveProps: function(nextProps){
+    if(this.state.isAdmin !== !!this.context.router.getCurrentQuery().admin){
+      this.setState({
+        isAdmin: !this.state.isAdmin
+      })
+    }
+  },
+
   componentDidMount: function() {
     this.drawGraph(this.props);
     $(ReactDOM.findDOMNode(this)).tooltip({
@@ -29,17 +43,25 @@ var RepoDAGDisplay  = React.createClass({
   },
 
   shouldComponentUpdate: function(nextProps, nextState){
-    this.repo_updated = stringify(nextProps.repo.DAG) !== stringify(this.props.repo.DAG);
+    const repo_updated = stringify(nextProps.repo.DAG) !== stringify(this.props.repo.DAG);
 
-    if(nextProps.uuid !== this.props.uuid || this.repo_updated){
+    if(nextProps.uuid !== this.props.uuid || repo_updated || this.state.isAdmin !== nextState.isAdmin){
       return true;
     }
 
     return false;
   },
 
-  componentWillUpdate: function(props) {
-    this.drawGraph(props);
+  isEditable(){
+    const serverInfo = this.props.serverInfo;
+    //for the full app, check if admin mode is enabled
+    //for the lite app, check if the serverInfo mode is set to 'read only'
+    return this.state.isAdmin ||
+      (this.props.lite && (serverInfo && serverInfo.Mode ? serverInfo.Mode !== 'read only' : true));
+  },
+
+  componentDidUpdate: function(props) {
+    this.drawGraph(this.props);
   },
 
   componentWillUnmount() {
@@ -237,6 +259,11 @@ var RepoDAGDisplay  = React.createClass({
 
     d3.select(".dag_note").remove();
 
+    let forbidden_toggle = "";
+    if(!this.isEditable()){
+      forbidden_toggle = " forbidden"
+    }
+
     var tooltip = d3.select("body")
       .append("div")
       .attr("class", "dag_note")
@@ -255,7 +282,7 @@ var RepoDAGDisplay  = React.createClass({
       .append("xhtml:span")
       .attr("class", "lock fa fa-lock");
 
-    if(admin || this.props.lite){
+    if(this.isEditable()){
       //add branch icons
       elementHolderLayer.selectAll("g.node.type-locked")
         .append("svg:foreignObject")
@@ -267,6 +294,7 @@ var RepoDAGDisplay  = React.createClass({
         .attr("class", "branch fa fa-code-fork");
     }
 
+    //add unlocked icon
     elementHolderLayer.selectAll("g.node.type-unlocked")
       .append("svg:foreignObject")
       .attr("width", 20)
@@ -274,7 +302,7 @@ var RepoDAGDisplay  = React.createClass({
       .attr("y", "-34px")
       .attr("x", "-40px")
       .append("xhtml:span")
-      .attr("class", "unlocked fa fa-unlock");
+      .attr("class", `unlocked fa fa-unlock ${forbidden_toggle}`);
 
     //add navigation listener
     elementHolderLayer.selectAll("g.node rect")
@@ -305,7 +333,7 @@ var RepoDAGDisplay  = React.createClass({
       });
 
     //add commit and branch actions, if allowed
-    if(admin || this.props.lite){
+    if(this.isEditable()){
       elementHolderLayer.selectAll("g.node foreignObject span")
         //want to add tooltips?
         .on("mouseenter", function (v) {
@@ -565,7 +593,8 @@ var RepoDAGDisplay  = React.createClass({
                 title="help" onClick={ModalActions.openModal.bind({}, 
                 {
                   MODAL_TYPE: ModalTypes.DAGINFO_MODAL, 
-                  uuid: null
+                  uuid: null,
+                  isEditable: this.isEditable()
                 })}><span className="fa fa-question"></span></button>
               <button className="btn btn-default pull-right" data-container="body" data-toggle="tooltip" data-placement="bottom" 
                 title="fit graph to window" onClick={this.fitDAG}>

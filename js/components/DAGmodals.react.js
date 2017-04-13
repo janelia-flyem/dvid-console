@@ -89,7 +89,7 @@ class DAGmodals extends React.Component {
             </Modal.Header>
             <Modal.Body>
               <p> The version graph lets you navigate your repo history and see what data is associated with each node.
-              You can also commit and branch nodes using the version graph.
+              If the data is editable, you can also commit and branch nodes using this interface.
               </p>
               <h4>Graph key</h4>
               <table  className="table table-condensed">
@@ -99,7 +99,7 @@ class DAGmodals extends React.Component {
                     <span className="fa fa-lock"></span>
                   </td>
                   <td>
-                    Indicates node is locked, which means no more changes can be made to the data on this node.
+                    Indicates node is locked, which means changes cannot be made to the data on this node.
                   </td>
                 </tr>
                 <tr>
@@ -108,17 +108,18 @@ class DAGmodals extends React.Component {
                   </td>
                   <td>
                     Indicates node is unlocked, which means changes can be made to the data on this node. 
-                    Click this icon to lock the node.
+                    If the data is editable, clicking this icon will lock the node.
                   </td>
                 </tr>
-                <tr>
+                {this.props.isEditable &&
+                  (<tr>
                   <td className="text-center">
                     <span className="fa fa-code-fork"></span>
                   </td>
                   <td>
                     Node can be branched. Clicking this icon will branch the node, which creates a direct descendant node.
                   </td>
-                </tr>
+                </tr>)}
                 <tr>
                   <td className="text-center">
                     <span className="label label-default">hover</span>

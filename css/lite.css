@@ -83,6 +83,10 @@ span.unlocked{
     cursor:pointer;
 }
 
+span.forbidden{
+    cursor: not-allowed;
+}
+
 #repoAddBtn {
     margin-top: -5px;
 }
