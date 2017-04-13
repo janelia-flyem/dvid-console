@@ -417,9 +417,18 @@ var RepoDAGDisplay  = React.createClass({
         ServerActions.fetch({uuid:uuid});
       }
       else{
+        let queryparams = null;
+        if(this.context.router.getCurrentQuery().admin !== undefined){
+          queryparams = {
+            admin: this.context.router.getCurrentQuery().admin
+          };
+        }
+        
         this.transitionTo('repo', {
-            uuid: uuid
-        });
+            uuid: uuid,
+          },
+          queryparams
+        );
       }
     }
     if(callback){
