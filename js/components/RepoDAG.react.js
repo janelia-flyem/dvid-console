@@ -13,6 +13,7 @@ import ErrorActions from '../actions/ErrorActions';
 import ModalActions from '../actions/ModalActions';
 import {ModalTypes} from '../stores/ModalStore';
 import DAGmodals from '../components/DAGmodals.react.js';
+import stringify from 'json-stable-stringify';
 
 var dag, elementHolderLayer, svgBackground;
 
@@ -25,6 +26,16 @@ var RepoDAGDisplay  = React.createClass({
     $(ReactDOM.findDOMNode(this)).tooltip({
       selector: '[data-toggle="tooltip"]'
     });
+  },
+
+  shouldComponentUpdate: function(nextProps, nextState){
+    this.repo_updated = stringify(nextProps.repo.DAG) !== stringify(this.props.repo.DAG);
+
+    if(nextProps.uuid !== this.props.uuid || this.repo_updated){
+      return true;
+    }
+
+    return false;
   },
 
   componentWillUpdate: function(props) {
@@ -117,7 +128,7 @@ var RepoDAGDisplay  = React.createClass({
         }
 
         if (n.UUID === props.uuid) {
-          nodeclass = nodeclass + " " + "current";
+          nodeclass = nodeclass + " current ";
         }
 
         dag.setNode(version, {
@@ -187,15 +198,15 @@ var RepoDAGDisplay  = React.createClass({
         }
     });
 
-    this.update();
-    //kludge for fixing edge crossings created by the initial dagre render
+    //kludge for fixing edge crossings created by the initial dagre render:
+    // collapse, then expand
     this.collapseGraph();
-    this.expandGraph();
+    this.scrollToCurrent();
+
     //set transition for future collapsing and expanding
     dag.graph().transition = function (selection) {
-    return selection.transition().duration(300);
+      return selection.transition().duration(300);
     };
-    this.scrollToCurrent();
   },
 
   update: function(){
@@ -265,7 +276,7 @@ var RepoDAGDisplay  = React.createClass({
       .append("xhtml:span")
       .attr("class", "unlocked fa fa-unlock");
 
-
+    //add navigation listener
     elementHolderLayer.selectAll("g.node rect")
       .on("mouseenter", function (v) {
         if (dag.node(v).note) {
@@ -370,6 +381,7 @@ var RepoDAGDisplay  = React.createClass({
     nodeDrag.call(elementHolderLayer.selectAll("g.node"));
     edgeDrag.call(elementHolderLayer.selectAll("g.edgePath"));
   },
+
   navigateDAG: function(uuid, callback){
     if(uuid !== this.props.uuid){
       if(this.props.lite){
@@ -473,7 +485,9 @@ var RepoDAGDisplay  = React.createClass({
   },
 
   //fully expands entire DAG
-  expandGraph: function () {
+  expandGraph: function (someExpanded = false) {
+    //skip expansion if no nodes are hidden
+
       //keep track of number of nodes expanded so that recursion can be terminated
       var nodesExpanded = 0;
       dag.nodes().forEach(function (n) {
@@ -482,14 +496,17 @@ var RepoDAGDisplay  = React.createClass({
               expandChildren(n);
           }
       });
+      someExpanded = someExpanded || nodesExpanded > 0;
       if (nodesExpanded) {
-          this.expandGraph();
+          this.expandGraph(someExpanded);
       } else {
           //if no nodes were expanded, it means the graph has been completely expanded.
-          //clean up old graph elements before redraw 
-          var svg = d3.select("svg > g");
-          svg.selectAll("*").remove();
-          this.update();
+          //clean up old graph elements before redraw
+          if(someExpanded){//no need to redraw if no nodes were ever expanded
+            var svg = d3.select("svg > g");
+            svg.selectAll("*").remove();
+            this.update();
+          }
       }
   },
 
