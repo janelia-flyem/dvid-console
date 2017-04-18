@@ -140,7 +140,8 @@ class RepoData extends React.Component {
         const pythonHelpLines = [
           `from diced import DicedStore`,
           `store = DicedStore("${this.props.ServerStore.dataSource || '<data source>'}")`,
-          `repo = store.open_repo("${this.props.ServerStore.repo.Alias}", "${this.props.ServerStore.uuid}")`,
+          `# open repo with version id or repo name`,
+          `repo = store.open_repo("${this.props.ServerStore.uuid}")`,
           `my_array = repo.get_array("<array_name>")`
         ];
 
