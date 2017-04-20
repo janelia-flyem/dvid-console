@@ -4,3 +4,4 @@ build
 *.swp
 *.tar.gz
 npm-debug.log
+js/vendor/modernizr-output.js

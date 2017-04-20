@@ -35,7 +35,7 @@ class LiteHome extends React.Component {
         
         <div className='row'>
           <div className='col-md-12'>
-            <h3>DICED: Diced Is Cloud-Enabled DVID</h3>
+            <h3>Repositories</h3>
             <hr/>
           </div>
         </div>
@@ -44,7 +44,7 @@ class LiteHome extends React.Component {
 
           <div className="col-md-7">
 
-              <h4>Repositories {newRepoButton}</h4>
+              {newRepoButton}
               {repo_list.map( (repo) =>{
                 const last_updated = moment(repo.Updated).fromNow();
                 const codeLines = [`from diced import DicedStore`,
