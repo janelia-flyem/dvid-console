@@ -10,6 +10,7 @@ var React       = require('react'),
   About         = require('../components/About.react'),
   Error         = require('../components/Error.react');
 
+import '../vendor/modernizr-output.js';
 import NewRepo from '../components/NewRepo.react';
 import ErrorActions from '../actions/ErrorActions';
 import ServerStore from '../stores/ServerStore';
@@ -30,6 +31,14 @@ class LiteApp extends React.Component {
           return trigger.nextElementSibling;
       }
     });
+
+    //litmus test for 'old browsers' similar to https://github.com/burocratik/outdated-browser
+      if (!Modernizr.csstransitions || !Modernizr.fetch) {
+        // not-supported
+        ErrorActions.update(<p>You appear to be using an older browser.
+          You may want to consider <a href="http://outdatedbrowser.com/" target="blank">updating</a> 
+          for a better and more reliable experience</p>)
+      }
   }
 
   componentWillReceiveProps() {

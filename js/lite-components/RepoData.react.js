@@ -1,5 +1,7 @@
 import React from 'react';
 import AltContainer from 'alt-container';
+import '../vendor/modernizr-output.js';
+import bowser from 'bowser';
 import ServerStore from '../stores/ServerStore';
 import ServerActions from '../actions/ServerActions';
 import FileActions from '../actions/FileActions';
@@ -50,6 +52,25 @@ class RepoData extends React.Component {
 
   openNeuroG(e){
     ErrorActions.clear()
+
+    //ensure browser can handle neuroglancer
+    if(!( (bowser.firefox || bowser.chrome) && Modernizr.webgl && 
+        Modernizr.webglextensions && 
+        'OES_texture_float' in Modernizr.webglextensions &&
+        'OES_element_index_uint' in Modernizr.webglextensions &&
+        'WEBGL_draw_buffers' in Modernizr.webglextensions)){
+      
+      const message = (
+        <p>
+        Your browser will not support neuroglancer for viewing data. <br/>
+        See the neuroglancer <a href='https://github.com/google/neuroglancer#troubleshooting'>documentation</a> for more details on browser requirements.<br/>
+        For certain browsers, can <a href="https://superuser.com/questions/836832/how-can-i-enable-webgl-in-my-browser/836833#836833">configure</a> your browser to work with neuroglancer.
+        </p>
+      );
+
+      ErrorActions.update(message)
+      return
+    }
     const imageTypes = ["uint8blk", "uint16blk", "uint32blk", "uint64blk"];
     const uuid = this.props.ServerStore.uuid;
     var errors = null;

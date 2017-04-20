@@ -3,9 +3,24 @@ module.exports = function(grunt) {
   // Project configuration.
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
+    modernizr: {
+      dist:{
+
+        "crawl": false,
+        "customTests": [],
+        "dest": "js/vendor/modernizr-output.js",
+        "tests": [
+          "csstransitions",
+          "webgl",
+          "webglextensions",
+          "fetch",
+        ],
+        "options": [],
+        "uglify": true
+      }
+    },
     browserify: {
       options: {
-        //transform:  [ require('grunt-react').browserify ]
         transform:  [ "babelify" ]
       },
       full:          {
@@ -168,6 +183,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-compress');
   grunt.loadNpmTasks('grunt-contrib-connect');
+  grunt.loadNpmTasks("grunt-modernizr");
 
   //allow for two different watch targets
   //see http://stackoverflow.com/questions/20841623/grunt-contrib-watch-targets-and-recursion/21744582#21744582
@@ -177,10 +193,10 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
 
   // Default task(s).
-  grunt.registerTask('default', ['browserify:full']);
-  grunt.registerTask('dev', ['browserify:full', 'connect:full', 'watch'])
-  grunt.registerTask('dist', ['browserify:full','uglify:full','copy:full', 'compress']);
+  grunt.registerTask('default', ['modernizr:dist','browserify:full']);
+  grunt.registerTask('dev', ['modernizr:dist', 'browserify:full', 'connect:full', 'watch'])
+  grunt.registerTask('dist', ['modernizr:dist', 'browserify:full','uglify:full','copy:full', 'compress']);
   //lite builds
-  grunt.registerTask('dev-lite', ['browserify:lite', 'connect:lite', 'watchlite'])
-  grunt.registerTask('dist-lite', ['browserify:lite','uglify:lite','copy:lite']);
+  grunt.registerTask('dev-lite', ['modernizr:dist', 'browserify:lite', 'connect:lite', 'watchlite'])
+  grunt.registerTask('dist-lite', ['modernizr:dist', 'browserify:lite','uglify:lite','copy:lite']);
 };

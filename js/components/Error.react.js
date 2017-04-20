@@ -7,18 +7,21 @@ import AltContainer from 'alt-container';
 class ErrorMessage extends React.Component {
   render() {
     if (this.props.errors) {
-      var message = 'Unknown error ocured';
+      var message = 'Unknown error occured';
 
       if (this.props.errors.hasOwnProperty('message')) {
         message = this.props.errors.message;
       } else {
         message = this.props.errors;
       }
+      if(typeof(message) === "string"){//only wrap strings in p tags, not jsx
+        message = <p>{message}</p>;
+      }
 
       return (
         <div className="fixed_alert">
           <Alert bsStyle='danger' onDismiss={this.handleDismiss.bind(this)}>
-            <p>{message}</p>
+            {message}
           </Alert>
         </div>
       );
