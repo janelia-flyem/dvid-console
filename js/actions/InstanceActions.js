@@ -16,6 +16,9 @@ class InstanceActions {
   setMetaEmpty(){
     this.dispatch()
   }
+  updateSelected(opts){
+    this.dispatch(opts)
+  }
 }
 
 module.exports = (alt.createActions(InstanceActions));

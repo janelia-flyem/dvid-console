@@ -11,6 +11,22 @@ class InstanceStore {
     this.neuroglancerInstances = null;
     this.restrictions = null;
     this.api = dvid.connect({host: config.host, port: config.port, username: 'dvidconsole', application: 'dvidconsole'});
+    this.selectedInstances = new Set();
+  }
+
+  onUpdateSelected(opts){
+    if(opts.instance){
+      if(opts.checked){
+        this.selectedInstances.add(opts.instance)
+      }
+      else{
+        this.selectedInstances.delete(opts.instance)
+      }
+    }
+    else{
+      return false;
+    }
+
   }
 
   onToggle() {
@@ -82,6 +98,7 @@ class InstanceStore {
   onClearMeta(){
     this.neuroglancerInstances = null;
     this.restrictions = null;
+    this.selectedInstances.clear()
   }
 
   onSetMetaEmpty(){
