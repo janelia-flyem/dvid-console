@@ -17,7 +17,7 @@ class LiteHome extends React.Component {
 
   render(){
     if(this.props.repos === null){
-      return <p><em>Loading...</em></p>;
+      return <div className='container'><p><em>Loading...</em></p></div>;
     }
 
     let repo_list = ServerStore.sortRepolist(this.props.repos);

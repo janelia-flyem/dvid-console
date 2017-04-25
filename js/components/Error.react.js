@@ -3,24 +3,40 @@ import {Alert} from 'react-bootstrap';
 import ErrorStore from '../stores/ErrorStore';
 import ErrorActions from '../actions/ErrorActions';
 import AltContainer from 'alt-container';
+import {serverMaintenance, serverMaintenanceMessage} from '../utils/config.js';
 
 class ErrorMessage extends React.Component {
   render() {
-    if (this.props.errors) {
-      var message = 'Unknown error occured';
-
-      if (this.props.errors.hasOwnProperty('message')) {
-        message = this.props.errors.message;
-      } else {
-        message = this.props.errors;
+    if (this.props.errors || serverMaintenance) {
+      var message = '';
+      if(this.props.errors){
+        if (this.props.errors.hasOwnProperty('message')) {
+          message = this.props.errors.message;
+        } else {
+          message = this.props.errors;
+        }
       }
+
+      let dismiss = '';
+      if(serverMaintenance){
+        message = (
+          <p>
+            {serverMaintenanceMessage}<br/><br/>
+            {message}
+          </p>);
+      }
+      else{
+        dismiss = this.handleDismiss.bind(this)
+      }
+      
       if(typeof(message) === "string"){//only wrap strings in p tags, not jsx
         message = <p>{message}</p>;
       }
 
+
       return (
         <div className="fixed_alert">
-          <Alert bsStyle='danger' onDismiss={this.handleDismiss.bind(this)}>
+          <Alert bsStyle='danger' onDismiss={dismiss}>
             {message}
           </Alert>
         </div>

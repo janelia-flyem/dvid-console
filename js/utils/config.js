@@ -16,6 +16,8 @@ if (port) {
   root = root + ":" + port;
 }
 
+exports.serverMaintenance = true;
+exports.serverMaintenanceMessage = "The server is undergoing maintenance and may be experiencing issues. Check back later if you are having trouble viewing the data."
 
 var settings = {
   // the layers at which tile will be fetched from the server. For sources that
