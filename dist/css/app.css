@@ -258,7 +258,6 @@ table.datainstances {
 /* dagre-d3 */
 
 .dag div {
-  width:90%;
   border: 1px solid #ccc;
   margin: auto;
 }
@@ -267,9 +266,10 @@ table.datainstances {
 }
 
 div.dag-tools{
+    right: 0px;
     border: 0;
     position: absolute;
-    padding: 5px 30px 0px 0px;
+    padding: 5px 15px 0px 0px;
 }
 
 svg {
