@@ -35,7 +35,7 @@ class DataInstanceList extends React.Component {
 
   render() {
     var nonDefaultCount = 0;
-    var tileRows = [];
+    var imageRows = [];
     var defaultInstances = new Array;
 
     for(var key in this.props.ServerStore.repoDefaultInstances) {
@@ -63,7 +63,7 @@ class DataInstanceList extends React.Component {
         var defaultOrShowDefault = !hasDefaultInstances || isDefaultInstance || !this.state.onlyShowDefault;
         if(  ((isChild  && this.state.showSub) || !isChild) && defaultOrShowDefault ) {
             var dataInstance = <DataInstance key={sorted[i][0]} instance={sorted[i][1]} isParent={isParent} uuid={this.props.ServerStore.uuid} show={this.state.showSub}/>;
-            tileRows.push(dataInstance);
+            imageRows.push(dataInstance);
         }
         
         if (hasDefaultInstances && !isDefaultInstance){
@@ -93,12 +93,12 @@ class DataInstanceList extends React.Component {
           <tr>
             <td onClick={this.showHandler.bind(this)}> Data Instance [{toggleIcon}]</td>
             <td>Type</td>
-            <td>Tile Source</td>
+            <td>Image Source</td>
             <td>Label Source</td>
           </tr>
         </thead>
         <tbody>
-          {tileRows}
+          {imageRows}
         </tbody>
       </table>
         {toggleDefault}
@@ -113,7 +113,7 @@ class DataInstance extends React.Component {
   }
 
   render() {
-    var tile_input = '';
+    var image_input = '';
     var label_input = '';
     var type = this.props.instance.Base.TypeName;
     var label_class = 'label lbl-' + type;
@@ -145,8 +145,8 @@ class DataInstance extends React.Component {
     var type_url = '/api/node/' + this.props.uuid + '/' + name + '/help';
     var type_tooltip = 'Display ' + type + ' help';
 
-    if (type === 'grayscale8' || type === 'multiscale2d' || type === 'uint8blk' || type === 'imagetile' || type === 'googlevoxels')
-      tile_input = <TileInput name={name}/>;
+    if (type === 'grayscale8' || type === 'multiscale2d' || type === 'uint8blk' || type === 'imageimage' || type === 'googlevoxels')
+      image_input = <ImageInput name={name}/>;
     else if (type === 'labels64' || type === 'labelblk' || type === 'googlevoxels')
       label_input = <LabelInput name={name}/>;
 
@@ -154,7 +154,7 @@ class DataInstance extends React.Component {
       <tr>
         <th>{masterMarker}<a href={name_url} target="_blank" data-toggle="tooltip" data-placement="right" title={name_tooltip}>{name}</a></th>
         <th><a href={type_url} target="_blank" data-toggle="tooltip" data-placement="right" title={type_tooltip}><span className={label_class}>{type}</span></a></th>
-        <td>{tile_input}</td>
+        <td>{image_input}</td>
         <td>{label_input}</td>
       </tr>
     );
@@ -169,10 +169,10 @@ class LabelInput extends React.Component {
   }
 }
 
-class TileInput extends React.Component {
+class ImageInput extends React.Component {
   render() {
     return (
-      <input type="radio" name="tile_source" value={this.props.name}></input>
+      <input type="radio" name="image_source" value={this.props.name}></input>
     );
   }
 }

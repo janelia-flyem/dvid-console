@@ -19,62 +19,21 @@ var InstanceSelectPanel = React.createClass({
     InstanceActions.toggle();
   },
 
-  showDataHandler: function(event) {
-    var tile_source = null,
-      label_source = null;
-    // grab tile source selection
-    tile_source = $("#instance_select input:radio[name=tile_source]:checked").val();
-    // grab label source selection
-    label_source = $("#instance_select input:radio[name=label_source]:checked").val();
-    // display an error message if either one is missing.
-    if(!tile_source) {
-      ErrorActions.update('Please select a tile source from the table below.');
-      return;
-    }
-
-    ErrorActions.clear();
-    // generate a new url with the choices made and ...
-    // redirect the browser
-    if (!label_source) {
-      this.transitionTo('tileonly', {
-        uuid : this.props.ServerStore.uuid,
-        tileSource : tile_source
-      });
-    } else {
-      // label source has been selected, so lets try and center on the ROI.
-      var label_meta = this.props.ServerStore.repo.DataInstances[label_source];
-      // first grab the min and max points from the Extended meta data
-      var minPoint = label_meta.Extended.MinPoint;
-      var maxPoint = label_meta.Extended.MaxPoint;
-      // work out the mid points for the x,y & z planes
-      var x = Math.round((maxPoint[0] + minPoint[0]) / 2);
-      var y = Math.round((maxPoint[1] + minPoint[1]) / 2);
-      var z = Math.round((maxPoint[2] + minPoint[2]) / 2);
-
-      this.transitionTo('tilemapwithcoords', {
-        uuid : this.props.ServerStore.uuid,
-        tileSource : tile_source,
-        labelSource : label_source,
-        plane: 'xy',
-        coordinates : x + '_' + y + '_' + z
-      });
-    }
-  },
 
   neuroGlancerHandler: function(event) {
-    var tile_source = null;
+    var image_source = null;
     var label_source = null;
     var seg_layer = '';
-    // grab tile source selection
-    tile_source = $("#instance_select input:radio[name=tile_source]:checked").val();
-    // display an error message if tilesource is missing.
-    if(!tile_source) {
-      ErrorActions.update('Please select a tile source from the table below.');
+    // grab image source selection
+    image_source = $("#instance_select input:radio[name=image_source]:checked").val();
+    // display an error message if imagesource is missing.
+    if(!image_source) {
+      ErrorActions.update('Please select a image source from the table below.');
       return;
     }
     ErrorActions.clear();
 
-    tile_source = tile_source.replace('*','');
+    image_source = image_source.replace('*','');
 
     // grab label source selection
     label_source = $("#instance_select input:radio[name=label_source]:checked").val();
@@ -87,9 +46,9 @@ var InstanceSelectPanel = React.createClass({
 
     // generate a new url with the choices made and ...
     // redirect the browser
-    var tile_layer = "%27" + tile_source + "%27:{%27type%27:%27image%27_%27source%27:%27dvid://" + config.baseUrl() + "/"+ this.props.ServerStore.uuid + "/" + tile_source + "%27}";
+    var image_layer = "%27" + image_source + "%27:{%27type%27:%27image%27_%27source%27:%27dvid://" + config.baseUrl() + "/"+ this.props.ServerStore.uuid + "/" + image_source + "%27}";
     var perspective = "%27perspectiveOrientation%27:[-0.12320884317159653_0.21754156053066254_-0.009492455050349236_0.9681965708732605]_%27perspectiveZoom%27:64";
-    var glancer_url = "/neuroglancer/#!{%27layers%27:{" + tile_layer + seg_layer + "}_" + perspective +"}"
+    var glancer_url = "/neuroglancer/#!{%27layers%27:{" + image_layer + seg_layer + "}_" + perspective +"}"
 
     window.location.href = glancer_url
   },
@@ -110,8 +69,7 @@ var InstanceSelectPanel = React.createClass({
           <div className="col-sm-3">
             {button}
             <hr/>
-            <p>Select a tile source and optionally a label source, then open the tile viewer to preview your data.</p>
-            <button className="btn btn-default" onClick={this.showDataHandler}>Open Tile Viewer</button>
+            <p>Select an image source and optionally a label source, then open neuroglancer to preview your data.</p>
             <button className="btn btn-default" onClick={this.neuroGlancerHandler}>Open Neuroglancer</button>
           </div>
           <div className="col-sm-9">

@@ -327,7 +327,7 @@ var RepoDAGDisplay  = React.createClass({
         if (d3.event.shiftKey) {
           self.toggleChildren(v);
         }else{
-          //loads the node's data into page (updates tile viewer link)
+          //loads the node's data into page (updates viewer link)
           self.navigateDAG(dag.node(v).uuid)
         }
       });
