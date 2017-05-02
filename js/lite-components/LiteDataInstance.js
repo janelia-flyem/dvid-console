@@ -9,22 +9,17 @@ class DataInstance extends React.Component {
     super(props);
 
     this.state = {
-      ndims: null
+      ndims: null,
+      instanceDetails: null
     }
   }
 
   componentWillMount(){
+    this.getDataInstanceInfo(this.props);
     if(this.props.hasMeta){
       this.getNdims(this.props)
     }
 
-  }
-
-  componentDidMount(nextProps, nextState){
-    const refName = `extents-${this.props.instance[0]}`
-    if(this.refs[refName]){
-      $(this.refs[refName]).tooltip();
-    }
   }
 
   componentWillUnmount(){
@@ -34,6 +29,38 @@ class DataInstance extends React.Component {
       tip.tooltip('destroy');
     }
 
+  }
+
+  componentDidUpdate(prevProps, prevState){
+    if(prevState.instanceDetails === null && this.state.instanceDetails !== null){
+      const refName = `extents-${this.props.instance[0]}`
+      if(this.refs[refName]){
+        $(this.refs[refName]).tooltip();
+      }
+    }
+  }
+
+  /**
+   * Fetches dataInstance info, since some datainstance information
+   * will no longer be available at the repos/info level 
+   */
+  getDataInstanceInfo(props){
+    const api = InstanceStore.state.api;
+    const name = props.instance[0];
+
+    if (api && name && props.uuid){
+      api.node({
+        uuid: props.uuid,
+        endpoint: `${name}/info`,
+        callback: (data) => {
+          this.setState(Object.assign({}, this.state, {instanceDetails: data}));
+        },
+        error: (err) => {
+          this.setState(Object.assign({}, this.state, {instanceDetails: null}));
+        }
+      });
+    }
+    return false;
   }
 
   /**
@@ -50,11 +77,11 @@ class DataInstance extends React.Component {
         endpoint: `.meta/key/instance:${name}:${dataUuid}`,
         callback: function(data) {
           if(data.numdims){
-            this.setState({ndims: data.numdims});
+            this.setState(Object.assign({}, this.state, {ndims: data.numdims}));
           }
         }.bind(this),
         error: function(data){
-          this.setState({ndims: null});
+          this.setState(Object.assign({}, this.state, {ndims: null}));
         }.bind(this)
     });
   }
@@ -72,20 +99,22 @@ class DataInstance extends React.Component {
     }
 
     let extents = "";
-    const details = this.props.instance[1].Extended;
-    if(details && details.MaxPoint && details.MinPoint){
+    if(this.state.instanceDetails && this.state.instanceDetails.Extended){
+      const details = this.state.instanceDetails.Extended;
       
       const max = details.MaxPoint;
       const min = details.MinPoint;
-      const extentsDetails = max.map(function(val, i){
-          return `${min[i]}:${val}`;
-      })
-      extents = (
-        <span className='badge extents' ref={`extents-${this.props.instance[0]}`} style={{backgroundColor:'#660066'}}
-         data-container="body" data-toggle="tooltip" data-placement="bottom" title={`[${extentsDetails.join(', ')}]`}>
-          extents <span className="fa fa-angle-down"></span>
-        </span>
-      );
+      if(min && max){
+        const extentsDetails = max.map(function(val, i){
+            return `${min[i]}:${val}`;
+        })
+        extents = (
+          <span className='badge extents' ref={`extents-${this.props.instance[0]}`} style={{backgroundColor:'#660066'}}
+           data-container="body" data-toggle="tooltip" data-placement="bottom" title={`[${extentsDetails.join(', ')}]`}>
+            extents <span className="fa fa-angle-down"></span>
+          </span>
+        );
+      }
     }
 
     var labels = datatype_labels[datatype];
