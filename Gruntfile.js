@@ -47,6 +47,16 @@ module.exports = function(grunt) {
       }
     },
     copy: {
+      dev:{
+        files: [
+          {
+              expand: true,
+              cwd: 'node_modules',
+              src: 'neuroglancer/*',
+              dest: './'
+          }
+        ]
+      },
       full:{
         files: [
           {
@@ -77,9 +87,10 @@ module.exports = function(grunt) {
             expand: true
           },
           {
-            src: 'neuroglancer/**',
-            dest: 'dist',
-            expand: true
+              expand: true,
+              cwd: 'node_modules',
+              src: 'neuroglancer/*',
+              dest: 'dist/'
           },
           {
             src: 'dist.html',
@@ -117,9 +128,10 @@ module.exports = function(grunt) {
             expand: true
           },
           {
-            src: 'neuroglancer/**',
-            dest: 'lite-dist',
-            expand: true
+              expand: true,
+              cwd: 'node_modules',
+              src: 'neuroglancer/*',
+              dest: 'lite-dist'
           },
           {
             src: 'dist-lite.html',
@@ -194,9 +206,9 @@ module.exports = function(grunt) {
 
   // Default task(s).
   grunt.registerTask('default', ['modernizr:dist','browserify:full']);
-  grunt.registerTask('dev', ['modernizr:dist', 'browserify:full', 'connect:full', 'watch'])
+  grunt.registerTask('dev', ['modernizr:dist', 'browserify:full', 'copy:dev', 'connect:full', 'watch'])
   grunt.registerTask('dist', ['modernizr:dist', 'browserify:full','uglify:full','copy:full', 'compress']);
   //lite builds
-  grunt.registerTask('dev-lite', ['modernizr:dist', 'browserify:lite', 'connect:lite', 'watchlite'])
+  grunt.registerTask('dev-lite', ['modernizr:dist', 'browserify:lite', 'copy:dev', 'connect:lite', 'watchlite'])
   grunt.registerTask('dist-lite', ['modernizr:dist', 'browserify:lite','uglify:lite','copy:lite']);
 };
