@@ -72,6 +72,7 @@ class RepoData extends React.Component {
       return
     }
     const imageTypes = ["uint8blk", "uint16blk", "uint32blk", "uint64blk"];
+    const labelTypes = ["labelblk", "labelarray"];
     const uuid = this.props.ServerStore.uuid;
     var errors = null;
     var layers = $(this.refs.instanceList).find(':checked').toArray().map(function(el){
@@ -79,7 +80,7 @@ class RepoData extends React.Component {
       const name = el.id;
       const type = this.props.ServerStore.repo.DataInstances[name].Base.TypeName;
 
-      if(type === 'labelblk'){//segmentation
+      if(labelTypes.includes(type)){//segmentation
         return `%27${name}%27:{%27type%27:%27segmentation%27_%27source%27:%27dvid://${config.baseUrl()}/${uuid}/${name}%27}`;
 
       }

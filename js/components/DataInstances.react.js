@@ -147,7 +147,7 @@ class DataInstance extends React.Component {
 
     if (type === 'grayscale8' || type === 'multiscale2d' || type === 'uint8blk' || type === 'imageimage' || type === 'googlevoxels')
       image_input = <ImageInput name={name}/>;
-    else if (type === 'labels64' || type === 'labelblk' || type === 'googlevoxels')
+    else if (type === 'labels64' || type === 'labelblk' || type === 'googlevoxels' || type === 'labelarray')
       label_input = <LabelInput name={name}/>;
 
     return (
