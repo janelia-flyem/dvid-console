@@ -1,8 +1,10 @@
 /neuroglancer
+lite-dist
+dist
 bindata.go
 node_modules
 build
 *.swp
 *.tar.gz
 npm-debug.log
-js/vendor/modernizr-output.js
+modernizr-output.js
