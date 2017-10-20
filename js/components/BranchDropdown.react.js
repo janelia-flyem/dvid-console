@@ -52,33 +52,8 @@ export default class BranchDropdown extends React.Component {
 
 
   getFirstBranch() {
-    // var branches = this.getBranches();
-    // if (branches.length > 0) {
-    //   return branches[0];
-    // }
-    // return null;
     return "Show all";
   }
-
-  /**
-   * Get the label and the value to fill the dropdown box
-   */
-  // getCompleteData() {
-  //   // var keys = Object.keys(this.props.repo.DAG.Nodes);
-  //   var values = this.props.myNodes;
-  //   var keys = Object.keys(values);
-  //   var result = {};
-  //   for (var i = 0; i < keys.length; i++) {
-  //     var tBranch = values[keys[i]].Branch;
-  //     if (tBranch in result) { // result does have the branch name already -> add another node to the list of branch nodes
-  //       result[tBranch].push(values[keys[i]].UUID)
-  //     }
-  //     else { // add new branch
-  //       result[tBranch] = []
-  //     }
-  //   }
-  //   return result;
-  // }
 
   getCompleteData() {
       var values = this.props.myNodes;
@@ -115,9 +90,6 @@ export default class BranchDropdown extends React.Component {
    * @return {String} val
    */
   getItemValue(item){
-    // You can obviously only return the Label or the component you need to show
-    // In this case we are going to show the value and the label that shows in the input
-    // something like "1 - Microsoft"
     return `${item}`;
   }
 
