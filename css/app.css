@@ -320,8 +320,24 @@ text {
   fill: #fff;
   cursor: pointer;
 }
+
 .node > rect:hover{
   fill: #e6e6e6;
+}
+
+.node-hint > rect {
+  stroke: #AAA;
+  stroke-width: .5px;
+  fill: #fff;
+  cursor: pointer;
+}
+
+.node-hint > rect:hover{
+  fill: #f6f6f6;
+}
+
+.node-hint text{
+  fill: #AAA;
 }
 
 g.master > rect {
@@ -370,6 +386,14 @@ button.current{
 
 .dag_note .tooltip-inner {
   max-width: 400px;
+}
+
+.dag div.dag-dropdown{
+  float: left;
+}
+
+.dag div.no-border {
+  border: none;
 }
 
 /* fix: bootstrap tooltip arrow is slightly offset */
