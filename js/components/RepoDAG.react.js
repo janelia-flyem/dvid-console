@@ -13,13 +13,13 @@ import ModalActions from '../actions/ModalActions';
 import {ModalTypes} from '../stores/ModalStore';
 import DAGmodals from '../components/DAGmodals.react.js';
 import stringify from 'json-stable-stringify';
-import BranchDropdown from '../components/BranchDropdown.react.js';
+import BranchSelect from '../components/BranchSelect.react.js';
 
 var dag, elementHolderLayer, svgBackground;
 
 var dagControl = dagControl || {};
 
-dagControl.oddChildren = []
+dagControl.oddNodes = []
 
 // Dagre graph
 var RepoDAGDisplay = React.createClass({
@@ -80,10 +80,14 @@ var RepoDAGDisplay = React.createClass({
     }
   },
 
-  myCallbackBranches: function (selectedBranch) {
+  callbackBranches: function (selectedBranch) {
+    if (selectedBranch == 'master'){
+      selectedBranch = '';
+    }
+
     this.clear();
-    dagControl.oddChildren = [];
-    if (selectedBranch == 'Show all'){
+    dagControl.oddNodes = [];
+    if (selectedBranch == 'showall'){
       if (this.props.repo.DAG.Nodes.hasOwnProperty(this.props.uuid)) {
         this.initDag(this, this.props, null, null);
       }
@@ -104,7 +108,7 @@ var RepoDAGDisplay = React.createClass({
       var branchObject = {};
       var root = this.findRoot();
 
-      this.traverseTree(root, selectedBranch, branchObject);
+      this.traverseTree(root, selectedBranch, branchObject, true);
       this.initDag(this, this.props, selectedBranch, branchObject);
       this.fitDAG(partialDAG);
     }
@@ -128,7 +132,7 @@ var RepoDAGDisplay = React.createClass({
     var nodes = this.props.repo.DAG.Nodes;
     var keys = Object.keys(nodes);
     for (var i = 0; i < keys.length; i++){
-        if (nodes[keys[i]].Branch === ""){
+        if (nodes[keys[i]].Parents.length == 0){
             return nodes[keys[i]];
         }
     }
@@ -136,10 +140,15 @@ var RepoDAGDisplay = React.createClass({
   },
 
   // find nodes belonging to the partial graph
-  traverseTree: function(node, selectedBranch, branchObject){
+  traverseTree: function(node, selectedBranch, branchObject, first){
+
       // if we have a node, which belongs to our branch, add this node to the list
       if (node.Branch === selectedBranch){
         branchObject[node.UUID] = node;
+        if (first){
+          first = false;
+          this.collectNodesBackToRoot(node, branchObject);
+        }
       }
       // traverse through children of node to find more nodes to the branch
       var children = node.Children;
@@ -149,9 +158,32 @@ var RepoDAGDisplay = React.createClass({
         // find those children, where the node is in the current branch, but the child is not
         if (node.Branch == selectedBranch && childNode.Branch !== selectedBranch){
           branchObject[childNode.UUID] = childNode;
-          dagControl.oddChildren.push(node.VersionID + '-' + childNode.VersionID);
+          dagControl.oddNodes.push(node.VersionID + '-' + childNode.VersionID);
         }
-        this.traverseTree(childNode, selectedBranch, branchObject);
+        this.traverseTree(childNode, selectedBranch, branchObject, first);
+      }
+  },
+
+  // collect the nodes all the way to the top
+  collectNodesBackToRoot: function(currentNode, branchObject){
+      if (currentNode && currentNode.Parents && currentNode.Parents.length > 0){
+          for (var j = 0; j < currentNode.Parents.length; j++){
+              var tNode = this.getNodeByVersion(currentNode.Parents[j]);
+              branchObject[tNode.UUID] = tNode;
+              dagControl.oddNodes.push(tNode.VersionID + '-' + currentNode.VersionID);
+              this.collectNodesBackToRoot(tNode, branchObject);
+          }
+      }
+  },
+
+  drawEdgedBackToRoot: function(currentNode){
+      if (currentNode && currentNode.Parents && currentNode.Parents.length > 0){
+          var parent = currentNode.Parents[0];
+          dag.setEdge(
+            parent,
+            currentNode.VersionID
+          )
+          this.drawEdgedBackToRoot(this.getNodeByVersion(parent));
       }
   },
 
@@ -218,7 +250,7 @@ var RepoDAGDisplay = React.createClass({
       if (n.Log.length) log = (n.Log);
       var nodeclass = "";
 
-      if (selectedBranch && (selectedBranch !== n.Branch)){
+      if ((selectedBranch !== null) && (selectedBranch !== n.Branch)){
         nodeclass += ' node-hint';
       }
       else {
@@ -267,33 +299,15 @@ var RepoDAGDisplay = React.createClass({
     $.each(nodes, function (name, n) {
       $.each(n.Children, function (c) {
         if ((selectedBranch === null) || n.Branch === selectedBranch){
-          if (dagControl.oddChildren && dagControl.oddChildren.indexOf(n.VersionID + '-' + n.Children[c]) !== -1){
-            dag.setEdge(
-              n.VersionID,
-              n.Children[c],
-              // {
-              //   class: 'edge-hint',
-              //   arrowheadStyle: "fill: #AAA",
-              //   style: 'stroke: blue',
-              //   id: n.VersionID + "-" + n.Children[c]
-              // }
-            );
-
-          }
-          else {
-            dag.setEdge(
-              n.VersionID,
-              n.Children[c]
-              // {
-              //   ineInterpolate: 'basis',
-              //   arrowheadStyle: "fill: #111",
-              //   id: n.VersionID + "-" + n.Children[c]
-              // }
-            );
-          }
+           dag.setEdge(
+               n.VersionID,
+               n.Children[c]
+          )
         }
       });
     });
+
+    this.drawEdgedBackToRoot(nodes[Object.keys(nodes)[0]]);
 
     // return a list of all predecessors of a parent node
     function findAllPredecessors(node, predecessorsList) {
@@ -740,8 +754,7 @@ var RepoDAGDisplay = React.createClass({
           <div className="dag">
             <div>
               <div className="dag-dropdown no-border">
-                {/*<VersionDropdown myNodes={this.props.repo.DAG.Nodes} callbackFromParent={this.myCallback}/>*/}
-                <BranchDropdown myNodes={this.props.repo.DAG.Nodes} callbackFromParent={this.myCallbackBranches} />
+                <BranchSelect myNodes={this.props.repo.DAG.Nodes} callbackFromParent={this.callbackBranches}/>
               </div>
               <div className='dag-tools'>
                 <button className="btn btn-default pull-right" data-container="body" data-toggle="tooltip"
@@ -879,8 +892,8 @@ function collapse(expandedChildren) {
 function expand(parent, collapsedChildren) {
   for (var child in collapsedChildren) {
     dag.setNode(child, collapsedChildren[child]);
-    // test, if parent/child combination is in the list of oddChildren
-    if (dagControl.oddChildren && dagControl.oddChildren.indexOf(parent + '-' + child) === -1){
+    // test, if parent/child combination is in the list of oddNodes
+    if (dagControl.oddNodes && dagControl.oddNodes.indexOf(parent + '-' + child) === -1){
         dag.setEdge(parent, child, {
         lineInterpolate: 'basis',
         id: parent + "-" + child,
