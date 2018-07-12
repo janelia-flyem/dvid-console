@@ -19,6 +19,13 @@ module.exports = function(grunt) {
         "uglify": true
       }
     },
+    exec: {
+      options: {},
+      build_neuroglancer: {
+        cwd: './node_modules/neuroglancer/',
+        command: 'npm install && npm run build-min',
+      }
+    },
     browserify: {
       options: {
         transform:  [ "babelify" ]
@@ -51,9 +58,9 @@ module.exports = function(grunt) {
         files: [
           {
               expand: true,
-              cwd: 'node_modules',
-              src: 'neuroglancer/*',
-              dest: './'
+              cwd: 'node_modules/neuroglancer/dist/min',
+              src: '*',
+              dest: './neuroglancer'
           }
         ]
       },
@@ -88,9 +95,9 @@ module.exports = function(grunt) {
           },
           {
               expand: true,
-              cwd: 'node_modules',
-              src: 'neuroglancer/*',
-              dest: 'dist/'
+              cwd: 'node_modules/neuroglancer/dist/min',
+              src: '*',
+              dest: './neuroglancer'
           },
           {
             src: 'dist.html',
@@ -129,9 +136,9 @@ module.exports = function(grunt) {
           },
           {
               expand: true,
-              cwd: 'node_modules',
-              src: 'neuroglancer/*',
-              dest: 'lite-dist'
+              cwd: 'node_modules/neuroglancer/dist/min',
+              src: '*',
+              dest: './neuroglancer'
           },
           {
             src: 'dist-lite.html',
@@ -196,6 +203,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-compress');
   grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks("grunt-modernizr");
+  grunt.loadNpmTasks('grunt-exec');
 
   //allow for two different watch targets
   //see http://stackoverflow.com/questions/20841623/grunt-contrib-watch-targets-and-recursion/21744582#21744582
@@ -205,10 +213,10 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
 
   // Default task(s).
-  grunt.registerTask('default', ['modernizr:dist','browserify:full']);
-  grunt.registerTask('dev', ['modernizr:dist', 'browserify:full', 'copy:dev', 'connect:full', 'watch'])
-  grunt.registerTask('dist', ['modernizr:dist', 'browserify:full','uglify:full','copy:full', 'compress']);
+  grunt.registerTask('default', ['exec:build_neuroglancer', 'modernizr:dist','browserify:full']);
+  grunt.registerTask('dev', ['exec:build_neuroglancer', 'modernizr:dist', 'browserify:full', 'copy:dev', 'connect:full', 'watch'])
+  grunt.registerTask('dist', ['exec:build_neuroglancer', 'modernizr:dist', 'browserify:full','uglify:full','copy:full', 'compress']);
   //lite builds
-  grunt.registerTask('dev-lite', ['modernizr:dist', 'browserify:lite', 'copy:dev', 'connect:lite', 'watchlite'])
-  grunt.registerTask('dist-lite', ['modernizr:dist', 'browserify:lite','uglify:lite','copy:lite']);
+  grunt.registerTask('dev-lite', ['exec:build_neuroglancer', 'modernizr:dist', 'browserify:lite', 'copy:dev', 'connect:lite', 'watchlite'])
+  grunt.registerTask('dist-lite', ['exec:build_neuroglancer', 'modernizr:dist', 'browserify:lite','uglify:lite','copy:lite']);
 };
