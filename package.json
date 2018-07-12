@@ -26,6 +26,7 @@
     "grunt-contrib-copy": "^0.8.0",
     "grunt-contrib-uglify": "^0.9.1",
     "grunt-contrib-watch": "^0.6.1",
+    "grunt-exec": "^3.0.0",
     "grunt-modernizr": "^1.0.2",
     "grunt-react": "^0.12.2"
   },
@@ -41,7 +42,7 @@
     "dvid": "^0.7.1",
     "json-stable-stringify": "^1.0.1",
     "moment": "^2.19.3",
-    "neuroglancer": "https://github.com/janelia-flyem/neuroglancer/releases/download/0.0.0-beta.4/dist-0.0.0-beta.4.tar.gz",
+    "neuroglancer": "git+ssh://git@github.com:janelia-flyem/neuroglancer.git#f93e7d36e1c2",
     "prismjs": "^1.6.0",
     "react": "^0.14.7",
     "react-bootstrap": "^0.27.3",
