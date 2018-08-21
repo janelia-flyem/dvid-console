@@ -40,7 +40,7 @@
     "dagre-d3": "^0.4.17",
     "dvid": "^0.7.1",
     "json-stable-stringify": "^1.0.1",
-    "moment": "^2.10.3",
+    "moment": "^2.19.3",
     "neuroglancer": "https://github.com/janelia-flyem/neuroglancer/releases/download/0.0.0-beta.4/dist-0.0.0-beta.4.tar.gz",
     "prismjs": "^1.6.0",
     "react": "^0.14.7",
