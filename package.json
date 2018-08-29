@@ -1,0 +1,39 @@
+{
+  "name": "dvid-console",
+  "version": "3.0.0",
+  "description": "Web console for DVID, a distributed, versioned image-oriented datastore.",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/janelia-flyem/dvid-console.git"
+  },
+  "author": "Jody Clements",
+  "license": "Janelia",
+  "bugs": {
+    "url": "https://github.com/janelia-flyem/dvid-console/issues"
+  },
+  "homepage": "https://github.com/janelia-flyem/dvid-console",
+  "dependencies": {
+    "@material-ui/core": "^3.0.1",
+    "@material-ui/icons": "^3.0.1",
+    "ajv": "^6.5.3",
+    "prop-types": "^15.6.2",
+    "react": "^16.4.2",
+    "react-dom": "^16.4.2",
+    "react-router": "^4.3.1",
+    "react-router-dom": "^4.3.1",
+    "react-scripts": "1.1.5"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "devDependencies": {
+    "eslint": "^5.4.0",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-jsx-a11y": "^6.1.1",
+    "eslint-plugin-react": "^7.11.1"
+  }
+}
