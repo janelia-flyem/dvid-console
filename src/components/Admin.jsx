@@ -1,6 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
+import ServerStats from './ServerStats';
+import ServerStatus from './ServerStatus';
+import ServerTypes from './ServerTypes';
 
 const styles = theme => ({
   root: {
@@ -13,7 +16,12 @@ class Admin extends React.Component {
   render() {
     const { classes } = this.props;
     return (
-      <div className={classes.root}>Admin page</div>
+      <div className={classes.root}>
+        <h1>Server Stats</h1>
+        <ServerStats />
+        <ServerStatus />
+        <ServerTypes />
+      </div>
     );
   }
 }
