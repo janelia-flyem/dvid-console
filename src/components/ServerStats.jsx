@@ -25,19 +25,37 @@ const styles = theme => ({
 
 
 class ServerStats extends React.Component {
-  render() {
-    const { classes } = this.props;
+  componentDidMount() {
+    const { actions } = this.props;
+    actions.loadStats();
+    actions.loadRepos();
+  }
 
-    const versionNodes = 0;
-    const dvidVersion = 'unknown';
+  render() {
+    const { classes, stats, repos } = this.props;
+
+    let versionNodes = 0;
+
+    Object.keys(repos).forEach((key) => {
+      const repo = repos[key];
+      if (repo) {
+        versionNodes += Object.keys(repo.DAG.Nodes).length;
+      }
+    });
+
+    const dvidVersion = stats['DVID Version'] || 'unknown';
     const gitLink = 'https://github.com/janelia-flyem/dvid/';
-    const usedCores = 0;
-    const maxCores = 0;
-    const repoCount = 0;
-    const serverUptime = 0;
-    const storageBackends = 'unknown';
-    const datastoreVersion = 0;
-    const consoleVersion = 0;
+    const usedCores = stats.Cores || 0;
+    const maxCores = stats['Maximum Cores'] || 0;
+    const repoCount = Object.keys(repos).length;
+    const storageBackends = stats['Storage backend'] || 'unknown';
+    const datastoreVersion = stats['Datastore Version'] || 0;
+    const consoleVersion = process.env.REACT_APP_VERSION;
+
+    let serverUptime = 0;
+    if (stats['Server uptime']) {
+      serverUptime = stats['Server uptime'].split('.', 1);
+    }
 
     return (
       <div className={classes.root}>
@@ -82,7 +100,7 @@ class ServerStats extends React.Component {
               />
               <CardContent className={classes.content}>
                 <Typography variant="display1">
-                  {serverUptime}
+                  {serverUptime}s
                 </Typography>
               </CardContent>
             </Card>
@@ -111,7 +129,7 @@ class ServerStats extends React.Component {
                 }
               />
               <CardContent className={classes.content}>
-                <Typography variant="display1">
+                <Typography variant="body2">
                   <a href={gitLink}>{dvidVersion}</a>
                 </Typography>
               </CardContent>
@@ -126,7 +144,7 @@ class ServerStats extends React.Component {
                 }
               />
               <CardContent className={classes.content}>
-                <Typography variant="display1">
+                <Typography variant="body2">
                   {storageBackends}
                 </Typography>
               </CardContent>
@@ -170,6 +188,9 @@ class ServerStats extends React.Component {
 
 ServerStats.propTypes = {
   classes: PropTypes.object.isRequired,
+  actions: PropTypes.object.isRequired,
+  stats: PropTypes.object.isRequired,
+  repos: PropTypes.object.isRequired,
 };
 
 export default withStyles(styles)(ServerStats);

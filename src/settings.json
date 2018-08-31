@@ -1,0 +1,6 @@
+{
+  "dvid": {
+    "host": "emdata1",
+    "port": 8100
+  }
+}

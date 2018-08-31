@@ -38,7 +38,8 @@ class ServerStatus extends React.Component {
 
   // this gets called after the fist time the component is loaded into the page.
   componentDidMount() {
-    this.updateLoadStats();
+    const { actions } = this.props;
+    actions.loadStatus();
   }
 
   componentWillUnmount() {
@@ -95,6 +96,7 @@ class ServerStatus extends React.Component {
 
 ServerStatus.propTypes = {
   classes: PropTypes.object.isRequired,
+  actions: PropTypes.object.isRequired,
 };
 
 export default withStyles(styles)(ServerStatus);

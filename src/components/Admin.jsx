@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import ServerStats from './ServerStats';
-import ServerStatus from './ServerStatus';
+import ServerStats from '../containers/ServerStats';
+import ServerStatus from '../containers/ServerStatus';
 import ServerTypes from './ServerTypes';
 
 const styles = theme => ({
