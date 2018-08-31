@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import ServerStats from '../containers/ServerStats';
 import ServerStatus from '../containers/ServerStatus';
-import ServerTypes from './ServerTypes';
+import ServerTypes from '../containers/ServerTypes';
 
 const styles = theme => ({
   root: {

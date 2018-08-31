@@ -18,8 +18,20 @@ const styles = theme => ({
 });
 
 class ServerTypes extends React.Component {
+  componentDidMount() {
+    const { actions } = this.props;
+    actions.loadTypes();
+  }
+
   render() {
-    const { classes } = this.props;
+    const { classes, types } = this.props;
+
+    const typeList = [];
+
+    Object.keys(types).forEach((key) => {
+      const type = types[key];
+      typeList.push(<li key={key}><b>{key}</b>: {type}</li>);
+    });
 
     return (
       <div className={classes.root}>
@@ -30,9 +42,9 @@ class ServerTypes extends React.Component {
                 title="Installed Data Types"
               />
               <CardContent>
-                <Typography>
-                  list here
-                </Typography>
+                <ul>
+                  {typeList}
+                </ul>
               </CardContent>
             </Card>
           </Grid>
@@ -44,6 +56,8 @@ class ServerTypes extends React.Component {
 
 ServerTypes.propTypes = {
   classes: PropTypes.object.isRequired,
+  actions: PropTypes.object.isRequired,
+  types: PropTypes.object.isRequired,
 };
 
 export default withStyles(styles)(ServerTypes);

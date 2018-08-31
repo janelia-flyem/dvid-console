@@ -77,6 +77,40 @@ export function loadRepos() {
   };
 }
 
+export const LOADING_DVID_TYPES = 'LOADING_DVID_TYPES';
+export const LOADED_DVID_TYPES = 'LOADED_DVID_TYPES';
+export const LOAD_DVID_TYPES_ERROR = 'LOAD_DVID_TYPES_ERROR';
+
+function loadingDvidTypes() {
+  return {
+    type: LOADING_DVID_TYPES,
+  };
+}
+
+function loadedDvidTypes(json) {
+  return {
+    type: LOADED_DVID_TYPES,
+    json,
+  };
+}
+
+function loadDvidTypesError(error) {
+  return {
+    type: LOAD_DVID_TYPES_ERROR,
+    error,
+  };
+}
+export function loadTypes() {
+  return function loadTypesAsync(dispatch) {
+    dispatch(loadingDvidTypes());
+    api.serverCompiledTypes({
+      callback: data => dispatch(loadedDvidTypes(data)),
+      error: err => dispatch(loadDvidTypesError(err)),
+    });
+  };
+}
+
+
 export const LOADING_DVID_STATUS = 'LOADING_DVID_STATUS';
 
 export function loadStatus() {
