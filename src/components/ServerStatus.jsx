@@ -12,7 +12,6 @@ import {
   YAxis,
   CartesianGrid,
   ResponsiveContainer,
-  Tooltip,
   Legend,
 } from 'recharts';
 
@@ -59,7 +58,6 @@ const datasetYScale = {
 };
 
 const totalPoints = 300;
-const loadStats = [];
 const loadInterval = 1000;
 
 // set up the initial array that will be used to plot the status.
@@ -98,7 +96,6 @@ function convertStatus(status) {
   // trim the first item off
   loadData = loadData.slice(1);
 
-  console.log(loadData);
   return loadData;
 }
 
