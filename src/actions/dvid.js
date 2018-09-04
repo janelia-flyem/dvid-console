@@ -100,6 +100,7 @@ function loadDvidTypesError(error) {
     error,
   };
 }
+
 export function loadTypes() {
   return function loadTypesAsync(dispatch) {
     dispatch(loadingDvidTypes());
@@ -112,9 +113,34 @@ export function loadTypes() {
 
 
 export const LOADING_DVID_STATUS = 'LOADING_DVID_STATUS';
+export const LOADED_DVID_STATUS = 'LOADED_DVID_STATUS';
+export const LOAD_DVID_STATUS_ERROR = 'LOAD_DVID_STATUS_ERROR';
 
-export function loadStatus() {
+function loadingStatus() {
   return {
     type: LOADING_DVID_STATUS,
+  };
+}
+
+function loadedStatus(json) {
+  return {
+    type: LOADED_DVID_STATUS,
+    json,
+  };
+}
+
+function loadStatusError(error) {
+  return {
+    type: LOAD_DVID_STATUS_ERROR,
+    error,
+  };
+}
+export function loadStatus() {
+  return function loadStatusAsync(dispatch) {
+    dispatch(loadingStatus());
+    api.load({
+      callback: data => dispatch(loadedStatus(data)),
+      error: err => dispatch(loadStatusError(err)),
+    });
   };
 }

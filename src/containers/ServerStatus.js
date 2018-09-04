@@ -3,7 +3,7 @@ import ServerStatus from '../components/ServerStatus';
 import { loadStatus } from '../actions/dvid';
 
 const mapStateToProps = state => ({
-  stats: state.stats,
+  status: state.dvid.get('status'),
 });
 
 const mapDispatchToProps = dispatch => ({

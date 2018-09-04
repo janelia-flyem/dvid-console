@@ -10,6 +10,9 @@ const initialState = Immutable.Map({
   types: {},
   types_loading: false,
   types_loaded: false,
+  status: {},
+  status_loading: false,
+  status_loaded: false,
   error: null,
 });
 
@@ -35,6 +38,13 @@ export default function adminReducer(state = initialState, action) {
       return state.set('types', action.json).set('types_loading', false).set('types_loaded', true);
     case 'LOAD_DVID_TYPES_ERROR':
       return state.set('error', action.error).set('types_loading', false);
+
+    case 'LOADING_DVID_STATUS':
+      return state.set('status_loading', true).set('status_loaded', false);
+    case 'LOADED_DVID_STATUS':
+      return state.set('status', action.json).set('status_loading', false).set('status_loaded', true);
+    case 'LOAD_DVID_STATUS_ERROR':
+      return state.set('error', action.error).set('status_loading', false);
 
     default:
       return state;

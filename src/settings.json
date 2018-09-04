@@ -1,6 +1,6 @@
 {
   "dvid": {
-    "host": "emdata1",
-    "port": 8100
+    "host": "emdata3",
+    "port": 8900
   }
 }

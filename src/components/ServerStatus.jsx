@@ -11,6 +11,7 @@ import {
   XAxis,
   YAxis,
   CartesianGrid,
+  ResponsiveContainer,
   Tooltip,
   Legend,
 } from 'recharts';
@@ -25,21 +26,85 @@ const styles = theme => ({
   },
 });
 
+// Determine the scale for each type of monitoring on y-axis.
+const datasetYScale = {
+  'key bytes read': {
+    scale: 1000000,
+    units: 'MB/sec',
+  },
+  'key bytes written': {
+    scale: 1000000,
+    units: 'MB/sec',
+  },
+  'value bytes read': {
+    scale: 1000000,
+    units: 'MB/sec',
+  },
+  'value bytes written': {
+    scale: 1000000,
+    units: 'MB/sec',
+  },
+  'file bytes read': {
+    scale: 1000000,
+    units: 'MB/sec',
+  },
+  'file bytes written': {
+    scale: 1000000,
+    units: 'MB/sec',
+  },
+  'handlers active': {
+    scale: 1,
+    units: '%',
+  },
+};
+
+const totalPoints = 300;
+const loadStats = [];
 const loadInterval = 1000;
+
+// set up the initial array that will be used to plot the status.
+// If it isn't prepopulated with empty data, it won't update the
+// chart correctly.
+let loadData = [];
+for (let i = 0; i < totalPoints; i++) {
+  loadData[i] = {};
+}
+
 let updateTimeout = null;
 
-class ServerStatus extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      data: [],
-    };
-  }
+function formatData(dataset, value) {
+  const yscale = datasetYScale[dataset];
+  let scaled = value / yscale.scale;
 
-  // this gets called after the fist time the component is loaded into the page.
+  if (scaled < 0) {
+    scaled = 0;
+  }
+  if (scaled > 100) {
+    scaled = 100;
+  }
+  return scaled;
+}
+
+
+function convertStatus(status) {
+  const dataPoint = {};
+  Object.keys(status).forEach((dataset) => {
+    if (dataset in datasetYScale) {
+      dataPoint[dataset] = formatData(dataset, status[dataset]);
+      dataPoint.name = new Date();
+    }
+  });
+  loadData.push(dataPoint);
+  // trim the first item off
+  loadData = loadData.slice(1);
+
+  console.log(loadData);
+  return loadData;
+}
+
+class ServerStatus extends React.Component {
   componentDidMount() {
-    const { actions } = this.props;
-    actions.loadStatus();
+    this.updateLoadStats();
   }
 
   componentWillUnmount() {
@@ -48,13 +113,15 @@ class ServerStatus extends React.Component {
   }
 
   updateLoadStats() {
-    this.setState({ data: [] });
+    const { actions } = this.props;
+    actions.loadStatus();
     updateTimeout = setTimeout(this.updateLoadStats.bind(this), loadInterval);
   }
 
   render() {
-    const { classes } = this.props;
-    const { data } = this.state;
+    const { classes, status } = this.props;
+
+    const data = convertStatus(status);
 
     return (
       <div className={classes.root}>
@@ -66,25 +133,31 @@ class ServerStatus extends React.Component {
               />
               <CardContent>
                 <div className="usageChart" />
-                <LineChart
-                  width={730}
-                  height={250}
-                  data={data}
-                  margin={{
-                    top: 5,
-                    right: 30,
-                    left: 20,
-                    bottom: 5,
-                  }}
-                >
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                  <Line type="monotone" dataKey="fbr" stroke="#8884d8" />
-                  <Line type="monotone" dataKey="fbw" stroke="#82ca9d" />
-                </LineChart>
+                <ResponsiveContainer width="90%" height={300}>
+                  <LineChart
+                    data={data}
+                    margin={{
+                      top: 5,
+                      right: 30,
+                      left: 20,
+                      bottom: 5,
+                    }}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                    <XAxis dataKey="name" />
+                    <YAxis
+                      ticks={[25, 50, 75, 100]}
+                    />
+                    <Legend />
+                    <Line type="monotone" dataKey="key bytes read" stroke="#8884d8" isAnimationActive={false} dot={false} />
+                    <Line type="monotone" dataKey="key bytes written" stroke="#8856a7" isAnimationActive={false} dot={false} />
+                    <Line type="monotone" dataKey="value bytes read" stroke="#43a2ca" isAnimationActive={false} dot={false} />
+                    <Line type="monotone" dataKey="value bytes written" stroke="#a8ddb5" isAnimationActive={false} dot={false} />
+                    <Line type="monotone" dataKey="file bytes read" stroke="#f03b20" isAnimationActive={false} dot={false} />
+                    <Line type="monotone" dataKey="file bytes written" stroke="#feb24c" isAnimationActive={false} dot={false} />
+                    <Line type="monotone" dataKey="handlers active" stroke="#cccccc" isAnimationActive={false} dot={false} />
+                  </LineChart>
+                </ResponsiveContainer>
               </CardContent>
             </Card>
           </Grid>
@@ -97,6 +170,7 @@ class ServerStatus extends React.Component {
 ServerStatus.propTypes = {
   classes: PropTypes.object.isRequired,
   actions: PropTypes.object.isRequired,
+  status: PropTypes.object.isRequired,
 };
 
 export default withStyles(styles)(ServerStatus);
