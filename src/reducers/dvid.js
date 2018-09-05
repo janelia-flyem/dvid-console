@@ -7,6 +7,7 @@ const initialState = Immutable.Map({
   repos: {},
   repos_loading: false,
   repos_loaded: false,
+  repoDetail: {},
   types: {},
   types_loading: false,
   types_loaded: false,
@@ -45,6 +46,9 @@ export default function adminReducer(state = initialState, action) {
       return state.set('status', action.json).set('status_loading', false).set('status_loaded', true);
     case 'LOAD_DVID_STATUS_ERROR':
       return state.set('error', action.error).set('status_loading', false);
+
+    case 'LOADED_REPO_INFO':
+      return state.set('repoDetail', action.json);
 
     default:
       return state;

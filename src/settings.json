@@ -1,6 +1,6 @@
 {
   "dvid": {
-    "host": "emdata3",
-    "port": 8900
+    "host": "emdata.janelia.org",
+    "port": 80
   }
 }

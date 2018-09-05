@@ -67,12 +67,33 @@ function loadDvidReposError(error) {
   };
 }
 
-export function loadRepos() {
+/* export function loadRepos() {
   return function loadReposAsync(dispatch) {
     dispatch(loadingDvidRepos());
     api.reposInfo({
-      callback: data => dispatch(loadedDvidRepos(data)),
-      error: err => dispatch(loadDvidReposError(err)),
+      callback: (data) => {
+        dispatch(loadedDvidRepos(data));
+      },
+      error: (err) => {
+        dispatch(loadDvidReposError(err));
+      },
+    });
+  };
+} */
+
+export function loadRepos() {
+  return function loadReposAsync(dispatch) {
+    dispatch(loadingDvidRepos());
+    return new Promise((resolve, reject) => {
+      api.reposInfo({
+        callback: (data) => {
+          dispatch(loadedDvidRepos(data));
+          resolve();
+        },
+        error: (err) => {
+          reject(dispatch(loadDvidReposError(err)));
+        },
+      });
     });
   };
 }
@@ -141,6 +162,58 @@ export function loadStatus() {
     api.load({
       callback: data => dispatch(loadedStatus(data)),
       error: err => dispatch(loadStatusError(err)),
+    });
+  };
+}
+
+export const LOADING_REPO_INFO = 'LOADING_REPO_INFO';
+export const LOADED_REPO_INFO = 'LOADED_REPO_INFO';
+export const LOAD_REPO_INFO_ERROR = 'LOAD_REPO_INFO_ERROR';
+
+function loadingRepoInfo(name) {
+  return {
+    type: LOADING_REPO_INFO,
+    name,
+  };
+}
+
+function loadedRepoInfo(json) {
+  return {
+    type: LOADED_REPO_INFO,
+    json,
+  };
+}
+
+function loadRepoInfoError(error) {
+  return {
+    type: LOAD_REPO_INFO_ERROR,
+    error,
+  };
+}
+
+export function loadRepoInfo(id) {
+  return function loadRepoInfoAsync(dispatch) {
+    dispatch(loadingRepoInfo(id));
+    return new Promise((resolve, reject) => {
+      api.repo({
+        uuid: id,
+        endpoint: 'info',
+        callback: (data) => {
+          resolve(dispatch(loadedRepoInfo(data)));
+        },
+        error: (err) => {
+          reject(dispatch(loadRepoInfoError(err)));
+        },
+      });
+    });
+  };
+}
+
+export function loadRepoInfoFromAlias(alias) {
+  return function loadRepoInfoFromAliasAsync(dispatch, getState) {
+    return dispatch(loadRepos()).then(() => {
+      const repoIDs = Object.values(getState().dvid.get('repos')).filter(repo => repo.Alias === alias).map(repo => repo.Root);
+      return dispatch(loadRepoInfo(repoIDs[0]));
     });
   };
 }

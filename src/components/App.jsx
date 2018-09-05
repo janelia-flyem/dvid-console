@@ -6,7 +6,8 @@ import blue from '@material-ui/core/colors/blue';
 import Admin from './Admin';
 import Home from './Home';
 import About from './About';
-import Navigation from './Navigation';
+import RepoHome from '../containers/RepoHome';
+import Navigation from '../containers/Navigation';
 
 const theme = createMuiTheme({
   palette: {
@@ -31,6 +32,7 @@ class App extends Component {
             <Route exact path="/" component={Home} />
             <Route path="/admin" component={Admin} />
             <Route path="/about" component={About} />
+            <Route path="/repo/:name" component={RepoHome} />
           </Switch>
         </div>
       </MuiThemeProvider>
