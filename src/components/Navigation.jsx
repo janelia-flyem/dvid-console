@@ -52,38 +52,41 @@ class Navigation extends React.Component {
     });
 
     return (
-      <AppBar position="sticky" key="appbar">
-        <Toolbar>
-          <Button component={HomeLink} color="inherit">
-            <Typography variant="title" color="inherit">
-              DVID
-            </Typography>
-          </Button>
-          <FormControl className={classes.flex}>
-            <NativeSelect
-              className={classes.select}
-              value={match.params.name}
-              onChange={this.handleChange}
+      <div>
+        <AppBar position="sticky" key="appbar">
+          <Toolbar>
+            <Button component={HomeLink} color="inherit">
+              <Typography variant="title" color="inherit">
+                DVID
+              </Typography>
+            </Button>
+            <FormControl className={classes.flex}>
+              <NativeSelect
+                className={classes.select}
+                value={match.params.name}
+                onChange={this.handleChange}
+              >
+                <option value="">Select a repository</option>
+                {options}
+              </NativeSelect>
+            </FormControl>
+            <IconButton
+              component={AdminLink}
+              color="inherit"
             >
-              <option value="">Select a repository</option>
-              {options}
-            </NativeSelect>
-          </FormControl>
-          <IconButton
-            component={AdminLink}
-            color="inherit"
-          >
-            <SettingsIcon />
-          </IconButton>
-          <IconButton
-            component={AboutLink}
-            color="inherit"
-          >
-            <AboutIcon />
-          </IconButton>
+              <SettingsIcon />
+            </IconButton>
+            <IconButton
+              component={AboutLink}
+              color="inherit"
+            >
+              <AboutIcon />
+            </IconButton>
 
-        </Toolbar>
-      </AppBar>
+          </Toolbar>
+        </AppBar>
+        {this.props.children}
+      </div>
     );
   }
 }

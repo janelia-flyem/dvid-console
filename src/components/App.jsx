@@ -4,7 +4,7 @@ import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import blue from '@material-ui/core/colors/blue';
 
 import Admin from './Admin';
-import Home from './Home';
+import Home from '../containers/Home';
 import About from './About';
 import RepoHome from '../containers/RepoHome';
 import Navigation from '../containers/Navigation';

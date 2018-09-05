@@ -13,8 +13,13 @@ const styles = theme => ({
 });
 
 class Home extends React.Component {
+  componentDidMount() {
+    // do nothing here, but rely on the Navigation component to
+    // load the repo list and save the values in the redux store.
+  }
+
   render() {
-    const { classes } = this.props;
+    const { classes, repos } = this.props;
     return (
       <div className={classes.root}>
         <Grid container spacing={24}>
@@ -22,7 +27,7 @@ class Home extends React.Component {
             <h2>Repositories</h2>
           </Grid>
           <Grid item sm={6}>
-            <RepoList />
+            <RepoList repos={repos} />
           </Grid>
           <Grid item sm={6}>
             <HomeHelp />
@@ -35,6 +40,7 @@ class Home extends React.Component {
 
 Home.propTypes = {
   classes: PropTypes.object.isRequired,
+  repos: PropTypes.object.isRequired,
 };
 
 export default withStyles(styles)(Home);
