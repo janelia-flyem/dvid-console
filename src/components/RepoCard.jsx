@@ -37,7 +37,7 @@ class RepoCard extends React.Component {
   }
 
   render() {
-    const { classes, repo } = this.props;
+    const { classes, repo, dataSource } = this.props;
     const { expanded } = this.state;
     const desc = repo.Description;
     const date = parse(repo.Updated);
@@ -47,7 +47,7 @@ class RepoCard extends React.Component {
 
     const Component = () => {
       const codeString = ['from diced import DicedStore',
-        `store = DicedStore("${this.props.dataSource || '<data source>'}")`,
+        `store = DicedStore("${dataSource}")`,
         `repo = store.open_repo("${repo.Alias || '<data source>'}")`].join('\n');
       return <SyntaxHighlighter language="python" style={darcula}>{codeString}</SyntaxHighlighter>;
     };
@@ -85,6 +85,11 @@ class RepoCard extends React.Component {
 RepoCard.propTypes = {
   classes: PropTypes.object.isRequired,
   repo: PropTypes.object.isRequired,
+  dataSource: PropTypes.string,
+};
+
+RepoCard.defaultProps = {
+  dataSource: '<data source>',
 };
 
 export default withStyles(styles)(RepoCard);
