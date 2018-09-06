@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
 import ReadMe from './ReadMe';
 import RepoData from './RepoData';
 
@@ -36,12 +37,12 @@ class RepoHome extends React.Component {
   }
 
   render() {
-    const { classes, match, repoDetail } = this.props;
+    const { classes, repoDetail } = this.props;
     return (
       <div className={classes.root}>
         <Grid container spacing={24}>
           <Grid item xs={6}>
-            <p>{match.params.name}</p>
+            <Typography variant="title">{repoDetail.Alias}</Typography>
           </Grid>
           <Grid item xs={6} className={classes.right}>
             <p>{repoDetail.Description}</p>
