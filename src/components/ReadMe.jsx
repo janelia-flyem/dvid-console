@@ -4,8 +4,24 @@ import Markdown from 'react-markdown';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
+import Typography from '@material-ui/core/Typography';
+import { withStyles } from '@material-ui/core/styles';
+import FileIcon from '@material-ui/icons/Description';
 import dvid from 'dvid';
 import settings from '../settings.json';
+
+const styles = theme => ({
+  root: {
+    flexGrow: 1,
+    margin: theme.spacing.unit * 2,
+  },
+  cardHeader: {
+    background: '#f5f5f5',
+    borderBottom: '1px solid #ddd',
+    padding: '0.5em 2em',
+  },
+});
+
 
 class ReadMe extends React.Component {
   constructor(props) {
@@ -48,15 +64,19 @@ class ReadMe extends React.Component {
 
   render() {
     const { readme, error } = this.state;
+    const { classes } = this.props;
     let content = 'loading...';
     if (readme) {
       content = <Markdown source={readme} />;
     } else if (error) {
       content = "You don't have a readme yet. Create one and upload to the .files keyvalue.";
     }
+
+    const title = <Typography variant="title"><FileIcon /> README.md</Typography>;
+
     return (
       <Card>
-        <CardHeader title="README.md" />
+        <CardHeader title={title} className={classes.cardHeader} />
         <CardContent>
           {content}
         </CardContent>
@@ -67,10 +87,11 @@ class ReadMe extends React.Component {
 
 ReadMe.propTypes = {
   id: PropTypes.string,
+  classes: PropTypes.object.isRequired,
 };
 
 ReadMe.defaultProps = {
   id: null,
 };
 
-export default ReadMe;
+export default withStyles(styles)(ReadMe);
