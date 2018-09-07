@@ -48,7 +48,7 @@ class RepoHome extends React.Component {
             <p>{repoDetail.Description}</p>
           </Grid>
           <Grid item xs={12}>
-            <RepoData {...this.props} />
+            <RepoData repoDetail={repoDetail} />
           </Grid>
           <Grid item xs={12}>
             <ReadMe id={repoDetail.Root} />

@@ -17,10 +17,9 @@ const styles = theme => ({
   },
 });
 
-
 class RepoData extends React.Component {
   render() {
-    const { classes } = this.props;
+    const { classes, repoDetail } = this.props;
     return (
       <Card>
         <CardHeader title="Data" className={classes.cardHeader} />
@@ -31,7 +30,7 @@ class RepoData extends React.Component {
                 <RepoArrays />
               </Grid>
               <Grid item sm={12}>
-                <RepoFiles />
+                <RepoFiles repo={repoDetail} />
               </Grid>
             </Grid>
             <Grid item sm={6}>
@@ -46,6 +45,7 @@ class RepoData extends React.Component {
 
 RepoData.propTypes = {
   classes: PropTypes.object.isRequired,
+  repoDetail: PropTypes.object.isRequired,
 };
 
 export default withStyles(styles)(RepoData);
