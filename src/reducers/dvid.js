@@ -48,6 +48,8 @@ export default function adminReducer(state = initialState, action) {
       return state.set('error', action.error).set('status_loading', false);
 
     case 'LOADED_REPO_INFO':
+      // TODO: at this point we need to build the dag content, so that we can use
+      // it in later checks and for the DAG display.
       return state.set('repoDetail', action.json);
 
     default:

@@ -67,20 +67,6 @@ function loadDvidReposError(error) {
   };
 }
 
-/* export function loadRepos() {
-  return function loadReposAsync(dispatch) {
-    dispatch(loadingDvidRepos());
-    api.reposInfo({
-      callback: (data) => {
-        dispatch(loadedDvidRepos(data));
-      },
-      error: (err) => {
-        dispatch(loadDvidReposError(err));
-      },
-    });
-  };
-} */
-
 export function loadRepos() {
   return function loadReposAsync(dispatch) {
     dispatch(loadingDvidRepos());

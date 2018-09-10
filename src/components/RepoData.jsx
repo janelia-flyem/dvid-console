@@ -27,7 +27,7 @@ class RepoData extends React.Component {
           <Grid container spacing={24}>
             <Grid item sm={6}>
               <Grid item sm={12}>
-                <RepoArrays />
+                <RepoArrays dataInstances={repoDetail.DataInstances} />
               </Grid>
               <Grid item sm={12}>
                 <RepoFiles repo={repoDetail} />
