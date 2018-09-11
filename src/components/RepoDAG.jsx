@@ -4,6 +4,12 @@ import ReactDOM from 'react-dom';
 import d3 from 'd3';
 import $ from 'jquery';
 import stringify from 'json-stable-stringify';
+import QuestionIcon from '@material-ui/icons/HelpOutline';
+import FullScreenIcon from '@material-ui/icons/Fullscreen';
+import DownloadIcon from '@material-ui/icons/SaveAlt';
+import CenterIcon from '@material-ui/icons/CenterFocusStrong';
+import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
 // import dagreD3 from 'dagre-d3';
 // import ServerActions from '../actions/ServerActions';
 // import InstanceActions from '../actions/InstanceActions';
@@ -160,6 +166,36 @@ function scrollToNode(nodeSelector) {
   return false;
 }
 
+function fitDAG() {
+  // figure out the scale ratio that will be used to resize the graph.
+  let scale = Math.min($('svg').width() / dag.graph().width, $('svg').height() / dag.graph().height);
+  // only scale the graph if it's larger than the container. otherwise, keep original size
+  scale = scale > 1 ? 1 : scale -= 0.05;
+  // work out the offsets needed to center the graph
+  const xCenterOffset = Math.abs(((dag.graph().width * scale) - $('svg').width()) / 2);
+  let yCenterOffset = Math.abs(((dag.graph().height * scale) - $('svg').height()) / 2);
+  // nudge the y down a bit
+  yCenterOffset += 5;
+  // apply the scale and translation in one go.
+  elementHolderLayer.attr('transform', `matrix(${scale}, 0, 0, ${scale}, ${xCenterOffset},${yCenterOffset})`);
+  // Set up zoom support
+  setZoom([xCenterOffset, yCenterOffset], scale);
+}
+
+function clear() {
+  const svg = d3.select('svg > g');
+  svg.selectAll('*').remove();
+}
+
+function downloadSVGHandler() {
+  fitDAG();
+  const e = document.createElement('script');
+  e.setAttribute('src', '/js/vendor/svg-crowbar.js');
+  e.setAttribute('class', 'svg-crowbar');
+  document.body.appendChild(e);
+}
+
+
 // Dagre graph
 class RepoDAG extends React.Component {
   constructor(props) {
@@ -211,7 +247,8 @@ class RepoDAG extends React.Component {
 
   // get the actual node with all information from the original DAG
   getNodeByVersion(id) {
-    const nodes = this.props.repo.DAG.Nodes;
+    const { repo } = this.props;
+    const nodes = repo.DAG.Nodes;
     const keys = Object.keys(nodes);
 
     for (let k = 0; k < keys.length; k++) {
@@ -311,7 +348,7 @@ class RepoDAG extends React.Component {
       .attr('mode', 'normal');
 
     // create new dagreD3 object
-    dag = {} /* new dagreD3.graphlib.Graph({
+    dag = {}; /* new dagreD3.graphlib.Graph({
       compound: true,
       multigraph: true,
     })
@@ -385,8 +422,7 @@ class RepoDAG extends React.Component {
     this.drawEdgedBackToRoot(nodes[Object.keys(nodes)[0]]);
 
     // return a list of all predecessors of a parent node
-    function findAllPredecessors(node, predecessorsList) {
-      predecessorsList = predecessorsList || [];
+    function findAllPredecessors(node, predecessorsList = []) {
       dag.predecessors(node).forEach((n) => {
         // some nodes can be visited more than once so this removes them
         if (predecessorsList.indexOf(n) === -1) {
@@ -439,10 +475,6 @@ class RepoDAG extends React.Component {
     };
   }
 
-  clear() {
-    const svg = d3.select('svg > g');
-    svg.selectAll('*').remove();
-  }
 
   update(currentDag) {
     const self = this;
@@ -472,9 +504,9 @@ class RepoDAG extends React.Component {
 
     d3.select('.dag_note').remove();
 
-    let forbidden_toggle = '';
+    let forbiddenToggle = '';
     if (!this.isEditable()) {
-      forbidden_toggle = ' forbidden';
+      forbiddenToggle = ' forbidden';
     }
 
     const tooltip = d3.select('body')
@@ -515,7 +547,7 @@ class RepoDAG extends React.Component {
       .attr('y', '-34px')
       .attr('x', '-40px')
       .append('xhtml:span')
-      .attr('class', `unlocked fa fa-unlock ${forbidden_toggle}`);
+      .attr('class', `unlocked fa fa-unlock ${forbiddenToggle}`);
 
     // // add class for hint nodes
     // elementHolderLayer.selectAll("g.node.type-hint")
@@ -523,14 +555,14 @@ class RepoDAG extends React.Component {
 
     // add navigation listener - antje's code
     elementHolderLayer.selectAll('g.node rect')
-      .on('mouseenter', function (v) {
+      .on('mouseenter', (v) => {
         if (currentDag.node(v).note) {
           tooltip.style('visibility', 'visible');
           tooltip.text(currentDag.node(v).note);
         }
         $(`#${this.id}`).css('filter', 'url(#drop-shadow)');
       })
-      .on('mouseleave', function (v) {
+      .on('mouseleave', () => {
         tooltip.style('visibility', 'hidden');
         $(`#${this.id}`).css('filter', '');
       })
@@ -552,9 +584,9 @@ class RepoDAG extends React.Component {
     if (this.isEditable()) {
       elementHolderLayer.selectAll('g.node foreignObject span')
       // want to add tooltips?
-        .on('mouseenter', (v) => {
+        .on('mouseenter', () => {
         })
-        .on('mouseleave', (v) => {
+        .on('mouseleave', () => {
         })
         .on('mousemove', () => {
         })
@@ -563,7 +595,7 @@ class RepoDAG extends React.Component {
           if (d3.event.defaultPrevented) return;
 
           // loads the node's data into page
-          const uuid = currentDag.node(v).uuid;
+          const { uuid } = currentDag.node(v);
           // const classList = d3.event.path[0].classList;
 
           // figure out what action to take based on the icon class
@@ -595,7 +627,7 @@ class RepoDAG extends React.Component {
     }
 
     const nodeDrag = d3.behavior.drag()
-      .on('drag', function (d) {
+      .on('drag', (d) => {
         const node = d3.select(this);
 
 
@@ -672,13 +704,14 @@ class RepoDAG extends React.Component {
     this.expandGraph();
     const success = scrollToNode('.node.master');
     if (!success) {
-      this.fitDAG();
+      fitDAG();
     }
   }
 
   // find the root node, branch is ""
   findRoot() {
-    const { Nodes } = this.props.repo.DAG;
+    const { repo } = this.props;
+    const { Nodes } = repo.DAG;
     const keys = Object.keys(Nodes);
     for (let i = 0; i < keys.length; i++) {
       if (Nodes[keys[i]].Parents.length === 0) {
@@ -689,14 +722,15 @@ class RepoDAG extends React.Component {
   }
 
   callbackBranches(selectedBranch) {
+    const { repo, uuid } = this.props;
     if (selectedBranch === 'master') {
       selectedBranch = '';
     }
 
-    this.clear();
+    clear();
     dagControl.oddNodes = [];
     if (selectedBranch === 'showall') {
-      if (this.props.repo.DAG.Nodes.hasOwnProperty(this.props.uuid)) {
+      if (repo.DAG.Nodes.hasOwnProperty(uuid)) {
         this.initDag(this, this.props, null, null);
       }
     } else {
@@ -714,7 +748,7 @@ class RepoDAG extends React.Component {
 
       this.traverseTree(root, selectedBranch, branchObject, true);
       this.initDag(this, this.props, selectedBranch, branchObject);
-      this.fitDAG(partialDAG);
+      fitDAG(partialDAG);
     }
   }
 
@@ -733,22 +767,6 @@ class RepoDAG extends React.Component {
     // for the lite app, check if the serverInfo mode is set to 'read only'
     return isAdmin
       || (lite && (serverInfo && serverInfo.Mode ? serverInfo.Mode !== 'read only' : true));
-  }
-
-  fitDAG() {
-    // figure out the scale ratio that will be used to resize the graph.
-    let scale = Math.min($('svg').width() / dag.graph().width, $('svg').height() / dag.graph().height);
-    // only scale the graph if it's larger than the container. otherwise, keep original size
-    scale = scale > 1 ? 1 : scale -= 0.05;
-    // work out the offsets needed to center the graph
-    const xCenterOffset = Math.abs(((dag.graph().width * scale) - $('svg').width()) / 2);
-    let yCenterOffset = Math.abs(((dag.graph().height * scale) - $('svg').height()) / 2);
-    // nudge the y down a bit
-    yCenterOffset += 5;
-    // apply the scale and translation in one go.
-    elementHolderLayer.attr('transform', `matrix(${scale}, 0, 0, ${scale}, ${xCenterOffset},${yCenterOffset})`);
-    // Set up zoom support
-    setZoom([xCenterOffset, yCenterOffset], scale);
   }
 
   // toggles collapsing and expanding of a parent node
@@ -801,20 +819,12 @@ class RepoDAG extends React.Component {
 
   expandAndScale() {
     this.expandGraph();
-    this.fitDAG();
+    fitDAG();
   }
 
   collapseAndScale() {
     this.collapseGraph();
-    this.fitDAG();
-  }
-
-  downloadSVGHandler() {
-    this.fitDAG();
-    const e = document.createElement('script');
-    e.setAttribute('src', '/js/vendor/svg-crowbar.js');
-    e.setAttribute('class', 'svg-crowbar');
-    document.body.appendChild(e);
+    fitDAG();
   }
 
   render() {
@@ -851,48 +861,27 @@ class RepoDAG extends React.Component {
               {/* <BranchSelect myNodes={repo.DAG.Nodes} callbackFromParent={this.callbackBranches} /> */}
             </div>
             <div className="dag-tools">
-              <button
-                className="btn btn-default pull-right"
-                data-container="body"
-                data-toggle="tooltip"
-                data-placement="bottom"
-                title="help"
-              >
-                <span className="fa fa-question" />
-              </button>
-              <button
-                className="btn btn-default pull-right"
-                data-container="body"
-                data-toggle="tooltip"
-                data-placement="bottom"
-                title="fit graph to window"
-                onClick={this.fitDAG}
-              >
-                <span className="fa fa-arrows-alt" />
-              </button>
-              <button
-                className="btn btn-default current pull-right"
-                data-container="body"
-                data-toggle="tooltip"
-                data-placement="bottom"
-                title="scroll to current node"
-                onClick={this.scrollToCurrent}
-              ><span
-                className="fa fa-crosshairs"
-              />
-              </button>
+              <Tooltip title="Help">
+                <IconButton color="primary">
+                  <QuestionIcon />
+                </IconButton>
+              </Tooltip>
+              <Tooltip title="fit graph to window">
+                <IconButton color="primary" onClick={fitDAG}>
+                  <FullScreenIcon />
+                </IconButton>
+              </Tooltip>
+              <Tooltip title="scroll to current node">
+                <IconButton color="primary" onClick={this.scrollToCurrent}>
+                  <CenterIcon />
+                </IconButton>
+              </Tooltip>
               {scrollToMasterBtn}
-              <button
-                className="btn btn-default pull-right"
-                data-container="body"
-                data-toggle="tooltip"
-                data-placement="bottom"
-                title="download version history as svg"
-                onClick={this.downloadSVGHandler}
-              ><span
-                className="fa fa-download"
-              />
-              </button>
+              <Tooltip title="download version history as svg">
+                <IconButton color="primary" onClick={downloadSVGHandler}>
+                  <DownloadIcon />
+                </IconButton>
+              </Tooltip>
             </div>
             <svg width="100%" height={dagHeight} ref="DAGimage">
               <g />
@@ -909,6 +898,8 @@ RepoDAG.propTypes = {
   repo: PropTypes.object.isRequired,
   lite: PropTypes.bool.isRequired,
   repoMasterUuid: PropTypes.string.isRequired,
+  uuid: PropTypes.string.isRequired,
+  serverInfo: PropTypes.object.isRequired,
 };
 
 export default RepoDAG;
