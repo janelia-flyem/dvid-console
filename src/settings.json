@@ -1,7 +1,11 @@
 {
-  "dvid": {
+  "_dvid": {
     "host": "emdata.janelia.org",
     "port": 80
+  },
+  "dvid": {
+    "host": "emdata3.int.janelia.org",
+    "port": 8900
   },
   "datatypeLabels": {
     "uint8blk": [

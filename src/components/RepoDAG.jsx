@@ -10,13 +10,15 @@ import DownloadIcon from '@material-ui/icons/SaveAlt';
 import CenterIcon from '@material-ui/icons/CenterFocusStrong';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
-// import dagreD3 from 'dagre-d3';
+import dagreD3 from 'dagre-d3';
 // import ServerActions from '../actions/ServerActions';
 // import InstanceActions from '../actions/InstanceActions';
 /* import ModalActions from '../actions/ModalActions';
 import { ModalTypes } from '../stores/ModalStore'; */
 // import DAGmodals from '../components/DAGmodals.react.js';
 // import BranchSelect from '../components/BranchSelect.react.js';
+
+import './RepoDAG.css';
 
 let dag;
 let elementHolderLayer;
@@ -153,8 +155,8 @@ function scrollToNode(nodeSelector) {
     const masterT = { x: mTransform.translate[0], y: mTransform.translate[1] };
     // create a translation that will center this node on the display
     const newT = {
-      x: $('svg').width() / 2 - masterT.x,
-      y: $('svg').height() / 2 - masterT.y,
+      x: $('#DAGimage').width() / 2 - masterT.x,
+      y: $('#DAGimage').height() / 2 - masterT.y,
     };
     // apply with a basic transition
     elementHolderLayer.transition().duration(300).attr('transform', `translate(${newT.x}, ${newT.y})`);
@@ -168,12 +170,12 @@ function scrollToNode(nodeSelector) {
 
 function fitDAG() {
   // figure out the scale ratio that will be used to resize the graph.
-  let scale = Math.min($('svg').width() / dag.graph().width, $('svg').height() / dag.graph().height);
+  let scale = Math.min($('#DAGimage').width() / dag.graph().width, $('#DAGimage').height() / dag.graph().height);
   // only scale the graph if it's larger than the container. otherwise, keep original size
   scale = scale > 1 ? 1 : scale -= 0.05;
   // work out the offsets needed to center the graph
-  const xCenterOffset = Math.abs(((dag.graph().width * scale) - $('svg').width()) / 2);
-  let yCenterOffset = Math.abs(((dag.graph().height * scale) - $('svg').height()) / 2);
+  const xCenterOffset = Math.abs(((dag.graph().width * scale) - $('#DAGimage').width()) / 2);
+  let yCenterOffset = Math.abs(((dag.graph().height * scale) - $('#DAGimage').height()) / 2);
   // nudge the y down a bit
   yCenterOffset += 5;
   // apply the scale and translation in one go.
@@ -203,10 +205,11 @@ class RepoDAG extends React.Component {
     this.state = {
       isAdmin: false,
     };
+    this.DAGimage = React.createRef();
   }
 
   componentDidMount() {
-    this.drawGraph(this.props);
+    this.drawGraph();
     /* const node = ReactDOM.findDOMNode(this);
     $(node).tooltip({
       selector: '[data-toggle="tooltip"]',
@@ -235,13 +238,14 @@ class RepoDAG extends React.Component {
     return false;
   }
 
-  componentDidUpdate(props) {
-    this.drawGraph(props);
+  componentDidUpdate() {
+    console.log('component Updated');
+    this.drawGraph();
   }
 
   componentWillUnmount() {
-    const tips = $(ReactDOM.findDOMNode(this)).find('[data-toggle="tooltip"]');
-    tips.tooltip('destroy');
+    // const tips = $(ReactDOM.findDOMNode(this)).find('[data-toggle="tooltip"]');
+    // tips.tooltip('destroy');
   }
 
 
@@ -306,11 +310,16 @@ class RepoDAG extends React.Component {
     }
   }
 
-  initDag(t, props, selectedBranch, nodes) {
+  initDag(selectedBranch, nodes) {
+    const {
+      repo,
+      repoMasterUuid,
+      repoMasterBranchHist,
+      uuid,
+    } = this.props;
     // initialize svg for D3
-    const svg = d3.select('svg');
-    // .attr("width", width)
-    // .attr("height", height);
+
+    const svg = d3.select(this.DAGimage.current);
     // clear out the existing data.
     svg.selectAll('*').remove();
 
@@ -318,8 +327,8 @@ class RepoDAG extends React.Component {
     svgBackground = svg.append('rect')
       .attr('id', 'svgBackground')
       .attr('fill', 'transparent')
-      .attr('width', $('svg').width())
-      .attr('height', $('svg').height());
+      .attr('width', $(this.DAGimage.current).width())
+      .attr('height', $(this.DAGimage.current).height());
 
     // creates a group that will hold all the svg elements for the graph
     elementHolderLayer = svg.append('g')
@@ -348,16 +357,16 @@ class RepoDAG extends React.Component {
       .attr('mode', 'normal');
 
     // create new dagreD3 object
-    dag = {}; /* new dagreD3.graphlib.Graph({
+    dag = new dagreD3.graphlib.Graph({
       compound: true,
       multigraph: true,
     })
       .setGraph({})
       .setDefaultEdgeLabel(() => ({}));
-    */
+
     // check, if we initialize the full tree or just a sub branch
     if (!nodes) {
-      nodes = props.repo.DAG.Nodes;
+      nodes = repo.DAG.Nodes;
     }
 
     // add nodes and edges from the JSON dag data
@@ -377,17 +386,17 @@ class RepoDAG extends React.Component {
       let note = null;
       if (n.Note) note = n.Note;
 
-      if (props.repoMasterUuid && RegExp(`^${props.repoMasterUuid}`).test(n.UUID)) {
+      if (repoMasterUuid && RegExp(`^${repoMasterUuid}`).test(n.UUID)) {
         nodeclass = `${nodeclass} master`;
-      } else if (props.repoMasterBranchHist) {
-        props.repoMasterBranchHist.slice(1).forEach((masterBranchUuid) => {
+      } else if (repoMasterBranchHist) {
+        repoMasterBranchHist.slice(1).forEach((masterBranchUuid) => {
           if (RegExp(`^${masterBranchUuid}`).test(n.UUID)) {
             nodeclass += ' master_branch';
           }
         });
       }
 
-      if (n.UUID === props.uuid) {
+      if (n.UUID === uuid) {
         nodeclass += ' current ';
       }
 
@@ -477,12 +486,11 @@ class RepoDAG extends React.Component {
 
 
   update(currentDag) {
-    const self = this;
     // renders the dag
-    const dagreRenderer = {}; // new dagreD3.render();
+    const dagreRenderer = new dagreD3.render();
     // Add a custom arrow
     dagreRenderer.arrows().normal = function normal(parent, id, edge, type) {
-      /* const marker = parent.append('marker')
+      const marker = parent.append('marker')
         .attr('id', id)
         .attr('viewBox', '-1 2 12 10')
         .attr('refX', 11)
@@ -497,7 +505,7 @@ class RepoDAG extends React.Component {
         .style('stroke-width', 1.5)
         .style('stroke', 'black')
         .style('stroke-linejoin', 'round');
-      dagreD3.util.applyStyle(path, edge[`${type}Style`]); */
+      dagreD3.util.applyStyle(path, edge[`${type}Style`]);
     };
 
     dagreRenderer(elementHolderLayer, currentDag);
@@ -573,10 +581,10 @@ class RepoDAG extends React.Component {
         // prevents a drag from being registered as a click
         if (d3.event.defaultPrevented) return;
         if (d3.event.shiftKey) {
-          self.toggleChildren(v);
+          this.toggleChildren(v);
         } else {
           // loads the node's data into page (updates viewer link)
-          self.navigateDAG(dag.node(v).uuid);
+          this.navigateDAG(dag.node(v).uuid);
         }
       });
 
@@ -617,9 +625,9 @@ class RepoDAG extends React.Component {
           */
 
           // determine if a navigation is also needed
-          if (self.uuid !== uuid) {
+          if (this.uuid !== uuid) {
             // it's not the current node--navigate to the node
-            self.navigateDAG(uuid, action);
+            this.navigateDAG(uuid, action);
           } else if (action) {
             action();
           }
@@ -627,14 +635,11 @@ class RepoDAG extends React.Component {
     }
 
     const nodeDrag = d3.behavior.drag()
-      .on('drag', (d) => {
+      .on('drag', function(d) {
         const node = d3.select(this);
-
 
         const selectedNode = currentDag.node(d);
         const prevX = selectedNode.x;
-
-
         const prevY = selectedNode.y;
 
         selectedNode.x += d3.event.dx;
@@ -654,7 +659,7 @@ class RepoDAG extends React.Component {
       });
 
     const edgeDrag = d3.behavior.drag()
-      .on('drag', (d) => {
+      .on('drag', function(d) {
         translateEdge(currentDag.edge(d.v, d.w), d3.event.dx, d3.event.dy);
         $(`#${currentDag.edge(d.v, d.w).id} .path`).attr('d', calcPoints(d));
       });
@@ -664,25 +669,10 @@ class RepoDAG extends React.Component {
   }
 
   navigateDAG(newUuid, callback) {
-    const { router } = this.context;
-    const { uuid, lite } = this.props;
+    const { uuid } = this.props;
     if (newUuid !== uuid) {
-      if (lite) {
-        // InstanceActions.clearMeta();
-        // ServerActions.fetch({ newUuid });
-      } else {
-        let queryparams = null;
-        if (router.getCurrentQuery().admin !== undefined) {
-          queryparams = {
-            admin: router.getCurrentQuery().admin,
-          };
-        }
-
-        this.transitionTo('repo', {
-          newUuid,
-        },
-        queryparams);
-      }
+      // InstanceActions.clearMeta();
+      // ServerActions.fetch({ newUuid });
     }
     if (callback) {
       setTimeout(() => {
@@ -731,31 +721,32 @@ class RepoDAG extends React.Component {
     dagControl.oddNodes = [];
     if (selectedBranch === 'showall') {
       if (repo.DAG.Nodes.hasOwnProperty(uuid)) {
-        this.initDag(this, this.props, null, null);
+        this.initDag(null, null);
       }
     } else {
       // create new graph
-      const partialDAG = {}; /* new dagreD3.graphlib.Graph({
+      const partialDAG = new dagreD3.graphlib.Graph({
         compound: true,
         multigraph: true,
       }).setGraph({})
         .setDefaultEdgeLabel(
           () => ({}),
-        ); */
+        );
 
       const branchObject = {};
       const root = this.findRoot();
 
       this.traverseTree(root, selectedBranch, branchObject, true);
-      this.initDag(this, this.props, selectedBranch, branchObject);
+      this.initDag(selectedBranch, branchObject);
       fitDAG(partialDAG);
     }
   }
 
-  drawGraph(props) {
-    if (props.repo.DAG) {
-      if (props.repo.DAG.Nodes.hasOwnProperty(props.uuid)) {
-        this.initDag(this, props, null, null);
+  drawGraph() {
+    const { repo, uuid } = this.props;
+    if (repo.DAG) {
+      if (repo.DAG.Nodes.hasOwnProperty(uuid)) {
+        this.initDag(null, null);
       }
     }
   }
@@ -827,6 +818,10 @@ class RepoDAG extends React.Component {
     fitDAG();
   }
 
+  handleScrollClick = () => {
+    this.scrollToCurrent();
+  }
+
   render() {
     const { repoMasterUuid } = this.props;
     let scrollToMasterBtn = '';
@@ -845,13 +840,9 @@ class RepoDAG extends React.Component {
       );
     }
 
-    let headline = <h4>Version History</h4>;
-    const { lite } = this.props;
-    let dagHeight = '500';
-    if (lite === '1') {
-      dagHeight = '400';
-      headline = <div id="dag-header"><h5>Version History</h5></div>;
-    }
+    const dagHeight = '400';
+    const headline = <div id="dag-header"><h5>Version History</h5></div>;
+
     return (
       <div>
         {headline}
@@ -872,7 +863,7 @@ class RepoDAG extends React.Component {
                 </IconButton>
               </Tooltip>
               <Tooltip title="scroll to current node">
-                <IconButton color="primary" onClick={this.scrollToCurrent}>
+                <IconButton color="primary" onClick={this.handleScrollClick}>
                   <CenterIcon />
                 </IconButton>
               </Tooltip>
@@ -883,7 +874,7 @@ class RepoDAG extends React.Component {
                 </IconButton>
               </Tooltip>
             </div>
-            <svg width="100%" height={dagHeight} ref="DAGimage">
+            <svg width="100%" height={dagHeight} ref={this.DAGimage} id="DAGimage">
               <g />
             </svg>
           </div>

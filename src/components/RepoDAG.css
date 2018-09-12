@@ -1,0 +1,50 @@
+.node > rect {
+  stroke: #000;
+  stroke-width: .5px;
+  fill: #fff;
+  cursor: pointer;
+}
+
+.node > rect:hover{
+  fill: #e6e6e6;
+}
+
+/* When filtering for branches, display nodes which don't belong to branch in lighter grey */
+.node-hint > rect {
+  stroke: #AAA;
+  stroke-width: .5px;
+  fill: #fff;
+  cursor: pointer;
+}
+
+.node-hint > rect:hover{
+  fill: #f6f6f6;
+}
+
+.node-hint text{
+  fill: #AAA;
+}
+
+g.master > rect {
+  fill: #8BC34A;
+  stroke: #8BC34A;
+}
+g.master_branch > rect{
+  fill: #D9FCDA;
+  stroke: #8BC34A;
+}
+
+g.current > rect {
+  fill: #FCF8E3;
+}
+
+.edgePath {
+  stroke: #000;
+  stroke-width: 1.5px;
+  fill: none;
+  cursor: pointer;
+}
+
+.node, .edgePath:focus {
+    outline: none;
+}

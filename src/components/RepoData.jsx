@@ -34,7 +34,7 @@ class RepoData extends React.Component {
               </Grid>
             </Grid>
             <Grid item sm={6}>
-              <RepoDAG repo={repoDetail} lite={false} />
+              <RepoDAG repo={repoDetail} lite={false} uuid={repoDetail.Root} />
             </Grid>
           </Grid>
         </CardContent>
