@@ -94,16 +94,16 @@ class ResponsiveDialog extends React.Component {
                   </TableCell>
                 </TableRow>)}
                 <TableRow>
-                  <TableCell>
-                     <Chip label="hover" />
-                  </TableCell>
                   <TableCell className={classes.centered}>
+                    <Chip label="hover" />
+                  </TableCell>
+                  <TableCell>
                     Hovering over a node will reveal the commit message that was used to lock the node, if locked.
                   </TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell className={classes.centered}>
-                     <Chip label="click" />
+                    <Chip label="click" />
                   </TableCell>
                   <TableCell>
                     Click a node to navigate to that node and see its associated files and arrays.

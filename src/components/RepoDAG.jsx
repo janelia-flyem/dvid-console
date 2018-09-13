@@ -4,12 +4,12 @@ import ReactDOM from 'react-dom';
 import d3 from 'd3';
 import $ from 'jquery';
 import stringify from 'json-stable-stringify';
-import QuestionIcon from '@material-ui/icons/HelpOutline';
 import FullScreenIcon from '@material-ui/icons/Fullscreen';
 import DownloadIcon from '@material-ui/icons/SaveAlt';
 import CenterIcon from '@material-ui/icons/CenterFocusStrong';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
+import Typography from '@material-ui/core/Typography';
 import dagreD3 from 'dagre-d3';
 import RepoDAGHelpModal from './RepoDAGHelpModal';
 // import ServerActions from '../actions/ServerActions';
@@ -843,7 +843,7 @@ class RepoDAG extends React.Component {
     }
 
     const dagHeight = '400';
-    const headline = <div id="dag-header"><h5>Version History</h5></div>;
+    const headline = <Typography>Version History</Typography>;
 
     return (
       <div>
