@@ -4,13 +4,25 @@ import Typography from '@material-ui/core/Typography';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
+import { withStyles } from '@material-ui/core/styles';
 import DataInstance from './DataInstance';
 
 const allowedTypes = ['uint8blk', 'uint16blk', 'uint32blk', 'uint64blk', 'labelblk'];
 
+const styles = theme => ({
+  button: {
+    marginRight: theme.spacing.unit,
+  },
+});
+
 class RepoArrays extends React.Component {
+  state = {
+    selectedInstances: [],
+  };
+
   render() {
-    const { dataInstances } = this.props;
+    const { dataInstances, classes } = this.props;
+    const { selectedInstances } = this.state;
     const content = Object.values(dataInstances).sort((a, b) => {
       const aType = a.Base.TypeName;
       const bType = b.Base.TypeName;
@@ -30,6 +42,8 @@ class RepoArrays extends React.Component {
       return <DataInstance instance={instance} key={Base.DataUUID} />;
     });
 
+    const viewEnabled = selectedInstances.length < 1;
+
     return (
       <div>
         <Typography>Arrays</Typography>
@@ -38,10 +52,10 @@ class RepoArrays extends React.Component {
             <ul>
               {content}
             </ul>
+            <Button className={classes.button} size="small" variant="outlined" color="primary">Get arrays</Button>
+            <Button className={classes.button} disabled={viewEnabled} size="small" variant="outlined" color="primary">View selected</Button>
           </CardContent>
         </Card>
-        <Button size="small" variant="outlined" color="inherit">Get arrays</Button>
-        <Button size="small" variant="outlined" color="inherit">View selected</Button>
       </div>
     );
   }
@@ -49,10 +63,11 @@ class RepoArrays extends React.Component {
 
 RepoArrays.propTypes = {
   dataInstances: PropTypes.object,
+  classes: PropTypes.object.isRequired,
 };
 
 RepoArrays.defaultProps = {
   dataInstances: {},
 };
 
-export default RepoArrays;
+export default withStyles(styles)(RepoArrays);
