@@ -192,7 +192,7 @@ function clear() {
 function downloadSVGHandler() {
   fitDAG();
   const e = document.createElement('script');
-  e.setAttribute('src', '/js/vendor/svg-crowbar.js');
+  e.setAttribute('src', '/svg-crowbar.js');
   e.setAttribute('class', 'svg-crowbar');
   document.body.appendChild(e);
 }
@@ -239,7 +239,6 @@ class RepoDAG extends React.Component {
   }
 
   componentDidUpdate() {
-    console.log('component Updated');
     this.drawGraph();
   }
 
@@ -263,29 +262,7 @@ class RepoDAG extends React.Component {
     return null;
   }
 
-  // find nodes belonging to the partial graph
-  traverseTree(node, selectedBranch, branchObject, first) {
-    // if we have a node, which belongs to our branch, add this node to the list
-    if (node.Branch === selectedBranch) {
-      branchObject[node.UUID] = node;
-      if (first) {
-        first = false;
-        this.collectNodesBackToRoot(node, branchObject);
-      }
-    }
-    // traverse through children of node to find more nodes to the branch
-    const children = node.Children;
-    for (let c = 0; c < children.length; c++) {
-      const childNode = this.getNodeByVersion(children[c]);
 
-      // find those children, where the node is in the current branch, but the child is not
-      if (node.Branch === selectedBranch && childNode.Branch !== selectedBranch) {
-        branchObject[childNode.UUID] = childNode;
-        dagControl.oddNodes.push(`${node.VersionID}-${childNode.VersionID}`);
-      }
-      this.traverseTree(childNode, selectedBranch, branchObject, first);
-    }
-  }
 
   // collect the nodes all the way to the top
   collectNodesBackToRoot(currentNode, branchObject) {
@@ -635,7 +612,7 @@ class RepoDAG extends React.Component {
     }
 
     const nodeDrag = d3.behavior.drag()
-      .on('drag', function(d) {
+      .on('drag', function (d) {
         const node = d3.select(this);
 
         const selectedNode = currentDag.node(d);
@@ -659,7 +636,7 @@ class RepoDAG extends React.Component {
       });
 
     const edgeDrag = d3.behavior.drag()
-      .on('drag', function(d) {
+      .on('drag', (d) => {
         translateEdge(currentDag.edge(d.v, d.w), d3.event.dx, d3.event.dy);
         $(`#${currentDag.edge(d.v, d.w).id} .path`).attr('d', calcPoints(d));
       });
@@ -820,6 +797,30 @@ class RepoDAG extends React.Component {
 
   handleScrollClick = () => {
     this.scrollToCurrent();
+  }
+
+  // find nodes belonging to the partial graph
+  traverseTree(node, selectedBranch, branchObject, first) {
+    // if we have a node, which belongs to our branch, add this node to the list
+    if (node.Branch === selectedBranch) {
+      branchObject[node.UUID] = node;
+      if (first) {
+        first = false;
+        this.collectNodesBackToRoot(node, branchObject);
+      }
+    }
+    // traverse through children of node to find more nodes to the branch
+    const children = node.Children;
+    for (let c = 0; c < children.length; c++) {
+      const childNode = this.getNodeByVersion(children[c]);
+
+      // find those children, where the node is in the current branch, but the child is not
+      if (node.Branch === selectedBranch && childNode.Branch !== selectedBranch) {
+        branchObject[childNode.UUID] = childNode;
+        dagControl.oddNodes.push(`${node.VersionID}-${childNode.VersionID}`);
+      }
+      this.traverseTree(childNode, selectedBranch, branchObject, first);
+    }
   }
 
   render() {
