@@ -48,3 +48,11 @@ g.current > rect {
 .node, .edgePath:focus {
     outline: none;
 }
+
+.dag {
+  border: 1px solid #ddd;
+}
+
+.dag-tools {
+  float:right;
+}
