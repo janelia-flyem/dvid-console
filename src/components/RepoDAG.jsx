@@ -11,6 +11,7 @@ import CenterIcon from '@material-ui/icons/CenterFocusStrong';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import dagreD3 from 'dagre-d3';
+import RepoDAGHelpModal from './RepoDAGHelpModal';
 // import ServerActions from '../actions/ServerActions';
 // import InstanceActions from '../actions/InstanceActions';
 /* import ModalActions from '../actions/ModalActions';
@@ -853,11 +854,7 @@ class RepoDAG extends React.Component {
               {/* <BranchSelect myNodes={repo.DAG.Nodes} callbackFromParent={this.callbackBranches} /> */}
             </div>
             <div className="dag-tools">
-              <Tooltip title="Help">
-                <IconButton color="primary">
-                  <QuestionIcon />
-                </IconButton>
-              </Tooltip>
+              <RepoDAGHelpModal />
               <Tooltip title="fit graph to window">
                 <IconButton color="primary" onClick={fitDAG}>
                   <FullScreenIcon />
