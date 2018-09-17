@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
+import { withRouter } from 'react-router-dom';
 import queryString from 'qs';
 import d3 from 'd3';
 import $ from 'jquery';
@@ -15,9 +16,6 @@ import dagreD3 from 'dagre-d3';
 import RepoDAGHelpModal from './RepoDAGHelpModal';
 // import ServerActions from '../actions/ServerActions';
 // import InstanceActions from '../actions/InstanceActions';
-/* import ModalActions from '../actions/ModalActions';
-import { ModalTypes } from '../stores/ModalStore'; */
-// import DAGmodals from '../components/DAGmodals.react.js';
 // import BranchSelect from '../components/BranchSelect.react.js';
 
 import './RepoDAG.css';
@@ -212,20 +210,17 @@ class RepoDAG extends React.Component {
 
   componentDidMount() {
     this.drawGraph();
-    /* const node = ReactDOM.findDOMNode(this);
-    $(node).tooltip({
-      selector: '[data-toggle="tooltip"]',
-    }); */
   }
 
   componentWillReceiveProps() {
     const { isAdmin } = this.state;
-    /* const { router } = this.context;
-    if (isAdmin !== !!router.getCurrentQuery().admin) {
+    const { location } = this.props;
+    const params = queryString.parse(location.search);
+    if (isAdmin !== 'admin' in params) {
       this.setState({
         isAdmin: !isAdmin,
       });
-    } */
+    }
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -243,12 +238,6 @@ class RepoDAG extends React.Component {
   componentDidUpdate() {
     this.drawGraph();
   }
-
-  componentWillUnmount() {
-    // const tips = $(ReactDOM.findDOMNode(this)).find('[data-toggle="tooltip"]');
-    // tips.tooltip('destroy');
-  }
-
 
   // get the actual node with all information from the original DAG
   getNodeByVersion(id) {
@@ -878,7 +867,6 @@ class RepoDAG extends React.Component {
             </svg>
           </div>
         </div>
-        {/* <DAGmodals /> */}
       </div>
     );
   }
@@ -888,8 +876,10 @@ RepoDAG.propTypes = {
   repo: PropTypes.object.isRequired,
   lite: PropTypes.bool.isRequired,
   repoMasterUuid: PropTypes.string.isRequired,
+  repoMasterBranchHist: PropTypes.object.isRequired,
   uuid: PropTypes.string.isRequired,
   serverInfo: PropTypes.object.isRequired,
+  location: PropTypes.object.isRequired,
 };
 
-export default RepoDAG;
+export default withRouter(RepoDAG);

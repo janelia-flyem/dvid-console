@@ -51,8 +51,38 @@ g.current > rect {
 
 .dag {
   border: 1px solid #ddd;
+  border-radius: 5px;
 }
 
 .dag-tools {
   float:right;
+}
+
+span.branch{
+  cursor:pointer;
+}
+span.unlocked{
+  cursor:pointer;
+}
+
+span.forbidden{
+  cursor: not-allowed;
+}
+
+/* need this to prevent node text from interfering with the pointer.  */
+text {
+  pointer-events: none;
+}
+
+.dag_note {
+  font-weight: bold;
+  text-shadow: 0 1px 0 #fff, 0 -1px 0 #fff, 1px 0 0 #fff, -1px 0 0 #fff;
+  border: 1px solid #444;
+  border-radius: 5px;
+  background: #fff;
+  padding: 0.3em 1em;
+}
+
+.dag_note .tooltip-inner {
+  max-width: 400px;
 }
