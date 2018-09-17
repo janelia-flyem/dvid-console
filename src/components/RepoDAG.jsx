@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
+import queryString from 'qs';
 import d3 from 'd3';
 import $ from 'jquery';
 import stringify from 'json-stable-stringify';
