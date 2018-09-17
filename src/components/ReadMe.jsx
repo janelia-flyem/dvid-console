@@ -1,12 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import Markdown from 'react-markdown';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
-import FileIcon from '@material-ui/icons/Description';
+import Icon from '@material-ui/core/Icon';
 import dvid from 'dvid';
 import settings from '../settings.json';
 
@@ -72,7 +73,7 @@ class ReadMe extends React.Component {
       content = "You don't have a readme yet. Create one and upload to the .files keyvalue.";
     }
 
-    const title = <Typography variant="title"><FileIcon /> README.md</Typography>;
+    const title = <Typography variant="title"><Icon className={classNames('fas fa-file-alt')} style={{ fontSize: 16 }} /> README.md</Typography>;
 
     return (
       <Card>

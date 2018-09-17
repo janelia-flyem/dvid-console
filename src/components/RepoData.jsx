@@ -1,8 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
+import Typography from '@material-ui/core/Typography';
+import Icon from '@material-ui/core/Icon';
 import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/core/styles';
 import RepoFiles from './RepoFiles';
@@ -20,9 +23,12 @@ const styles = theme => ({
 class RepoData extends React.Component {
   render() {
     const { classes, repoDetail } = this.props;
+
+    const title = <Typography variant="title"><Icon className={classNames('fa fa-database')} style={{ fontSize: 16 }} /> Data</Typography>;
+
     return (
       <Card>
-        <CardHeader title="Data" className={classes.cardHeader} />
+        <CardHeader title={title} className={classes.cardHeader} />
         <CardContent>
           <Grid container spacing={24}>
             <Grid item sm={6}>

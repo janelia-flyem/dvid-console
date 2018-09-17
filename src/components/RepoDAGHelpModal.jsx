@@ -9,8 +9,6 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import withMobileDialog from '@material-ui/core/withMobileDialog';
 import IconButton from '@material-ui/core/IconButton';
 import QuestionIcon from '@material-ui/icons/HelpOutline';
-import LockedIcon from '@material-ui/icons/Lock';
-import UnlockedIcon from '@material-ui/icons/LockOpen';
 import Tooltip from '@material-ui/core/Tooltip';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -69,7 +67,7 @@ class ResponsiveDialog extends React.Component {
               <TableBody>
                 <TableRow>
                   <TableCell className={classes.centered}>
-                    <LockedIcon />
+                    <span className="fas fa-lock-alt"></span>
                   </TableCell>
                   <TableCell>
                     Indicates node is locked, which means changes cannot be made to the data on this node.
@@ -77,7 +75,7 @@ class ResponsiveDialog extends React.Component {
                 </TableRow>
                 <TableRow>
                   <TableCell className={classes.centered}>
-                    <UnlockedIcon />
+                    <span className="fas fa-lock-open-alt"></span>
                   </TableCell>
                   <TableCell>
                     Indicates node is unlocked, which means changes can be made to the data on this node.

@@ -501,7 +501,7 @@ class RepoDAG extends React.Component {
       .attr('y', '-34px')
       .attr('x', '-35px')
       .append('xhtml:span')
-      .attr('class', 'lock fa fa-lock');
+      .attr('class', 'lock fas fa-lock-alt');
 
     if (this.isEditable()) {
       // add branch icons
@@ -523,7 +523,7 @@ class RepoDAG extends React.Component {
       .attr('y', '-34px')
       .attr('x', '-40px')
       .append('xhtml:span')
-      .attr('class', `unlocked fa fa-unlock ${forbiddenToggle}`);
+      .attr('class', `unlocked fas fa-lock-open-alt ${forbiddenToggle}`);
 
     // // add class for hint nodes
     // elementHolderLayer.selectAll("g.node.type-hint")
