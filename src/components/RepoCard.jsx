@@ -7,7 +7,6 @@ import CardActions from '@material-ui/core/CardActions';
 import Collapse from '@material-ui/core/Collapse';
 import Button from '@material-ui/core/Button';
 import distanceInWordsToNow from 'date-fns/distance_in_words_to_now';
-import ScheduleIcon from '@material-ui/icons/Schedule';
 import parse from 'date-fns/parse';
 import { Link } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
@@ -43,7 +42,7 @@ class RepoCard extends React.Component {
     const date = parse(repo.Updated);
     const url = `/repo/${repo.Alias}`;
     const link = <Link to={url}>{repo.Alias}</Link>;
-    const subheading = <p><ScheduleIcon style={{ fontSize: '1em' }} /> Updated {distanceInWordsToNow(date, { addSuffix: true })}</p>;
+    const subheading = <p><span className="far fa-clock" /> Updated {distanceInWordsToNow(date, { addSuffix: true })}</p>;
 
     const Component = () => {
       const codeString = ['from diced import DicedStore',

@@ -45,7 +45,7 @@ class RepoHome extends React.Component {
             <Typography variant="title">{repoDetail.Alias}</Typography>
           </Grid>
           <Grid item xs={6} className={classes.right}>
-            <p>{repoDetail.Description}</p>
+            <Typography>{repoDetail.Description}</Typography>
           </Grid>
           <Grid item xs={12}>
             <RepoData repoDetail={repoDetail} />

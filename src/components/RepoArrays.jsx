@@ -46,7 +46,7 @@ class RepoArrays extends React.Component {
 
     return (
       <div>
-        <Typography>Arrays</Typography>
+        <Typography><span className="fas fa-th-large" /> Data Types</Typography>
         <Card>
           <CardContent>
             <ul>

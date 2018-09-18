@@ -1,11 +1,22 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import dvid from 'dvid';
 import Typography from '@material-ui/core/Typography';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
-import FileIcon from '@material-ui/icons/DescriptionOutlined';
+import { withStyles } from '@material-ui/core/styles';
 import settings from '../settings.json';
+
+const styles = theme => ({
+  list: {
+    listStyle: 'none',
+  },
+  link: {
+    color: theme.palette.primary.main,
+  },
+});
+
 
 class RepoFiles extends React.Component {
   constructor(props) {
@@ -40,14 +51,14 @@ class RepoFiles extends React.Component {
 
   render() {
     const { files, error } = this.state;
-    const { repo } = this.props;
+    const { repo, classes } = this.props;
     let content = 'loading';
 
     if (files) {
       content = files.map((file) => {
         const url = `http://${window.location.hostname}/api/node/${repo.Root}/.files/key/${file}`;
-        const link = <a href={url}>{file}</a>;
-        return <li key={file}><FileIcon />{link}</li>;
+        const link = <Link className={classes.link} to={url}>{file}</Link>;
+        return <li key={file}><span className="far fa-file-alt" /> {link}</li>;
       });
     }
 
@@ -57,10 +68,10 @@ class RepoFiles extends React.Component {
 
     return (
       <div>
-        <Typography>Files</Typography>
+        <Typography><span className="fas fa-folder-open" /> Files</Typography>
         <Card>
           <CardContent>
-            <ul>
+            <ul className={classes.list}>
               {content}
             </ul>
           </CardContent>
@@ -72,10 +83,11 @@ class RepoFiles extends React.Component {
 
 RepoFiles.propTypes = {
   repo: PropTypes.object,
+  classes: PropTypes.object.isRequired,
 };
 
 RepoFiles.defaultProps = {
   repo: {},
 };
 
-export default RepoFiles;
+export default withStyles(styles)(RepoFiles);

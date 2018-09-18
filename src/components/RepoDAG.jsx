@@ -6,9 +6,6 @@ import queryString from 'qs';
 import d3 from 'd3';
 import $ from 'jquery';
 import stringify from 'json-stable-stringify';
-import FullScreenIcon from '@material-ui/icons/Fullscreen';
-import DownloadIcon from '@material-ui/icons/SaveAlt';
-import CenterIcon from '@material-ui/icons/CenterFocusStrong';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
@@ -833,7 +830,7 @@ class RepoDAG extends React.Component {
     }
 
     const dagHeight = '400';
-    const headline = <Typography>Version History</Typography>;
+    const headline = <Typography><span className="far fa-code-branch" /> Version History</Typography>;
 
     return (
       <div>
@@ -847,18 +844,18 @@ class RepoDAG extends React.Component {
               <RepoDAGHelpModal />
               <Tooltip title="fit graph to window">
                 <IconButton color="primary" onClick={fitDAG}>
-                  <FullScreenIcon />
+                  <span className="far fa-arrows-alt" />
                 </IconButton>
               </Tooltip>
               <Tooltip title="scroll to current node">
                 <IconButton color="primary" onClick={this.handleScrollClick}>
-                  <CenterIcon />
+                  <span className="far fa-crosshairs" />
                 </IconButton>
               </Tooltip>
               {scrollToMasterBtn}
               <Tooltip title="download version history as svg">
                 <IconButton color="primary" onClick={downloadSVGHandler}>
-                  <DownloadIcon />
+                  <span className="far fa-download" />
                 </IconButton>
               </Tooltip>
             </div>

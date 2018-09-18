@@ -1,10 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import FolderIcon from '@material-ui/icons/Folder';
-import StorageIcon from '@material-ui/icons/Storage';
-import TagIcon from '@material-ui/icons/Share';
-import TimerIcon from '@material-ui/icons/Schedule';
-import BookmarkIcon from '@material-ui/icons/Bookmark';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
@@ -65,7 +60,7 @@ class ServerStats extends React.Component {
               <CardHeader
                 title="DVID CPU Cores"
                 avatar={
-                  <StorageIcon />
+                  <span className="far fa-microchip" />
                 }
               />
               <CardContent className={classes.content}>
@@ -80,7 +75,7 @@ class ServerStats extends React.Component {
               <CardHeader
                 title="Respositories"
                 avatar={
-                  <FolderIcon />
+                  <span className="far fa-folder-open" />
                 }
               />
               <CardContent className={classes.content}>
@@ -95,7 +90,7 @@ class ServerStats extends React.Component {
               <CardHeader
                 title="Server Uptime"
                 avatar={
-                  <TimerIcon />
+                  <span className="fa fa-clock" />
                 }
               />
               <CardContent className={classes.content}>
@@ -110,7 +105,7 @@ class ServerStats extends React.Component {
               <CardHeader
                 title="Version Nodes"
                 avatar={
-                  <TagIcon />
+                  <span className="far fa-code-branch" />
                 }
               />
               <CardContent className={classes.content}>
@@ -125,7 +120,7 @@ class ServerStats extends React.Component {
               <CardHeader
                 title="DVID Version"
                 avatar={
-                  <BookmarkIcon />
+                  <span className="far fa-bookmark" />
                 }
               />
               <CardContent className={classes.content}>
@@ -140,7 +135,7 @@ class ServerStats extends React.Component {
               <CardHeader
                 title="Storage Backend"
                 avatar={
-                  <StorageIcon />
+                  <span className="far fa-hdd" />
                 }
               />
               <CardContent className={classes.content}>
@@ -155,7 +150,7 @@ class ServerStats extends React.Component {
               <CardHeader
                 title="Datastore Version"
                 avatar={
-                  <BookmarkIcon />
+                  <span className="far fa-bookmark" />
                 }
               />
               <CardContent className={classes.content}>
@@ -170,7 +165,7 @@ class ServerStats extends React.Component {
               <CardHeader
                 title="Console Version"
                 avatar={
-                  <BookmarkIcon />
+                  <span className="far fa-bookmark" />
                 }
               />
               <CardContent className={classes.content}>

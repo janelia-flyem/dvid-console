@@ -7,8 +7,6 @@ import Toolbar from '@material-ui/core/Toolbar';
 import AppBar from '@material-ui/core/AppBar';
 import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
-import SettingsIcon from '@material-ui/icons/Settings';
-import AboutIcon from '@material-ui/icons/Info';
 import NativeSelect from '@material-ui/core/NativeSelect';
 import FormControl from '@material-ui/core/FormControl';
 
@@ -74,13 +72,13 @@ class Navigation extends React.Component {
               component={AdminLink}
               color="inherit"
             >
-              <SettingsIcon />
+              <span className="fas fa-cogs" />
             </IconButton>
             <IconButton
               component={AboutLink}
               color="inherit"
             >
-              <AboutIcon />
+              <span className="far fa-info-circle" />
             </IconButton>
 
           </Toolbar>
