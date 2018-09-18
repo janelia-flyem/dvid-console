@@ -10,7 +10,7 @@ import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/core/styles';
 import RepoFiles from './RepoFiles';
 import RepoArrays from './RepoArrays';
-import RepoDAG from './RepoDAG';
+import RepoCommitSummary from './RepoCommitSummary';
 
 const styles = theme => ({
   cardHeader: {
@@ -32,16 +32,14 @@ class RepoData extends React.Component {
         <CardContent>
           <Grid container spacing={24}>
             <Grid item sm={6}>
-              <Grid item sm={12}>
-                <RepoArrays dataInstances={repoDetail.DataInstances} />
-              </Grid>
-              <Grid item sm={12}>
-                <RepoFiles repo={repoDetail} />
-              </Grid>
+              <RepoArrays dataInstances={repoDetail.DataInstances} />
             </Grid>
             <Grid item sm={6}>
-              <RepoDAG repo={repoDetail} lite={false} uuid={repoDetail.Root} />
+              <RepoFiles repo={repoDetail} />
             </Grid>
+          </Grid>
+          <Grid item sm={12}>
+            <RepoCommitSummary repo={repoDetail} />
           </Grid>
         </CardContent>
       </Card>

@@ -6,6 +6,7 @@ import blue from '@material-ui/core/colors/blue';
 import Admin from './Admin';
 import Home from '../containers/Home';
 import About from './About';
+import CommitHistory from '../containers/CommitHistory';
 import RepoHome from '../containers/RepoHome';
 import Navigation from '../containers/Navigation';
 
@@ -32,7 +33,8 @@ class App extends Component {
             <Route exact path="/" component={Home} />
             <Route path="/admin" component={Admin} />
             <Route path="/about" component={About} />
-            <Route path="/repo/:name" component={RepoHome} />
+            <Route exact path="/repo/:name" component={RepoHome} />
+            <Route path="/repo/:name/commits" component={CommitHistory} />
           </Switch>
         </div>
       </MuiThemeProvider>
