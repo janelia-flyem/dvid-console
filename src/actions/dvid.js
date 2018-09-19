@@ -197,6 +197,8 @@ export function loadRepoInfo(id) {
 
 export function loadRepoInfoFromAlias(alias) {
   return function loadRepoInfoFromAliasAsync(dispatch, getState) {
+    // need to dispatch this here to prevent double loading of the info end point.
+    dispatch(loadingRepoInfo(alias));
     return dispatch(loadRepos()).then(() => {
       const repoIDs = Object.values(getState().dvid.get('repos')).filter(repo => repo.Alias === alias).map(repo => repo.Root);
       return dispatch(loadRepoInfo(repoIDs[0]));

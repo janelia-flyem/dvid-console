@@ -5,6 +5,8 @@ import { loadRepoInfoFromAlias } from '../actions/dvid';
 const mapStateToProps = state => ({
   repos: state.dvid.get('repos'),
   repoDetail: state.dvid.get('repoDetail'),
+  repoInfoLoading: state.dvid.get('repoInfoLoading'),
+  repoInfoLoaded: state.dvid.get('repoInfoLoaded'),
 });
 
 const mapDispatchToProps = dispatch => ({

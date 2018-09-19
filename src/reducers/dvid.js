@@ -7,13 +7,15 @@ const initialState = Immutable.Map({
   repos: {},
   repos_loading: false,
   repos_loaded: false,
-  repoDetail: {},
   types: {},
   types_loading: false,
   types_loaded: false,
   status: {},
   status_loading: false,
   status_loaded: false,
+  repoInfoLoading: false,
+  repoInfoLoaded: false,
+  repoDetail: {},
   error: null,
 });
 
@@ -47,10 +49,12 @@ export default function adminReducer(state = initialState, action) {
     case 'LOAD_DVID_STATUS_ERROR':
       return state.set('error', action.error).set('status_loading', false);
 
+    case 'LOADING_REPO_INFO':
+      return state.set('repoInfoLoading', true).set('repoInfoLoaded', false);
     case 'LOADED_REPO_INFO':
       // TODO: at this point we need to build the dag content, so that we can use
       // it in later checks and for the DAG display.
-      return state.set('repoDetail', action.json);
+      return state.set('repoDetail', action.json).set('repoInfoLoading', false).set('repoInfoLoaded', true);
 
     default:
       return state;

@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
@@ -38,11 +39,12 @@ class RepoHome extends React.Component {
 
   render() {
     const { classes, repoDetail } = this.props;
+    const url = `/repo/${repoDetail.Alias}`;
     return (
       <div className={classes.root}>
         <Grid container spacing={24}>
           <Grid item xs={6}>
-            <Typography variant="title">{repoDetail.Alias}</Typography>
+            <Typography variant="title"><Link to={url}>{repoDetail.Alias}</Link></Typography>
           </Grid>
           <Grid item xs={6} className={classes.right}>
             <Typography>{repoDetail.Description}</Typography>
