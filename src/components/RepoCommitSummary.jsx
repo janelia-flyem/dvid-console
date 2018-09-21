@@ -27,9 +27,14 @@ class RepoCommitSummary extends React.Component {
         return 0;
       });
       const mostRecentCommit = sorted[sorted.length - 1];
-      return (
-        <p>{mostRecentCommit.UUID.slice(0, 9)} {mostRecentCommit.Note}</p>
-      );
+      let branch = mostRecentCommit.Branch;
+      if (branch === '') {
+        branch = 'Master';
+      }
+      return [
+        <p key="branch">Branch: {branch}</p>,
+        <p key="id">{mostRecentCommit.UUID.slice(0, 9)} {mostRecentCommit.Note}</p>,
+      ];
     }
 
     return (
