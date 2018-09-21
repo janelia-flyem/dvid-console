@@ -18,11 +18,12 @@ const styles = theme => ({
 class RepoArrays extends React.Component {
   state = {
     selectedInstances: [],
+    showAll: false,
   };
 
   render() {
     const { dataInstances, classes } = this.props;
-    const { selectedInstances } = this.state;
+    const { selectedInstances, showAll } = this.state;
     const content = Object.values(dataInstances).sort((a, b) => {
       const aType = a.Base.TypeName;
       const bType = b.Base.TypeName;
@@ -36,7 +37,7 @@ class RepoArrays extends React.Component {
     }).map((instance) => {
       const { Base } = instance;
       // check if this instance is in the list of allowed instances.
-      if (!allowedTypes.includes(Base.TypeName)) {
+      if (!allowedTypes.includes(Base.TypeName) && !showAll) {
         return false;
       }
       return <DataInstance instance={instance} key={Base.DataUUID} />;
