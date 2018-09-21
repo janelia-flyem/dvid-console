@@ -13,15 +13,40 @@ const styles = theme => ({
 });
 
 class RepoCommitSummary extends React.Component {
+  getMostRecentCommit() {
+    const { repo } = this.props;
+    if ('DAG' in repo) {
+      const nodeList = Object.values(repo.DAG.Nodes);
+      const sorted = nodeList.sort((a, b) => {
+        if (a.VersionID < b.VersionID) {
+          return -1;
+        }
+        if (a.VersionID > b.VersionID) {
+          return 1;
+        }
+        return 0;
+      });
+      const mostRecentCommit = sorted[sorted.length - 1];
+      return (
+        <p>{mostRecentCommit.UUID.slice(0, 9)} {mostRecentCommit.Note}</p>
+      );
+    }
+
+    return (
+      <p>Commit message, user, date and uuid here.</p>
+    );
+  }
+
   render() {
     const { classes, repo } = this.props;
     const commitUrl = `/repo/${repo.Alias}/commits`;
+    const mostRecentCommit = this.getMostRecentCommit();
     return (
       <div>
         <Typography><span className="far fa-code-branch" /> <Link to={commitUrl}>Latest Commit</Link></Typography>
         <Card>
           <CardContent>
-            <p>Commit message, user, date and uuid here.</p>
+            {mostRecentCommit}
           </CardContent>
         </Card>
       </div>
