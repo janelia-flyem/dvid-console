@@ -87,7 +87,12 @@ class CommitHistory extends React.Component {
   }
 
   render() {
-    const { classes, repoDetail } = this.props;
+    const {
+      classes,
+      repoDetail,
+      repoInfoLoaded,
+      repoInfoLoading,
+    } = this.props;
     const { selectedBranch } = this.state;
     const branchOptions = this.createBranchOptions();
     const repoUrl = `/repo/${repoDetail.Alias}`;
@@ -109,7 +114,7 @@ class CommitHistory extends React.Component {
             />
             <p className={classes.button}>Show full commit history for branch: {selectedBranch.label}.</p>
             {'DAG' in repoDetail
-              && <CommitList branch={selectedBranch} nodes={repoDetail.DAG.Nodes} />
+              && <CommitList branch={selectedBranch} nodes={repoDetail.DAG.Nodes} loading={repoInfoLoading} loaded={repoInfoLoaded} />
             }
           </Grid>
         </Grid>

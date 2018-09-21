@@ -56,18 +56,24 @@ class CommitList extends React.Component {
       return branchNodeList;
     }
     return (
-      <tr><td>Loading...</td></tr>
+      <tr><td>No records found.</td></tr>
     );
   }
 
   render() {
-    const commits = this.commits();
+    const { loaded } = this.props;
+    if (loaded) {
+      const commits = this.commits();
+      return (
+        <table>
+          <tbody>
+            {commits}
+          </tbody>
+        </table>
+      );
+    }
     return (
-      <table>
-        <tbody>
-          {commits}
-        </tbody>
-      </table>
+      <p>Loading...</p>
     );
   }
 }
@@ -75,6 +81,7 @@ class CommitList extends React.Component {
 CommitList.propTypes = {
   nodes: PropTypes.object.isRequired,
   branch: PropTypes.object.isRequired,
+  loaded: PropTypes.bool.isRequired,
 };
 
 export default CommitList;
