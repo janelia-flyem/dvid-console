@@ -28,7 +28,7 @@ const styles = theme => ({
 function getAncestorsForNode(node, nodeLookup, classes, ancestors = []) {
   // take node and push it onto ancestors list
   ancestors.push((
-    <Paper key={node.UUID} className={classes.commit}>
+    <Paper key={node.UUID} className={classes.commit} elevation={1}>
       <Grid container spacing={24}>
         <Grid item sm={12} md={10}>
           <Typography variant="title">
@@ -60,7 +60,13 @@ function getAncestorsForNode(node, nodeLookup, classes, ancestors = []) {
 
 class CommitList extends React.Component {
   commits() {
-    const { nodes, branch, classes } = this.props;
+    const { nodes, classes } = this.props;
+    let { branch } = this.props;
+
+    if (branch === 'Master') {
+      branch = '';
+    }
+
     const nodesByVersionID = {};
     let mostRecentNodeOnBranch = {};
 
