@@ -6,6 +6,7 @@ import CardHeader from '@material-ui/core/CardHeader';
 import CardActions from '@material-ui/core/CardActions';
 import Collapse from '@material-ui/core/Collapse';
 import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
 import distanceInWordsToNow from 'date-fns/distance_in_words_to_now';
 import parse from 'date-fns/parse';
 import { Link } from 'react-router-dom';
@@ -20,6 +21,10 @@ const styles = theme => ({
   },
   card: {
     marginBottom: theme.spacing.unit * 2,
+  },
+  cardTitle: {
+    color: theme.palette.primary.main,
+    textDecoration: 'none',
   },
 });
 
@@ -41,7 +46,7 @@ class RepoCard extends React.Component {
     const desc = repo.Description;
     const date = parse(repo.Updated);
     const url = `/repo/${repo.Alias}`;
-    const link = <Link to={url}>{repo.Alias}</Link>;
+    const link = <Link to={url} className={classes.cardTitle}>{repo.Alias}</Link>;
     const subheading = <p><span className="far fa-clock" /> Updated {distanceInWordsToNow(date, { addSuffix: true })}</p>;
 
     const Component = () => {
@@ -58,7 +63,7 @@ class RepoCard extends React.Component {
           subheader={subheading}
         />
         <CardContent>
-          <p>{desc}</p>
+          <Typography>{desc}</Typography>
         </CardContent>
         <CardActions className={classes.actions} disableActionSpacing>
           <Button
@@ -72,7 +77,7 @@ class RepoCard extends React.Component {
         </CardActions>
         <Collapse in={expanded} timeout="auto" unmountOnExit>
           <CardContent>
-            <h4>Add this to your python code:</h4>
+            <Typography variant="body2">Add this to your python code:</Typography>
             <Component />
           </CardContent>
         </Collapse>

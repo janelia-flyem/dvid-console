@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
 import RepoList from './RepoList';
 import HomeHelp from './HomeHelp';
 
@@ -24,7 +25,7 @@ class Home extends React.Component {
       <div className={classes.root}>
         <Grid container spacing={24}>
           <Grid item xs={12}>
-            <h2>Repositories</h2>
+            <Typography variant="headline">Repositories</Typography>
           </Grid>
           <Grid item sm={6}>
             <RepoList repos={repos} />

@@ -15,6 +15,10 @@ const styles = theme => ({
   right: {
     textAlign: 'right',
   },
+  cardTitle: {
+    color: theme.palette.primary.main,
+    textDecoration: 'none',
+  },
 });
 
 class RepoHome extends React.Component {
@@ -44,7 +48,7 @@ class RepoHome extends React.Component {
       <div className={classes.root}>
         <Grid container spacing={24}>
           <Grid item xs={6}>
-            <Typography variant="title"><Link to={url}>{repoDetail.Alias}</Link></Typography>
+            <Typography variant="title"><Link to={url} className={classes.cardTitle}>{repoDetail.Alias}</Link></Typography>
           </Grid>
           <Grid item xs={6} className={classes.right}>
             <Typography>{repoDetail.Description}</Typography>

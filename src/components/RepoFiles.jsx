@@ -6,7 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import { withStyles } from '@material-ui/core/styles';
-import settings from '../settings.json';
+import { getHostName, getPort } from '../settings';
 
 const styles = theme => ({
   list: {
@@ -14,6 +14,10 @@ const styles = theme => ({
   },
   link: {
     color: theme.palette.primary.main,
+    textDecoration: 'none',
+  },
+  title: {
+    lineHeight: '32px',
   },
 });
 
@@ -24,6 +28,7 @@ class RepoFiles extends React.Component {
     this.state = {
       files: null,
       error: null,
+      loaded: false,
     };
   }
 
@@ -35,8 +40,8 @@ class RepoFiles extends React.Component {
     }
 
     const api = dvid.connect({
-      host: settings.dvid.host,
-      port: settings.dvid.port,
+      host: getHostName(),
+      port: getPort(),
       username: 'dvidconsole',
       application: 'dvidconsole',
     });
@@ -44,31 +49,34 @@ class RepoFiles extends React.Component {
     api.node({
       uuid: repo.Root,
       endpoint: '.files/keys',
-      callback: data => this.setState({ files: data }),
-      error: err => this.setState({ error: err }),
+      callback: data => this.setState({ files: data, loaded: true }),
+      error: err => this.setState({ error: err, loaded: true }),
     });
   }
 
   render() {
-    const { files, error } = this.state;
+    const { files, error, loaded } = this.state;
     const { repo, classes } = this.props;
     let content = 'loading';
 
-    if (files) {
-      content = files.map((file) => {
-        const url = `http://${window.location.hostname}/api/node/${repo.Root}/.files/key/${file}`;
-        const link = <Link className={classes.link} to={url}>{file}</Link>;
-        return <li key={file}><span className="far fa-file-alt" /> {link}</li>;
-      });
-    }
+    if (loaded) {
+      content = 'No files found.';
+      if (files) {
+        content = files.map((file) => {
+          const url = `http://${window.location.hostname}/api/node/${repo.Root}/.files/key/${file}`;
+          const link = <Link className={classes.link} to={url}>{file}</Link>;
+          return <li key={file}><Typography><span className="far fa-file-alt" /> {link}</Typography></li>;
+        });
+      }
 
-    if (error) {
-      content = <p>Failed to load files list</p>;
+      if (error) {
+        content = <p>Failed to load files list</p>;
+      }
     }
 
     return (
       <div>
-        <Typography><span className="fas fa-folder-open" /> Files</Typography>
+        <Typography className={classes.title}><span className="fas fa-folder-open" /> Files</Typography>
         <Card>
           <CardContent>
             <ul className={classes.list}>
