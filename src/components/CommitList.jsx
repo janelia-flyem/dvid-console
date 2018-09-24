@@ -78,7 +78,7 @@ class CommitList extends React.Component {
       // keep replacing the most recent node if it is on the current branch.
       // we are relying on the fact that the nodes are sorted by version number
       // to make sure we get the most recent last.
-      if (node.Branch === branch.value) {
+      if (node.Branch === branch) {
         mostRecentNodeOnBranch = node;
       }
     });
@@ -108,7 +108,7 @@ class CommitList extends React.Component {
 CommitList.propTypes = {
   nodes: PropTypes.object.isRequired,
   classes: PropTypes.object.isRequired,
-  branch: PropTypes.object.isRequired,
+  branch: PropTypes.string.isRequired,
   loaded: PropTypes.bool.isRequired,
 };
 

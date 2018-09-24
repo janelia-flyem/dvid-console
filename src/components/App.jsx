@@ -34,7 +34,7 @@ class App extends Component {
             <Route path="/admin" component={Admin} />
             <Route path="/about" component={About} />
             <Route exact path="/repo/:name" component={RepoHome} />
-            <Route path="/repo/:name/commits" component={CommitHistory} />
+            <Route path="/repo/:name/commits/:branch" component={CommitHistory} />
           </Switch>
         </div>
       </MuiThemeProvider>

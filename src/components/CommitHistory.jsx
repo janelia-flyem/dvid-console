@@ -25,13 +25,6 @@ const styles = theme => ({
 });
 
 class CommitHistory extends React.Component {
-  state = {
-    selectedBranch: {
-      label: 'Master',
-      value: '',
-    },
-  };
-
   componentDidUpdate() {
     const {
       match,
@@ -48,13 +41,37 @@ class CommitHistory extends React.Component {
   }
 
   handleBranchChange = (selectedBranch) => {
-    this.setState({ selectedBranch });
+    const { history, match } = this.props;
+    history.push(`/repo/${match.params.name}/commits/${selectedBranch.label}`);
   }
 
   loadRepoInfo() {
     const { match, actions } = this.props;
     const repoName = match.params.name;
     actions.loadRepoInfoFromAlias(repoName);
+  }
+
+  fetchSelected(selectedBranch) {
+    const { repoDetail } = this.props;
+    let selected = {
+      label: 'Master',
+      value: '',
+    };
+    if ('DAG' in repoDetail) {
+      Object.values(repoDetail.DAG.Nodes).forEach((node) => {
+        let branchName = node.Branch;
+        if (branchName === '') {
+          branchName = 'Master';
+        }
+        if (selectedBranch === branchName) {
+          selected = {
+            label: branchName,
+            value: node.Branch,
+          };
+        }
+      });
+    }
+    return selected;
   }
 
   createBranchOptions() {
@@ -96,9 +113,10 @@ class CommitHistory extends React.Component {
       repoDetail,
       repoInfoLoaded,
       repoInfoLoading,
+      match,
     } = this.props;
-    const { selectedBranch } = this.state;
     const branchOptions = this.createBranchOptions();
+    const selectedBranch = this.fetchSelected(match.params.branch);
     const repoUrl = `/repo/${repoDetail.Alias}`;
     return (
       <div className={classes.root}>
@@ -116,9 +134,9 @@ class CommitHistory extends React.Component {
               onChange={this.handleBranchChange}
               options={branchOptions}
             />
-            <p className={classes.button}>Show full commit history for branch: {selectedBranch.label}.</p>
+            <p className={classes.button}>Show full commit history for branch: {match.params.branch}.</p>
             {'DAG' in repoDetail
-              && <CommitList branch={selectedBranch} nodes={repoDetail.DAG.Nodes} loading={repoInfoLoading} loaded={repoInfoLoaded} />
+              && <CommitList branch={match.params.branch} nodes={repoDetail.DAG.Nodes} loading={repoInfoLoading} loaded={repoInfoLoaded} />
             }
           </Grid>
         </Grid>
@@ -133,6 +151,7 @@ CommitHistory.propTypes = {
   repoInfoLoaded: PropTypes.bool.isRequired,
   repoInfoLoading: PropTypes.bool.isRequired,
   match: PropTypes.object.isRequired,
+  history: PropTypes.object.isRequired,
   actions: PropTypes.object.isRequired,
 };
 
