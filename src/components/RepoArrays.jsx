@@ -21,6 +21,10 @@ class RepoArrays extends React.Component {
     showAll: false,
   };
 
+  handleShowAll = () => {
+    this.setState(state => ({ showAll: !state.showAll }));
+  }
+
   render() {
     const { dataInstances, classes } = this.props;
     const { selectedInstances, showAll } = this.state;
@@ -47,7 +51,12 @@ class RepoArrays extends React.Component {
 
     return (
       <div>
-        <Typography><span className="fas fa-th-large" /> Data Types</Typography>
+        <Typography>
+          <span className="fas fa-th-large" /> Data Types
+          <Button className={classes.button} size="small" color="primary" onClick={this.handleShowAll}>
+            {showAll ? 'Show Filtered' : 'Show All'}
+          </Button>
+        </Typography>
         <Card>
           <CardContent>
             <ul>
