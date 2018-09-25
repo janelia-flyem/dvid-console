@@ -9,6 +9,7 @@ import About from './About';
 import CommitHistory from '../containers/CommitHistory';
 import RepoHome from '../containers/RepoHome';
 import Navigation from '../containers/Navigation';
+import NotFound from './NotFound';
 
 const theme = createMuiTheme({
   palette: {
@@ -17,7 +18,7 @@ const theme = createMuiTheme({
   overrides: {
     MuiAppBar: {
       colorPrimary: {
-        "background-color": '#333',
+        'background-color': '#333',
       },
     },
   },
@@ -30,11 +31,12 @@ class App extends Component {
         <div className="App">
           <Navigation />
           <Switch>
-            <Route exact path="/" component={Home} />
+            <Route path="/" exact component={Home} />
             <Route path="/admin" component={Admin} />
             <Route path="/about" component={About} />
-            <Route exact path="/repo/:name" component={RepoHome} />
+            <Route path="/repo/:name" exact component={RepoHome} />
             <Route path="/repo/:name/commits/:branch" component={CommitHistory} />
+            <Route path="*" exact component={NotFound} />
           </Switch>
         </div>
       </MuiThemeProvider>
