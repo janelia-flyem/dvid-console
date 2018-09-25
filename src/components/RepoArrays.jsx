@@ -1,19 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
 import List from '@material-ui/core/List';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
-import DataInstance from './DataInstance';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import SyntaxHighlighter from 'react-syntax-highlighter/prism';
 import { darcula } from 'react-syntax-highlighter/styles/prism';
+import qs from 'qs';
+import DataInstance from './DataInstance';
 
 const allowedTypes = ['uint8blk', 'uint16blk', 'uint32blk', 'uint64blk', 'labelblk'];
 
@@ -39,6 +40,32 @@ class RepoArrays extends React.Component {
     this.setState({ showGetArrays: !showGetArrays });
   }
 
+  handleAddInstance = (dataInstance) => {
+    const { selectedInstances } = this.state;
+    const newInstances = [...selectedInstances];
+    newInstances.push(dataInstance);
+    this.setState({ selectedInstances: newInstances });
+  }
+
+  handleDeleteInstance = (dataInstance) => {
+    const { selectedInstances } = this.state;
+    const newInstances = [...selectedInstances];
+    const index = newInstances.indexOf(dataInstance);
+    if (index > -1) {
+      newInstances.splice(index, 1);
+    }
+    this.setState({ selectedInstances: newInstances });
+  }
+
+  handleViewSelected = () => {
+    const { selectedInstances } = this.state;
+    const { history } = this.props;
+    // need to pump these instances into neuroglancer component.
+    // how do we pass these into a redirect?
+    const queryParams = qs.stringify(selectedInstances);
+    history.push(`/repo/repoName/neuroglancer/?${queryParams}`);
+  }
+
   render() {
     const { dataInstances, classes, repoID } = this.props;
     const { selectedInstances, showAll, showGetArrays } = this.state;
@@ -58,7 +85,7 @@ class RepoArrays extends React.Component {
       if (!allowedTypes.includes(Base.TypeName) && !showAll) {
         return false;
       }
-      return <DataInstance instance={instance} key={Base.DataUUID} />;
+      return <DataInstance instance={instance} key={Base.DataUUID} addInstance={this.handleAddInstance} deleteInstance={this.handleDeleteInstance} />;
     });
 
     const CodeExampleComponent = () => {
@@ -88,8 +115,25 @@ class RepoArrays extends React.Component {
             <List>
               {content}
             </List>
-            <Button className={classes.button} onClick={this.handleShowGetArrays} size="small" variant="outlined" color="primary">Get arrays</Button>
-            <Button className={classes.button} disabled={viewEnabled} size="small" variant="outlined" color="primary">View selected</Button>
+            <Button
+              className={classes.button}
+              onClick={this.handleShowGetArrays}
+              size="small"
+              variant="outlined"
+              color="primary"
+            >
+              Get arrays
+            </Button>
+            <Button
+              className={classes.button}
+              onClick={this.handleViewSelected}
+              disabled={viewEnabled}
+              size="small"
+              variant="outlined"
+              color="primary"
+            >
+              View selected
+            </Button>
           </CardContent>
         </Card>
         <Dialog
@@ -117,10 +161,11 @@ RepoArrays.propTypes = {
   dataInstances: PropTypes.object,
   classes: PropTypes.object.isRequired,
   repoID: PropTypes.string.isRequired,
+  history: PropTypes.object.isRequired,
 };
 
 RepoArrays.defaultProps = {
   dataInstances: {},
 };
 
-export default withStyles(styles)(RepoArrays);
+export default withRouter(withStyles(styles)(RepoArrays));

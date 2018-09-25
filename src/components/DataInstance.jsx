@@ -12,7 +12,15 @@ class DataInstance extends React.Component {
   };
 
   handleToggle = () => {
+    const { instance, addInstance, deleteInstance } = this.props;
     const { checked } = this.state;
+
+    if (!checked) {
+      addInstance(instance.Base.Name);
+    } else {
+      deleteInstance(instance.Base.Name);
+    }
+
     this.setState({ checked: !checked });
   }
 
@@ -70,6 +78,8 @@ class DataInstance extends React.Component {
 
 DataInstance.propTypes = {
   instance: PropTypes.object.isRequired,
+  addInstance: PropTypes.func.isRequired,
+  deleteInstance: PropTypes.func.isRequired,
 };
 
 export default DataInstance;
