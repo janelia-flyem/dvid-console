@@ -100,14 +100,8 @@ class CommitList extends React.Component {
   }
 
   render() {
-    const { loaded } = this.props;
-    if (loaded) {
-      const commits = this.commits();
-      return commits;
-    }
-    return (
-      <p>Loading...</p>
-    );
+    const commits = this.commits();
+    return commits;
   }
 }
 
@@ -115,7 +109,6 @@ CommitList.propTypes = {
   nodes: PropTypes.object.isRequired,
   classes: PropTypes.object.isRequired,
   branch: PropTypes.string.isRequired,
-  loaded: PropTypes.bool.isRequired,
 };
 
 export default withStyles(styles)(CommitList);

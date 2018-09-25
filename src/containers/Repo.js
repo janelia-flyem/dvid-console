@@ -1,12 +1,10 @@
 import { connect } from 'react-redux';
-import CommitHistory from '../components/CommitHistory';
+import Repo from '../components/Repo';
 import { loadRepoInfoFromAlias } from '../actions/dvid';
 
 const mapStateToProps = state => ({
   repos: state.dvid.get('repos'),
   repoDetail: state.dvid.get('repoDetail'),
-  repoInfoLoading: state.dvid.get('repoInfoLoading'),
-  repoInfoLoaded: state.dvid.get('repoInfoLoaded'),
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -20,4 +18,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(CommitHistory);
+)(Repo);

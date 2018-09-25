@@ -6,9 +6,7 @@ import blue from '@material-ui/core/colors/blue';
 import Admin from './Admin';
 import Home from '../containers/Home';
 import About from './About';
-import VolumeViewer from './VolumeViewer';
-import CommitHistory from '../containers/CommitHistory';
-import RepoHome from '../containers/RepoHome';
+import Repo from '../containers/Repo';
 import Navigation from '../containers/Navigation';
 import NotFound from './NotFound';
 
@@ -35,9 +33,7 @@ class App extends Component {
             <Route path="/" exact component={Home} />
             <Route path="/admin" component={Admin} />
             <Route path="/about" component={About} />
-            <Route path="/repo/:name" exact component={RepoHome} />
-            <Route path="/repo/:name/commits/:branch" component={CommitHistory} />
-            <Route path="/repo/:name/neuroglancer/" component={VolumeViewer} />
+            <Route path="/repo/:name" component={Repo} />
             <Route path="*" exact component={NotFound} />
           </Switch>
         </div>

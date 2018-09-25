@@ -1,8 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import Select from 'react-select';
 import CommitList from './CommitList';
@@ -25,30 +23,9 @@ const styles = theme => ({
 });
 
 class CommitHistory extends React.Component {
-  componentDidUpdate() {
-    const {
-      match,
-      repoDetail,
-      repoInfoLoaded,
-      repoInfoLoading,
-    } = this.props;
-
-    if (!repoInfoLoading) {
-      if (!repoInfoLoaded || match.params.name !== repoDetail.Alias) {
-        this.loadRepoInfo();
-      }
-    }
-  }
-
   handleBranchChange = (selectedBranch) => {
     const { history, match } = this.props;
     history.push(`/repo/${match.params.name}/commits/${selectedBranch.label}`);
-  }
-
-  loadRepoInfo() {
-    const { match, actions } = this.props;
-    const repoName = match.params.name;
-    actions.loadRepoInfoFromAlias(repoName);
   }
 
   fetchSelected(selectedBranch) {
@@ -111,22 +88,13 @@ class CommitHistory extends React.Component {
     const {
       classes,
       repoDetail,
-      repoInfoLoaded,
-      repoInfoLoading,
       match,
     } = this.props;
     const branchOptions = this.createBranchOptions();
     const selectedBranch = this.fetchSelected(match.params.branch);
-    const repoUrl = `/repo/${repoDetail.Alias}`;
     return (
       <div className={classes.root}>
         <Grid container spacing={24}>
-          <Grid item xs={6}>
-            <Typography variant="title"><Link to={repoUrl} className={classes.cardTitle}>{repoDetail.Alias}</Link></Typography>
-          </Grid>
-          <Grid item xs={6} className={classes.right}>
-            <Typography>{repoDetail.Description}</Typography>
-          </Grid>
           <Grid item xs={12}>
             Branch
             <Select
@@ -136,7 +104,7 @@ class CommitHistory extends React.Component {
             />
             <p className={classes.button}>Show full commit history for branch: {match.params.branch}.</p>
             {'DAG' in repoDetail
-              && <CommitList branch={match.params.branch} nodes={repoDetail.DAG.Nodes} loading={repoInfoLoading} loaded={repoInfoLoaded} />
+              && <CommitList branch={match.params.branch} nodes={repoDetail.DAG.Nodes} />
             }
           </Grid>
         </Grid>
@@ -148,11 +116,8 @@ class CommitHistory extends React.Component {
 CommitHistory.propTypes = {
   classes: PropTypes.object.isRequired,
   repoDetail: PropTypes.object.isRequired,
-  repoInfoLoaded: PropTypes.bool.isRequired,
-  repoInfoLoading: PropTypes.bool.isRequired,
   match: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired,
-  actions: PropTypes.object.isRequired,
 };
 
 export default withStyles(styles)(CommitHistory);
