@@ -32,7 +32,7 @@ class RepoData extends React.Component {
         <CardContent>
           <Grid container spacing={24}>
             <Grid item sm={6}>
-              <RepoArrays dataInstances={repoDetail.DataInstances} />
+              <RepoArrays dataInstances={repoDetail.DataInstances} repoID={repoDetail.Root} />
             </Grid>
             <Grid item sm={6}>
               <RepoFiles repo={repoDetail} />

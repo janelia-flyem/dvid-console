@@ -1,11 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
+import List from '@material-ui/core/List';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
 import DataInstance from './DataInstance';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import SyntaxHighlighter from 'react-syntax-highlighter/prism';
+import { darcula } from 'react-syntax-highlighter/styles/prism';
 
 const allowedTypes = ['uint8blk', 'uint16blk', 'uint32blk', 'uint64blk', 'labelblk'];
 
@@ -19,24 +27,30 @@ class RepoArrays extends React.Component {
   state = {
     selectedInstances: [],
     showAll: false,
+    showGetArrays: false,
   };
 
   handleShowAll = () => {
     this.setState(state => ({ showAll: !state.showAll }));
   }
 
+  handleShowGetArrays = () => {
+    const { showGetArrays } = this.state;
+    this.setState({ showGetArrays: !showGetArrays });
+  }
+
   render() {
-    const { dataInstances, classes } = this.props;
-    const { selectedInstances, showAll } = this.state;
+    const { dataInstances, classes, repoID } = this.props;
+    const { selectedInstances, showAll, showGetArrays } = this.state;
     const content = Object.values(dataInstances).sort((a, b) => {
       const aType = a.Base.TypeName;
       const bType = b.Base.TypeName;
-      // sort by name, then...
+      // sort by the type...
+      if (aType < bType) return -1;
+      if (aType > bType) return 1;
+      // then sort by name.
       if (a.Base.Name > b.Base.Name) return 1;
       if (a.Base.Name < b.Base.Name) return -1;
-      // ... sort by the type.
-      if (aType > bType) return -1;
-      if (aType < bType) return 1;
       return 0;
     }).map((instance) => {
       const { Base } = instance;
@@ -46,6 +60,18 @@ class RepoArrays extends React.Component {
       }
       return <DataInstance instance={instance} key={Base.DataUUID} />;
     });
+
+    const CodeExampleComponent = () => {
+      const codeString = [
+        'from diced import DicedStore',
+        'store = DicedStore("gs://flyem-public-connectome")',
+        '# open repo with version id or repo name',
+        `repo = store.open_repo("${repoID}")`,
+        'my_array = repo.get_array("<array_name>")',
+      ].join('\n');
+      return <SyntaxHighlighter language="python" style={darcula}>{codeString}</SyntaxHighlighter>;
+    };
+
 
     const viewEnabled = selectedInstances.length < 1;
 
@@ -59,13 +85,29 @@ class RepoArrays extends React.Component {
         </Typography>
         <Card>
           <CardContent>
-            <ul>
+            <List>
               {content}
-            </ul>
-            <Button className={classes.button} size="small" variant="outlined" color="primary">Get arrays</Button>
+            </List>
+            <Button className={classes.button} onClick={this.handleShowGetArrays} size="small" variant="outlined" color="primary">Get arrays</Button>
             <Button className={classes.button} disabled={viewEnabled} size="small" variant="outlined" color="primary">View selected</Button>
           </CardContent>
         </Card>
+        <Dialog
+          open={showGetArrays}
+          onClose={this.handleShowGetArrays}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">Execute in Python</DialogTitle>
+          <DialogContent>
+            <CodeExampleComponent />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.handleShowGetArrays} color="primary">
+              Got It!
+            </Button>
+          </DialogActions>
+        </Dialog>
       </div>
     );
   }
@@ -74,6 +116,7 @@ class RepoArrays extends React.Component {
 RepoArrays.propTypes = {
   dataInstances: PropTypes.object,
   classes: PropTypes.object.isRequired,
+  repoID: PropTypes.string.isRequired,
 };
 
 RepoArrays.defaultProps = {
