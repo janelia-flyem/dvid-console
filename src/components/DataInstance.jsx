@@ -1,12 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Chip from '@material-ui/core/Chip';
-import Typography from '@material-ui/core/Typography';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import Checkbox from '@material-ui/core/Checkbox';
 import { datatypeLabels, labelProperties } from '../settings.json';
+
 class DataInstance extends React.Component {
+  state = {
+    checked: false,
+  };
+
+  handleToggle = () => {
+    const { checked } = this.state;
+    this.setState({ checked: !checked });
+  }
+
   render() {
     const { instance } = this.props;
-
+    const { checked } = this.state;
     let labels = null;
 
     if (datatypeLabels[instance.Base.TypeName]) {
@@ -33,12 +45,25 @@ class DataInstance extends React.Component {
     }
 
     return (
-      <li>
-        <Typography>
+      <ListItem
+        key={instance.Base.Name}
+        role={undefined}
+        dense
+        button
+        onClick={this.handleToggle}
+      >
+        <ListItemText>
           {instance.Base.Name}
           {labels}
-        </Typography>
-      </li>
+        </ListItemText>
+        <Checkbox
+          checked={checked}
+          color="primary"
+          tabIndex={-1}
+          disableRipple
+        />
+
+      </ListItem>
     );
   }
 }
