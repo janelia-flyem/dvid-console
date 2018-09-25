@@ -45,7 +45,7 @@ class RepoCommitSummary extends React.Component {
 
   render() {
     const { classes, repo } = this.props;
-    const commitUrl = `/repo/${repo.Alias}/commits`;
+    const commitUrl = `/repo/${repo.Alias}/commits/Master`;
     const historyLink = props => <Link to={commitUrl} {...props} />;
     const mostRecentCommit = this.getMostRecentCommit();
     return (
