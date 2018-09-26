@@ -60,7 +60,10 @@ class Repo extends React.Component {
               path="/repo/:name/commits/:branch"
               render={props => <CommitHistory {...props} repoDetail={repoDetail} />}
             />
-            <Route path="/repo/:name/neuroglancer/" component={VolumeViewer} />
+            <Route
+              path="/repo/:name/neuroglancer/"
+              render={props => <VolumeViewer {...props} repo={repoDetail} />}
+            />
             <Route
               path="*"
               render={props => <RepoHome {...props} repo={repoDetail} />}
