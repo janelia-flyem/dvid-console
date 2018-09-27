@@ -42,6 +42,21 @@ class RepoArrays extends React.Component {
     showGetArrays: false,
   };
 
+  getAncestors() {
+    const { commit, nodes } = this.props;
+    const nodeLookup = {};
+    Object.values(nodes).forEach((node) => {
+      nodeLookup[node.VersionID] = node;
+    });
+
+    // use nodeLookup to find ancestors of the commit we have been passed
+    const selectedNode = nodes[commit];
+    if (selectedNode) {
+      return getAncestorsForNode(selectedNode, nodeLookup);
+    }
+    return {};
+  }
+
   handleShowAll = () => {
     this.setState(state => ({ showAll: !state.showAll }));
   }
@@ -75,21 +90,6 @@ class RepoArrays extends React.Component {
     // how do we pass these into a redirect?
     const queryParams = qs.stringify(selectedInstances);
     history.push(`/repo/${repoName}/neuroglancer/?${queryParams}`);
-  }
-
-  getAncestors() {
-    const { commit, nodes } = this.props;
-    const nodeLookup = {};
-    Object.values(nodes).forEach((node) => {
-      nodeLookup[node.VersionID] = node;
-    });
-
-    // use nodeLookup to find ancestors of the commit we have been passed
-    const selectedNode = nodes[commit];
-    if (selectedNode) {
-      return getAncestorsForNode(selectedNode, nodeLookup);
-    }
-    return {};
   }
 
   render() {
