@@ -28,7 +28,8 @@ class CommitSelection extends React.Component {
 
   handleCommitChange = (selectedCommit) => {
     const { history, match } = this.props;
-    history.push(`/repo/${match.params.name}/${match.params.branch}/${selectedCommit.value}`);
+    const branch = match.params.branch || 'Master';
+    history.push(`/repo/${match.params.name}/${branch}/${selectedCommit.value}`);
   }
 
   fetchSelected(selectedBranch) {
