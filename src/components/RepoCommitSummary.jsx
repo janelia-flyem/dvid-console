@@ -16,18 +16,18 @@ const styles = theme => ({
 class RepoCommitSummary extends React.Component {
   getMostRecentCommit() {
     const { repo } = this.props;
-    if ('DAG' in repo) {
-      const nodeList = Object.values(repo.DAG.Nodes);
-      const sorted = nodeList.sort((a, b) => {
-        if (a.VersionID < b.VersionID) {
-          return -1;
-        }
-        if (a.VersionID > b.VersionID) {
-          return 1;
-        }
-        return 0;
-      });
-      const mostRecentCommit = sorted[sorted.length - 1];
+    const nodeList = Object.values(repo.DAG.Nodes);
+    const sorted = nodeList.sort((a, b) => {
+      if (a.VersionID < b.VersionID) {
+        return -1;
+      }
+      if (a.VersionID > b.VersionID) {
+        return 1;
+      }
+      return 0;
+    });
+    const mostRecentCommit = sorted[sorted.length - 1];
+    if (mostRecentCommit) {
       let branch = mostRecentCommit.Branch;
       if (!branch || branch === '') {
         branch = 'Master';

@@ -15,7 +15,13 @@ const initialState = Immutable.Map({
   status_loaded: false,
   repoInfoLoading: false,
   repoInfoLoaded: false,
-  repoDetail: {},
+  repoDetail: {
+    Root: '',
+    Alias: '',
+    DAG: {
+      Nodes: {},
+    },
+  },
   error: null,
 });
 

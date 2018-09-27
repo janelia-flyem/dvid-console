@@ -1,12 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Switch, Route, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
-import VolumeViewer from './VolumeViewer';
-import CommitHistory from './CommitHistory';
-import RepoHome from './RepoHome';
+import CommitSelection from './CommitSelection';
 
 const styles = theme => ({
   root: {
@@ -55,20 +53,7 @@ class Repo extends React.Component {
           <Grid item xs={6} className={classes.right}>
             <Typography>{repoDetail.Description}</Typography>
           </Grid>
-          <Switch>
-            <Route
-              path="/repo/:name/commits/:branch"
-              render={props => <CommitHistory {...props} repoDetail={repoDetail} />}
-            />
-            <Route
-              path="/repo/:name/neuroglancer/"
-              render={props => <VolumeViewer {...props} repo={repoDetail} />}
-            />
-            <Route
-              path="*"
-              render={props => <RepoHome {...props} repo={repoDetail} />}
-            />
-          </Switch>
+          <CommitSelection {...this.props} repoDetail={repoDetail} />
         </Grid>
       </div>
     );

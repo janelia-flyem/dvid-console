@@ -22,7 +22,12 @@ const styles = theme => ({
 
 class RepoData extends React.Component {
   render() {
-    const { classes, repoDetail } = this.props;
+    const {
+      classes,
+      repoDetail,
+      commit,
+      branch
+    } = this.props;
 
     const title = <Typography variant="title"><Icon className={classNames('fa fa-database')} style={{ fontSize: 16 }} /> Data</Typography>;
 
@@ -32,7 +37,13 @@ class RepoData extends React.Component {
         <CardContent>
           <Grid container spacing={24}>
             <Grid item sm={6}>
-              <RepoArrays dataInstances={repoDetail.DataInstances} repoID={repoDetail.Root} repoName={repoDetail.Alias} />
+              <RepoArrays
+                repoName={repoDetail.Alias}
+                nodes={repoDetail.DAG.Nodes}
+                dataInstances={repoDetail.DataInstances}
+                commit={commit}
+                branch={branch}
+              />
             </Grid>
             <Grid item sm={6}>
               <RepoFiles repo={repoDetail} />
@@ -50,6 +61,8 @@ class RepoData extends React.Component {
 RepoData.propTypes = {
   classes: PropTypes.object.isRequired,
   repoDetail: PropTypes.object.isRequired,
+  commit: PropTypes.string.isRequired,
+  branch: PropTypes.string.isRequired,
 };
 
 export default withStyles(styles)(RepoData);

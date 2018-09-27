@@ -34,7 +34,7 @@ class VolumeViewer extends React.Component {
     return (
       <div>
         <Neuroglancer perspectiveZoom={80} viewerState={viewerState} />
-        <p>Help docs here if needed</p>
+        <p>Help docs here if needed.</p>
       </div>
     );
   }

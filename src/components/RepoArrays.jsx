@@ -24,6 +24,17 @@ const styles = theme => ({
   },
 });
 
+function getAncestorsForNode(node, nodeLookup, ancestors = {}) {
+  // take node and push it onto ancestors list
+  ancestors[node.UUID] = 1;
+  // grab the parents array
+  // foreach item run getAncestorsForNode
+  node.Parents.forEach((parentId) => {
+    getAncestorsForNode(nodeLookup[parentId], nodeLookup, ancestors);
+  });
+  return ancestors;
+}
+
 class RepoArrays extends React.Component {
   state = {
     selectedInstances: [],
@@ -66,8 +77,29 @@ class RepoArrays extends React.Component {
     history.push(`/repo/${repoName}/neuroglancer/?${queryParams}`);
   }
 
+  getAncestors() {
+    const { commit, nodes } = this.props;
+    const nodeLookup = {};
+    Object.values(nodes).forEach((node) => {
+      nodeLookup[node.VersionID] = node;
+    });
+
+    // use nodeLookup to find ancestors of the commit we have been passed
+    const selectedNode = nodes[commit];
+    if (selectedNode) {
+      return getAncestorsForNode(selectedNode, nodeLookup);
+    }
+    return {};
+  }
+
   render() {
-    const { dataInstances, classes, repoID } = this.props;
+    const {
+      dataInstances,
+      classes,
+      commit,
+    } = this.props;
+    const ancestors = this.getAncestors();
+
     const { selectedInstances, showAll, showGetArrays } = this.state;
     const content = Object.values(dataInstances).sort((a, b) => {
       const aType = a.Base.TypeName;
@@ -79,21 +111,22 @@ class RepoArrays extends React.Component {
       if (a.Base.Name > b.Base.Name) return 1;
       if (a.Base.Name < b.Base.Name) return -1;
       return 0;
-    }).map((instance) => {
-      const { Base } = instance;
-      // check if this instance is in the list of allowed instances.
-      if (!allowedTypes.includes(Base.TypeName) && !showAll) {
-        return false;
-      }
-      return <DataInstance instance={instance} key={Base.DataUUID} addInstance={this.handleAddInstance} deleteInstance={this.handleDeleteInstance} />;
-    });
+    }).filter(instance => (instance.Base.RepoUUID in ancestors))
+      .map((instance) => {
+        const { Base } = instance;
+        // check if this instance is in the list of allowed instances.
+        if (!allowedTypes.includes(Base.TypeName) && !showAll) {
+          return false;
+        }
+        return <DataInstance instance={instance} key={Base.DataUUID} addInstance={this.handleAddInstance} deleteInstance={this.handleDeleteInstance} />;
+      });
 
     const CodeExampleComponent = () => {
       const codeString = [
         'from diced import DicedStore',
         'store = DicedStore("gs://flyem-public-connectome")',
         '# open repo with version id or repo name',
-        `repo = store.open_repo("${repoID}")`,
+        `repo = store.open_repo("${commit}")`,
         'my_array = repo.get_array("<array_name>")',
       ].join('\n');
       return <SyntaxHighlighter language="python" style={darcula}>{codeString}</SyntaxHighlighter>;
@@ -160,9 +193,11 @@ class RepoArrays extends React.Component {
 RepoArrays.propTypes = {
   dataInstances: PropTypes.object,
   classes: PropTypes.object.isRequired,
-  repoID: PropTypes.string.isRequired,
   repoName: PropTypes.string.isRequired,
   history: PropTypes.object.isRequired,
+  commit: PropTypes.string.isRequired,
+  branch: PropTypes.string.isRequired,
+  nodes: PropTypes.object.isRequired,
 };
 
 RepoArrays.defaultProps = {
