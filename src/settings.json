@@ -27,6 +27,9 @@
     "labelblk": [
       "labelarray",
       "64bit"
+    ],
+    "labelmap": [
+      "labelmap"
     ]
   },
   "labelProperties": {
@@ -47,6 +50,22 @@
     },
     "labelarray":{
       "color": "#ff6722"
+    },
+    "labelmap":{
+      "color": "#ff6722"
     }
+  },
+  "neuroglancer": {
+    "imageTypes": [
+      "uint8blk",
+      "uint16blk",
+      "uint32blk",
+      "uint64blk"
+    ],
+    "labelTypes": [
+      "labelblk",
+      "labelarray",
+      "labelmap"
+    ]
   }
 }
