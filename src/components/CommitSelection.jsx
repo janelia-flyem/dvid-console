@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import Select from 'react-select';
 import { Switch, Route } from 'react-router-dom';
-import VolumeViewer from './VolumeViewer';
 import RepoHome from './RepoHome';
 
 function getAncestorsForNode(node, nodeLookup, ancestors = []) {
@@ -203,10 +202,6 @@ class CommitSelection extends React.Component {
             />
           </Grid>
           <Switch>
-            <Route
-              path="/repo/:name/:branch:/:commit/neuroglancer/"
-              render={props => <VolumeViewer {...props} repo={repoDetail} />}
-            />
             <Route
               path="*"
               render={props => <RepoHome {...props} repo={repoDetail} branch={selectedBranch.label} commit={selectedCommit.value} />}

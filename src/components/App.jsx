@@ -9,6 +9,7 @@ import About from './About';
 import Repo from '../containers/Repo';
 import Navigation from '../containers/Navigation';
 import NotFound from './NotFound';
+import VolumeViewer from './VolumeViewer';
 
 const theme = createMuiTheme({
   palette: {
@@ -33,6 +34,7 @@ class App extends Component {
             <Route path="/" exact component={Home} />
             <Route path="/admin" component={Admin} />
             <Route path="/about" component={About} />
+            <Route path="/repo/:name/:branch/:commit/neuroglancer" component={VolumeViewer} />
             <Route path="/repo/:name/:branch/:commit" component={Repo} />
             <Route path="/repo/:name/:branch" component={Repo} />
             <Route path="/repo/:name/" component={Repo} />

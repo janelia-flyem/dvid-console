@@ -7,11 +7,8 @@ import { baseurl } from '../settings';
 
 class VolumeViewer extends React.Component {
   render() {
-    const { repo, location } = this.props;
-
-    if (!('Root' in repo)) {
-      return '';
-    }
+    const { match, location } = this.props;
+    console.log(match);
 
     const viewerState = {
       perspectiveZoom: 20,
@@ -24,7 +21,8 @@ class VolumeViewer extends React.Component {
     const layers = Object.values(qs.parse(location.search, { ignoreQueryPrefix: true }));
 
     layers.forEach((layer) => {
-      const source = `dvid://${baseurl()}/${repo.Root}/${layer}`;
+      const source = `dvid://${baseurl()}/${match.params.commit}/${layer}`;
+      console.log(source);
       viewerState.layers[layer] = {
         type: 'image',
         source,
@@ -34,15 +32,14 @@ class VolumeViewer extends React.Component {
     return (
       <div>
         <Neuroglancer perspectiveZoom={80} viewerState={viewerState} />
-        <p>Help docs here if needed.</p>
       </div>
     );
   }
 }
 
 VolumeViewer.propTypes = {
-  repo: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired,
+  match: PropTypes.object.isRequired,
 };
 
 export default VolumeViewer;

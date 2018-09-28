@@ -85,11 +85,16 @@ class RepoArrays extends React.Component {
 
   handleViewSelected = () => {
     const { selectedInstances } = this.state;
-    const { history, repoName } = this.props;
+    const {
+      history,
+      repoName,
+      branch,
+      commit,
+    } = this.props;
     // need to pump these instances into neuroglancer component.
     // how do we pass these into a redirect?
     const queryParams = qs.stringify(selectedInstances);
-    history.push(`/repo/${repoName}/neuroglancer/?${queryParams}`);
+    history.push(`/repo/${repoName}/${branch}/${commit}/neuroglancer/?${queryParams}`);
   }
 
   render() {
