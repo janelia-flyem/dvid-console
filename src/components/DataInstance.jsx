@@ -15,19 +15,22 @@ class DataInstance extends React.Component {
     const { instance, addInstance, deleteInstance } = this.props;
     const { checked } = this.state;
 
-    if (!checked) {
-      addInstance(instance.Base.Name);
-    } else {
-      deleteInstance(instance.Base.Name);
-    }
+    if (datatypeLabels[instance.Base.TypeName]) {
+      if (!checked) {
+        addInstance(instance.Base.Name);
+      } else {
+        deleteInstance(instance.Base.Name);
+      }
 
-    this.setState({ checked: !checked });
+      this.setState({ checked: !checked });
+    }
   }
 
   render() {
     const { instance } = this.props;
     const { checked } = this.state;
     let labels = null;
+    let checkbox = '';
 
     if (datatypeLabels[instance.Base.TypeName]) {
       labels = datatypeLabels[instance.Base.TypeName].map((label) => {
@@ -42,6 +45,7 @@ class DataInstance extends React.Component {
 
         return (<Chip key={label} label={label} style={style} />);
       });
+      checkbox = <Checkbox checked={checked} color="primary" tabIndex={-1} disableRipple />;
     } else {
       const style = {
         background: '#ccc',
@@ -64,13 +68,7 @@ class DataInstance extends React.Component {
           {instance.Base.Name}
           {labels}
         </ListItemText>
-        <Checkbox
-          checked={checked}
-          color="primary"
-          tabIndex={-1}
-          disableRipple
-        />
-
+        {checkbox}
       </ListItem>
     );
   }
