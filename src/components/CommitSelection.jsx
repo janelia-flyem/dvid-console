@@ -185,7 +185,7 @@ class CommitSelection extends React.Component {
     return (
       <div className={classes.root}>
         <Grid container spacing={24}>
-          <Grid item sm={6}>
+          <Grid item xs={12} md={6}>
             Branch
             <Select
               value={selectedBranch}
@@ -193,7 +193,7 @@ class CommitSelection extends React.Component {
               options={branchOptions}
             />
           </Grid>
-          <Grid item sm={6}>
+          <Grid item xs={12} md={6}>
             Commit
             <Select
               value={selectedCommit}

@@ -36,7 +36,7 @@ class RepoData extends React.Component {
         <CardHeader title={title} className={classes.cardHeader} />
         <CardContent>
           <Grid container spacing={24}>
-            <Grid item sm={6}>
+            <Grid item xs={12} md={6}>
               <RepoArrays
                 repoName={repoDetail.Alias}
                 nodes={repoDetail.DAG.Nodes}
@@ -45,11 +45,11 @@ class RepoData extends React.Component {
                 branch={branch}
               />
             </Grid>
-            <Grid item sm={6}>
+            <Grid item xs={12} md={6}>
               <RepoFiles repo={repoDetail} />
             </Grid>
           </Grid>
-          <Grid item sm={12}>
+          <Grid item xs={12}>
             <RepoCommitSummary repo={repoDetail} />
           </Grid>
         </CardContent>

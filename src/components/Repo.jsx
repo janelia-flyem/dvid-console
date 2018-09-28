@@ -47,10 +47,10 @@ class Repo extends React.Component {
     return (
       <div className={classes.root}>
         <Grid container spacing={24}>
-          <Grid item xs={6}>
+          <Grid item sm={6}>
             <Typography variant="title"><Link to={url} className={classes.cardTitle}>{repoDetail.Alias}</Link></Typography>
           </Grid>
-          <Grid item xs={6} className={classes.right}>
+          <Grid item sm={6} className={classes.right}>
             <Typography>{repoDetail.Description}</Typography>
           </Grid>
           <CommitSelection {...this.props} repoDetail={repoDetail} />
