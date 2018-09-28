@@ -34,8 +34,9 @@ class RepoFiles extends React.Component {
 
   componentDidUpdate(prevProps) {
     const { repo } = this.props;
+    const { loaded } = this.state;
 
-    if (prevProps.repo.Root === repo.Root) {
+    if (loaded) {
       return;
     }
 
