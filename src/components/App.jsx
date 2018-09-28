@@ -37,7 +37,7 @@ class App extends Component {
             <Route path="/repo/:name/:branch/:commit/neuroglancer" component={VolumeViewer} />
             <Route path="/repo/:name/:branch/:commit" component={Repo} />
             <Route path="/repo/:name/:branch" component={Repo} />
-            <Route path="/repo/:name/" component={Repo} />
+            <Route path="/repo/:name" component={Repo} />
             <Route path="*" exact component={NotFound} />
           </Switch>
         </div>
