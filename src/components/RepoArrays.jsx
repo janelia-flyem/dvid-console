@@ -15,8 +15,9 @@ import SyntaxHighlighter from 'react-syntax-highlighter/prism';
 import { darcula } from 'react-syntax-highlighter/styles/prism';
 import qs from 'qs';
 import DataInstance from './DataInstance';
+import settings from '../settings.json';
 
-const allowedTypes = ['uint8blk', 'uint16blk', 'uint32blk', 'uint64blk', 'labelblk'];
+const allowedTypes = ['uint8blk', 'uint16blk', 'uint32blk', 'uint64blk', 'labelblk', 'labelmap'];
 
 const styles = theme => ({
   button: {
@@ -84,16 +85,26 @@ class RepoArrays extends React.Component {
   }
 
   handleViewSelected = () => {
+    const { labelTypes, imageTypes } = settings.neuroglancer;
     const { selectedInstances } = this.state;
     const {
       history,
       repoName,
       branch,
       commit,
+      dataInstances,
     } = this.props;
     // need to pump these instances into neuroglancer component.
     // how do we pass these into a redirect?
-    const queryParams = qs.stringify(selectedInstances);
+    const queryParams = qs.stringify(selectedInstances.map((instance) => {
+      const type = dataInstances[instance].Base.TypeName;
+      const ngType = labelTypes.includes(type) ? 'segmentation' : 'image';
+      const instanceMeta = {
+        type: ngType,
+        name: instance,
+      };
+      return instanceMeta;
+    }));
     history.push(`/repo/${repoName}/${branch}/${commit}/neuroglancer/?${queryParams}`);
   }
 
