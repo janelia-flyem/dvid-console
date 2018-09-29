@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import dvid from 'dvid';
 import Typography from '@material-ui/core/Typography';
@@ -32,7 +31,7 @@ class RepoFiles extends React.Component {
     };
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate() {
     const { repo } = this.props;
     const { loaded } = this.state;
 

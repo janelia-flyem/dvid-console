@@ -85,7 +85,7 @@ class RepoArrays extends React.Component {
   }
 
   handleViewSelected = () => {
-    const { labelTypes, imageTypes } = settings.neuroglancer;
+    const { labelTypes } = settings.neuroglancer;
     const { selectedInstances } = this.state;
     const {
       history,
