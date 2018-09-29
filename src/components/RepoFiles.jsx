@@ -36,7 +36,7 @@ class RepoFiles extends React.Component {
     const { repo } = this.props;
     const { loaded } = this.state;
 
-    if (loaded) {
+    if (repo.Root === '' || loaded) {
       return;
     }
 
@@ -64,8 +64,8 @@ class RepoFiles extends React.Component {
       content = 'No files found.';
       if (files) {
         content = files.map((file) => {
-          const url = `http://${window.location.hostname}/api/node/${repo.Root}/.files/key/${file}`;
-          const link = <Link className={classes.link} to={url}>{file}</Link>;
+          const url = `/api/node/${repo.Root}/.files/key/${file}`;
+          const link = <a href={url}>{file}</a>;
           return <li key={file}><Typography><span className="far fa-file-alt" /> {link}</Typography></li>;
         });
       }
