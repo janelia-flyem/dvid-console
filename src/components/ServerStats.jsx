@@ -33,7 +33,7 @@ class ServerStats extends React.Component {
 
     Object.keys(repos).forEach((key) => {
       const repo = repos[key];
-      if (repo) {
+      if (repo && repo.DAG) {
         versionNodes += Object.keys(repo.DAG.Nodes).length;
       }
     });
