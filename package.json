@@ -45,6 +45,9 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
   "browserslist": {
     "development": [
       "last 2 chrome versions",
