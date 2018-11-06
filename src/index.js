@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Router } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware, compose } from 'redux';
 import thunkMiddleware from 'redux-thunk';
@@ -17,9 +17,9 @@ const store = createStore(reducers, {}, composeEnhancers(applyMiddleware(thunkMi
 
 ReactDOM.render(
   <Provider store={store}>
-    <Router history={history}>
+    <BrowserRouter history={history} basename="/AL-VA1v">
       <App />
-    </Router>
+    </BrowserRouter>
   </Provider>, document.getElementById('root'),
 );
 registerServiceWorker();
