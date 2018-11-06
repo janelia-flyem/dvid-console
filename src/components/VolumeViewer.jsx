@@ -49,14 +49,16 @@ class VolumeViewer extends React.Component {
 
     return (
       <div className={classes.root}>
-        <Grid container spacing={24}>
+        <Grid container spacing={24} direction="column">
           <Grid item xs={6}>
             <Typography variant="title"><Link to={url} className={classes.cardTitle}>{match.params.name}</Link></Typography>
           </Grid>
           <Grid item xs={6}>
             <Typography>Branch: {match.params.branch}, Commit: {match.params.commit}</Typography>
           </Grid>
-          <Neuroglancer perspectiveZoom={80} viewerState={viewerState} />
+          <Grid item xs={12}>
+            <Neuroglancer perspectiveZoom={80} viewerState={viewerState} />
+          </Grid>
         </Grid>
       </div>
     );
