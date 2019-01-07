@@ -15,8 +15,7 @@ Console simplification
 ===========
 As of the version 3 release, the console has been simplified to streamline the information
 shown. For those wishing to see all the information that was presented before the change,
-such as the complete DAG diagram, please use an older 2.x release. The latest one can be found
-[here](https://github.com/janelia-flyem/dvid-console/releases/tag/v2.1.4).
+such as the complete DAG diagram, please use the [older 2.x release](https://github.com/janelia-flyem/dvid-console/releases/tag/v2.1.4).
 
 Usage
 ==============
