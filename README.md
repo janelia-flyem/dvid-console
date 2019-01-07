@@ -11,6 +11,13 @@ This code can be used with DVID in two ways:
 allows a single DVID executable to have an embedded console and is the default way that DVID
 is built.
 
+Console simplification
+===========
+As of the version 3 release, the console has been simplified to streamline the information
+shown. For those wishing to see all the information that was presented before the change,
+such as the complete DAG diagram, please use an older 2.x release. The latest one can be found
+[here](https://github.com/janelia-flyem/dvid-console/releases/tag/v2.1.4).
+
 Usage
 ==============
 
@@ -26,7 +33,6 @@ Usage
 * Make sure to set the `webClient` in `[server]` section of the TOML file when starting the DVID server:
 
   `dvid -verbose serve /path/to/config.toml`
-
 
 ##### For Developers
 *When you want to use the bleeding edge or make your own modifications*
