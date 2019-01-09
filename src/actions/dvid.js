@@ -201,7 +201,53 @@ export function loadRepoInfoFromAlias(alias) {
     dispatch(loadingRepoInfo(alias));
     return dispatch(loadRepos()).then(() => {
       const repoIDs = Object.values(getState().dvid.get('repos')).filter(repo => repo.Alias === alias).map(repo => repo.Root);
-      return dispatch(loadRepoInfo(repoIDs[0]));
+      dispatch(loadRepoInfo(repoIDs[0]));
+      dispatch(loadRepoRestrictions(repoIDs[0]));
     });
   };
+}
+
+export const LOAD_REPO_RESTRICTIONS = 'LOAD_REPO_RESTRICTIONS';
+export const LOADED_REPO_RESTRICTIONS = 'LOADED_REPO_RESTRICTIONS';
+export const LOAD_REPO_RESTRICTIONS_ERROR = 'LOAD_REPO_RESTRICTIONS_ERROR';
+
+
+function loadingRepoRestrictions(id) {
+  return {
+    type: LOAD_REPO_RESTRICTIONS,
+    id
+  }
+}
+
+function loadedRepoRestrictions(json) {
+  return {
+    type: LOADED_REPO_RESTRICTIONS,
+    json
+  }
+}
+
+function loadRepoRestrictionsError(error) {
+  return {
+    type: LOAD_REPO_RESTRICTIONS_ERROR,
+    error
+  }
+}
+
+export function loadRepoRestrictions(id) {
+  return function loadRestrictionsAsync(dispatch) {
+    dispatch(loadingRepoRestrictions(id));
+    return new Promise((resolve, reject) => {
+      api.node({
+        uuid: id,
+        endpoint: '.meta/key/restrictions',
+        callback: (data) => {
+          resolve(dispatch(loadedRepoRestrictions(data)));
+        },
+        error: (err) => {
+          reject(dispatch(loadRepoRestrictionsError(err)));
+        },
+      });
+    });
+
+  }
 }

@@ -26,7 +26,8 @@ class RepoData extends React.Component {
       classes,
       repoDetail,
       commit,
-      branch
+      branch,
+      repoRestrictions
     } = this.props;
 
     const title = <Typography variant="title"><Icon className={classNames('fa fa-database')} style={{ fontSize: 16 }} /> Data</Typography>;
@@ -38,6 +39,7 @@ class RepoData extends React.Component {
           <Grid container spacing={24}>
             <Grid item xs={12} md={6}>
               <RepoArrays
+                restrictions={repoRestrictions}
                 repoName={repoDetail.Alias}
                 nodes={repoDetail.DAG.Nodes}
                 dataInstances={repoDetail.DataInstances}
@@ -63,6 +65,7 @@ RepoData.propTypes = {
   repoDetail: PropTypes.object.isRequired,
   commit: PropTypes.string.isRequired,
   branch: PropTypes.string.isRequired,
+  repoRestrictions: PropTypes.array.isRequired
 };
 
 export default withStyles(styles)(RepoData);

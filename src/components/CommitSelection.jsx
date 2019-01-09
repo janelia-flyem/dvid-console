@@ -174,6 +174,7 @@ class CommitSelection extends React.Component {
       classes,
       match,
       repoDetail,
+      repoRestrictions,
     } = this.props;
 
     const branchOptions = this.createBranchOptions();
@@ -204,7 +205,7 @@ class CommitSelection extends React.Component {
           <Switch>
             <Route
               path="*"
-              render={props => <RepoHome {...props} repo={repoDetail} branch={selectedBranch.label} commit={selectedCommit.value} />}
+              render={props => <RepoHome {...props} repo={repoDetail} branch={selectedBranch.label} commit={selectedCommit.value} repoRestrictions={repoRestrictions} />}
             />
           </Switch>
         </Grid>
@@ -216,6 +217,7 @@ class CommitSelection extends React.Component {
 CommitSelection.propTypes = {
   classes: PropTypes.object.isRequired,
   repoDetail: PropTypes.object.isRequired,
+  repoRestrictions: PropTypes.array.isRequired,
   match: PropTypes.object.isRequired,
 };
 

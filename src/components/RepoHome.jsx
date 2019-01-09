@@ -21,10 +21,10 @@ const styles = theme => ({
 
 class RepoHome extends React.Component {
   render() {
-    const { repo, branch, commit } = this.props;
+    const { repo, branch, commit, repoRestrictions } = this.props;
     return [
       <Grid key="repoData" item xs={12}>
-        <RepoData commit={commit} branch={branch} repoDetail={repo} />
+        <RepoData commit={commit} branch={branch} repoDetail={repo} repoRestrictions={repoRestrictions} />
       </Grid>,
       <Grid key="readme" item xs={12}>
         <ReadMe id={repo.Root} />
@@ -37,6 +37,7 @@ RepoHome.propTypes = {
   repo: PropTypes.object.isRequired,
   commit: PropTypes.string.isRequired,
   branch: PropTypes.string.isRequired,
+  repoRestrictions: PropTypes.array.isRequired
 };
 
 export default withStyles(styles)(RepoHome);

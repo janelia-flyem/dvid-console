@@ -22,6 +22,7 @@ const initialState = Immutable.Map({
       Nodes: {},
     },
   },
+  repoRestrictions: [],
   error: null,
 });
 
@@ -61,6 +62,8 @@ export default function adminReducer(state = initialState, action) {
       // TODO: at this point we need to build the dag content, so that we can use
       // it in later checks and for the DAG display.
       return state.set('repoDetail', action.json).set('repoInfoLoading', false).set('repoInfoLoaded', true);
+    case 'LOADED_REPO_RESTRICTIONS':
+      return state.set('repoRestrictions', action.json)
 
     default:
       return state;
