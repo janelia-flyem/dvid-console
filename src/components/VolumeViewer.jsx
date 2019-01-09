@@ -5,7 +5,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import qs from 'qs';
-import Neuroglancer from 'neuroglancer-react';
+import Neuroglancer from '@janelia-flyem/react-neuroglancer';
 import './VolumeViewer.css';
 import { baseurl } from '../settings';
 
