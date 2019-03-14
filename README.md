@@ -37,7 +37,6 @@ Usage
 *When you want to use the bleeding edge or make your own modifications*
 * Clone the repository
 * Make sure you have [node and npm](https://nodejs.org/) installed.
-* Install [grunt-cli](http://gruntjs.com/getting-started) globally
 * Install all the dependencies with npm
 
   ```bash 
@@ -47,7 +46,7 @@ Usage
 * build the console with grunt
 
   ```bash
-  grunt dist
+  npm run build
   ```
 * Make sure to set the `webClient` in `[server]` section of the TOML file when starting the DVID server  
   
