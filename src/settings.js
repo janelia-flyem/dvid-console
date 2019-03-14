@@ -19,7 +19,7 @@ export function getProtocol() {
     return settings.dvid.protocol;
   }
   // the dvid api expects the protocol to not end with a ':'
-  return window.location.protocol.replace(/:/,'');
+  return window.location.protocol.replace(/:$/,'');
 }
 
 export function baseurl() {
