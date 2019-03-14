@@ -17,7 +17,7 @@ const store = createStore(reducers, {}, composeEnhancers(applyMiddleware(thunkMi
 
 ReactDOM.render(
   <Provider store={store}>
-    <BrowserRouter history={history} basename="/AL-VA1v">
+    <BrowserRouter history={history}>
       <App />
     </BrowserRouter>
   </Provider>, document.getElementById('root'),
