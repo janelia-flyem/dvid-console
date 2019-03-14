@@ -43,7 +43,7 @@ Usage
   cd /into/the/repository/clone
   npm install
   ```
-* build the console with grunt
+* build the console
 
   ```bash
   npm run build
