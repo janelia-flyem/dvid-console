@@ -1,9 +1,10 @@
 import dvid from 'dvid';
-import { getHostName, getPort } from '../settings';
+import { getHostName, getPort, getProtocol } from '../settings';
 
 const api = dvid.connect({
   host: getHostName(),
   port: getPort(),
+  protocol: getProtocol(),
   username: 'dvidconsole',
   application: 'dvidconsole',
 });

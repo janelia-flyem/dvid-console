@@ -9,7 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import Icon from '@material-ui/core/Icon';
 import dvid from 'dvid';
-import { getHostName, getPort } from '../settings';
+import { getHostName, getPort, getProtocol } from '../settings';
 
 const styles = theme => ({
   root: {
@@ -50,6 +50,7 @@ class ReadMe extends React.Component {
       const api = dvid.connect({
         host: getHostName(),
         port: getPort(),
+        protocol: getProtocol(),
         username: 'dvidconsole',
         application: 'dvidconsole',
       });

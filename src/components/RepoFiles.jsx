@@ -5,7 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import { withStyles } from '@material-ui/core/styles';
-import { getHostName, getPort } from '../settings';
+import { getHostName, getPort, getProtocol } from '../settings';
 
 const styles = theme => ({
   list: {
@@ -42,6 +42,7 @@ class RepoFiles extends React.Component {
     const api = dvid.connect({
       host: getHostName(),
       port: getPort(),
+      protocol: getProtocol(),
       username: 'dvidconsole',
       application: 'dvidconsole',
     });
