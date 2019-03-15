@@ -23,7 +23,11 @@ export function getProtocol() {
 }
 
 export function baseurl() {
-  return `${getProtocol()}//${getHostName()}:${getPort()}`;
+  const port = getPort();
+  if (port.length === 0) {
+    return `${getProtocol()}://${getHostName()}`;
+  }
+  return `${getProtocol()}://${getHostName()}:${getPort()}`;
 }
 
 export function apiurl() {
