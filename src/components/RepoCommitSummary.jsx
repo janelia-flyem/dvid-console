@@ -6,6 +6,8 @@ import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import { withStyles } from '@material-ui/core/styles';
+import parse from 'date-fns/parse';
+import format from 'date-fns/format';
 
 const styles = theme => ({
   button: {
@@ -29,12 +31,14 @@ class RepoCommitSummary extends React.Component {
     const mostRecentCommit = sorted[sorted.length - 1];
     if (mostRecentCommit) {
       let branch = mostRecentCommit.Branch;
+      const date = parse(repo.Updated);
       if (!branch || branch === '') {
         branch = 'Master';
       }
       return [
         <Typography key="branch">Branch: {branch}</Typography>,
         <Typography key="id">{mostRecentCommit.UUID.slice(0, 9)} - {mostRecentCommit.Note}</Typography>,
+        <Typography key="date" variant="caption">{format(date, 'MM/DD/YYYY - HH:mm:ss')}</Typography>
       ];
     }
 
