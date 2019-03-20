@@ -4,7 +4,6 @@ import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import ReadMe from './ReadMe';
 import RepoData from './RepoData';
-import RepoDAG from './RepoDAG';
 
 const styles = theme => ({
   root: {
@@ -29,9 +28,6 @@ class RepoHome extends React.Component {
       </Grid>,
       <Grid key="readme" item xs={12}>
         <ReadMe id={repo.Root} />
-      </Grid>,
-      <Grid key="dag" item xs={12}>
-        <RepoDAG repo={repo} lite={true} uuid={commit} repoMasterUuid="" repoMasterBranchHist={[]} serverInfo={{}} />
       </Grid>
     ];
   }

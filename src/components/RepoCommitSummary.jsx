@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import { withStyles } from '@material-ui/core/styles';
@@ -14,6 +15,13 @@ const styles = theme => ({
 });
 
 class RepoCommitSummary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      showDAG: false
+    };
+  }
+
   getMostRecentCommit() {
     const { repo } = this.props;
     const nodeList = Object.values(repo.DAG.Nodes);
@@ -45,18 +53,35 @@ class RepoCommitSummary extends React.Component {
     );
   }
 
+  handleShowAll = () => {
+    const { showDAG } = this.state;
+    this.setState({showDAG: !showDAG});
+  }
+
   render() {
+    const { classes } = this.props;
+    const { showDAG } = this.state;
     const mostRecentCommit = this.getMostRecentCommit();
     return (
       <div>
         <Typography>
           <span className="far fa-code-branch" /> Latest Commit
+          <Button
+            className={classes.button}
+            size="small"
+            color="primary"
+            onClick={this.handleShowAll}
+          >
+            Show DAG
+          </Button>
+
         </Typography>
         <Card>
           <CardContent>
             {mostRecentCommit}
           </CardContent>
         </Card>
+        {showDAG && this.props.children}
       </div>
     );
   }
