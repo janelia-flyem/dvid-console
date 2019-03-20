@@ -30,8 +30,8 @@ class RepoHome extends React.Component {
       <Grid key="readme" item xs={12}>
         <ReadMe id={repo.Root} />
       </Grid>,
-      <Grid key="readme" item xs={12}>
-        <RepoDAG repo={repo} lite={false} uuid={commit} />
+      <Grid key="dag" item xs={12}>
+        <RepoDAG repo={repo} lite={true} uuid={commit} repoMasterUuid="" repoMasterBranchHist={[]} serverInfo={{}} />
       </Grid>
     ];
   }

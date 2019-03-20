@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ReactDOM from 'react-dom';
 import { withRouter } from 'react-router-dom';
 import queryString from 'qs';
 import d3 from 'd3';
@@ -11,8 +10,6 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import dagreD3 from 'dagre-d3';
 import RepoDAGHelpModal from './RepoDAGHelpModal';
-// import ServerActions from '../actions/ServerActions';
-// import InstanceActions from '../actions/InstanceActions';
 // import BranchSelect from '../components/BranchSelect.react.js';
 
 import './RepoDAG.css';
@@ -873,7 +870,7 @@ RepoDAG.propTypes = {
   repo: PropTypes.object.isRequired,
   lite: PropTypes.bool.isRequired,
   repoMasterUuid: PropTypes.string.isRequired,
-  repoMasterBranchHist: PropTypes.object.isRequired,
+  repoMasterBranchHist: PropTypes.array.isRequired,
   uuid: PropTypes.string.isRequired,
   serverInfo: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired,
