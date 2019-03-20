@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import Select from 'react-select';
-import { Switch, Route } from 'react-router-dom';
 import RepoHome from './RepoHome';
 
 function getAncestorsForNode(node, nodeLookup, ancestors = []) {
@@ -202,12 +201,7 @@ class CommitSelection extends React.Component {
               options={commitOptions}
             />
           </Grid>
-          <Switch>
-            <Route
-              path="*"
-              render={props => <RepoHome {...props} repo={repoDetail} branch={selectedBranch.label} commit={selectedCommit.value} repoRestrictions={repoRestrictions} />}
-            />
-          </Switch>
+          <RepoHome repo={repoDetail} branch={selectedBranch.label} commit={selectedCommit.value} repoRestrictions={repoRestrictions} />
         </Grid>
       </div>
     );
