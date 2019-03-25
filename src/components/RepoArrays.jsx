@@ -38,9 +38,11 @@ function getAncestorsForNode(node, nodeLookup, ancestors = {}) {
   ancestors[node.UUID] = 1;
   // grab the parents array
   // foreach item run getAncestorsForNode
-  node.Parents.forEach(parentId => {
-    getAncestorsForNode(nodeLookup[parentId], nodeLookup, ancestors);
-  });
+  if (node.Parents) {
+    node.Parents.forEach(parentId => {
+      getAncestorsForNode(nodeLookup[parentId], nodeLookup, ancestors);
+    });
+  }
   return ancestors;
 }
 
