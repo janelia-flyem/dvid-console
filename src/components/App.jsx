@@ -34,10 +34,10 @@ class App extends Component {
             <Route path="/" exact component={Home} />
             <Route path="/admin" component={Admin} />
             <Route path="/about" component={About} />
-            <Route path="/repo/:name/:branch/:commit/neuroglancer" component={VolumeViewer} />
-            <Route path="/repo/:name/:branch/:commit" component={Repo} />
-            <Route path="/repo/:name/:branch" component={Repo} />
-            <Route path="/repo/:name" component={Repo} />
+            <Route path="/:name/:branch/:commit/neuroglancer" component={VolumeViewer} />
+            <Route path="/:name/:branch/:commit" component={Repo} />
+            <Route path="/:name/:branch" component={Repo} />
+            <Route path="/:name" component={Repo} />
             <Route path="*" exact component={NotFound} />
           </Switch>
         </div>

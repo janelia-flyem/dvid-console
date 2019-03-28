@@ -25,7 +25,7 @@ const styles = theme => ({
 class CommitHistory extends React.Component {
   handleBranchChange = (selectedBranch) => {
     const { history, match } = this.props;
-    history.push(`/repo/${match.params.name}/commits/${selectedBranch.label}`);
+    history.push(`/${match.params.name}/commits/${selectedBranch.label}`);
   }
 
   fetchSelected(selectedBranch) {

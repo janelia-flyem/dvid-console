@@ -38,7 +38,7 @@ class Navigation extends React.Component {
 
   handleChange = (event) => {
     const { history } = this.props;
-    history.push(`/repo/${event.target.value}`);
+    history.push(`/${event.target.value}`);
   }
 
   render() {

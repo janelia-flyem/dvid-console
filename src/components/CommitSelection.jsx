@@ -23,13 +23,13 @@ function getAncestorsForNode(node, nodeLookup, ancestors = []) {
 class CommitSelection extends React.Component {
   handleBranchChange = (selectedBranch) => {
     const { history, match } = this.props;
-    history.push(`/repo/${match.params.name}/${selectedBranch.label}`);
+    history.push(`/${match.params.name}/${selectedBranch.label}`);
   }
 
   handleCommitChange = (selectedCommit) => {
     const { history, match } = this.props;
     const branch = match.params.branch || 'Master';
-    history.push(`/repo/${match.params.name}/${branch}/${selectedCommit.value}`);
+    history.push(`/${match.params.name}/${branch}/${selectedCommit.value}`);
   }
 
   fetchSelected(selectedBranch) {

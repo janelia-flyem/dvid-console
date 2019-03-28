@@ -112,7 +112,7 @@ class RepoArrays extends React.Component {
       })
     );
     history.push(
-      `/repo/${repoName}/${branch}/${commit}/neuroglancer/?${queryParams}`
+      `/${repoName}/${branch}/${commit}/neuroglancer/?${queryParams}`
     );
   };
 

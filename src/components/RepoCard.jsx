@@ -45,7 +45,7 @@ class RepoCard extends React.Component {
     const { expanded } = this.state;
     const desc = repo.Description;
     const date = parse(repo.Updated);
-    const url = `/repo/${repo.Alias}`;
+    const url = `/${repo.Alias}`;
     const link = <Link to={url} className={classes.cardTitle}>{repo.Alias}</Link>;
     const subheading = <p><span className="far fa-clock" /> Updated {distanceInWordsToNow(date, { addSuffix: true })}</p>;
 

@@ -5,6 +5,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import CommitSelection from './CommitSelection';
+import NotFound from './NotFound';
 
 const styles = theme => ({
   root: {
@@ -42,8 +43,11 @@ class Repo extends React.Component {
   }
 
   render() {
-    const { classes, repoDetail } = this.props;
-    const url = `/repo/${repoDetail.Alias}`;
+    const { classes, repoDetail, loaded } = this.props;
+    if (loaded && !repoDetail.Alias) {
+      return <NotFound />
+    }
+    const url = `/${repoDetail.Alias}`;
     return (
       <div className={classes.root}>
         <Grid container spacing={24}>
@@ -65,6 +69,7 @@ Repo.propTypes = {
   actions: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
   repoDetail: PropTypes.object.isRequired,
+  loaded: PropTypes.bool.isRequired,
 };
 
 

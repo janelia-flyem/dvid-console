@@ -45,7 +45,7 @@ class VolumeViewer extends React.Component {
       };
     });
 
-    const url = `/repo/${match.params.name}/${match.params.branch}/${match.params.commit}`;
+    const url = `/${match.params.name}/${match.params.branch}/${match.params.commit}`;
 
     return (
       <div className={classes.root}>

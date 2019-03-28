@@ -156,6 +156,7 @@ export function loadStatus() {
 export const LOADING_REPO_INFO = 'LOADING_REPO_INFO';
 export const LOADED_REPO_INFO = 'LOADED_REPO_INFO';
 export const LOAD_REPO_INFO_ERROR = 'LOAD_REPO_INFO_ERROR';
+export const LOAD_REPO_NOT_FOUND = 'LOAD_REPO_NOT_FOUND';
 
 function loadingRepoInfo(name) {
   return {
@@ -175,6 +176,13 @@ function loadRepoInfoError(error) {
   return {
     type: LOAD_REPO_INFO_ERROR,
     error,
+  };
+}
+
+function repoNotFound(name) {
+  return {
+    type: LOAD_REPO_NOT_FOUND,
+    name,
   };
 }
 
@@ -202,8 +210,12 @@ export function loadRepoInfoFromAlias(alias) {
     dispatch(loadingRepoInfo(alias));
     return dispatch(loadRepos()).then(() => {
       const repoIDs = Object.values(getState().dvid.get('repos')).filter(repo => repo.Alias === alias).map(repo => repo.Root);
-      dispatch(loadRepoInfo(repoIDs[0]));
-      dispatch(loadRepoRestrictions(repoIDs[0]));
+      if (repoIDs.length > 0) {
+        dispatch(loadRepoInfo(repoIDs[0]));
+        dispatch(loadRepoRestrictions(repoIDs[0]));
+      } else {
+        dispatch(repoNotFound(alias));
+      }
     });
   };
 }
