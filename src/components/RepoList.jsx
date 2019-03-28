@@ -7,7 +7,7 @@ class RepoList extends React.Component {
   render() {
     const { repos } = this.props;
 
-    const repoInfoUrl = `${apiurl()}/repo/info`;
+    const repoInfoUrl = `${apiurl()}/repos/info`;
 
     let formattedRepos = (
       <p>No repositories found. Please check the api response @ <a href={repoInfoUrl}>{repoInfoUrl}</a>.</p>
