@@ -7,7 +7,7 @@ import thunkMiddleware from 'redux-thunk';
 import reducers from './reducers';
 import App from './components/App';
 import history from './history';
-import registerServiceWorker from './registerServiceWorker';
+// import registerServiceWorker from './registerServiceWorker';
 
 import './index.css';
 
@@ -22,4 +22,4 @@ ReactDOM.render(
     </BrowserRouter>
   </Provider>, document.getElementById('root'),
 );
-registerServiceWorker();
+// registerServiceWorker();
