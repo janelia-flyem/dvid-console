@@ -55,6 +55,10 @@ function loadingDvidRepos() {
 }
 
 function loadedDvidRepos(json) {
+  if (typeof json === 'string') {
+    return loadDvidReposError();
+  }
+
   return {
     type: LOADED_DVID_REPOS,
     json,

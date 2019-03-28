@@ -7,11 +7,13 @@ class RepoList extends React.Component {
   render() {
     const { repos } = this.props;
 
+    const repoInfoUrl = `${apiurl()}/repo/info`;
+
     let formattedRepos = (
-      <p>No repositories found. Please check the api response @ {apiurl()}.</p>
+      <p>No repositories found. Please check the api response @ <a href={repoInfoUrl}>{repoInfoUrl}</a>.</p>
     );
 
-    if (typeof repos === 'object') {
+    if (typeof repos === 'object' && Object.keys(repos) > 0) {
       formattedRepos = Object.values(repos).map(repo => <RepoCard key={repo.Root} repo={repo} />);
     }
 
