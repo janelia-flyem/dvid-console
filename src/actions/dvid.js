@@ -100,6 +100,9 @@ function loadingDvidTypes() {
 }
 
 function loadedDvidTypes(json) {
+  if (typeof json === 'string') {
+    return loadDvidTypesError();
+  }
   return {
     type: LOADED_DVID_TYPES,
     json,
