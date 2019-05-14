@@ -33,7 +33,6 @@
     "react-redux": "^5.0.7",
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
-    "react-scripts": "^2.1.8",
     "react-select": "^2.4.3",
     "react-syntax-highlighter": "^8.0.1",
     "recharts": "^1.6.0",
@@ -60,5 +59,8 @@
       "not op_mini all",
       "ie 11"
     ]
+  },
+  "devDependencies": {
+    "react-scripts": "^3.0.1"
   }
 }
