@@ -11,6 +11,8 @@ import Navigation from '../containers/Navigation';
 import NotFound from './NotFound';
 import VolumeViewer from './VolumeViewer';
 
+import './App.css';
+
 const theme = createMuiTheme({
   palette: {
     primary: blue,

@@ -11,11 +11,13 @@ import { baseurl } from '../settings';
 
 const styles = theme => ({
   root: {
-    flexGrow: 1,
-    margin: theme.spacing.unit * 2,
+    flex: '1 1 auto',
   },
   right: {
     textAlign: 'right',
+  },
+  heading: {
+    padding: theme.spacing.unit * 1,
   },
   cardTitle: {
     color: theme.palette.primary.main,
@@ -49,17 +51,15 @@ class VolumeViewer extends React.Component {
 
     return (
       <div className={classes.root}>
-        <Grid container spacing={24} direction="column">
-          <Grid item xs={6}>
+        <Grid container spacing={24}>
+          <Grid item xs={6} className={classes.heading}>
             <Typography variant="title"><Link to={url} className={classes.cardTitle}>{match.params.name}</Link></Typography>
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={6} className={classes.heading}>
             <Typography>Branch: {match.params.branch}, Commit: {match.params.commit}</Typography>
           </Grid>
-          <Grid item xs={12}>
-            <Neuroglancer perspectiveZoom={80} viewerState={viewerState} />
-          </Grid>
         </Grid>
+        <Neuroglancer perspectiveZoom={80} viewerState={viewerState} />
       </div>
     );
   }
