@@ -11,7 +11,9 @@ import { baseurl } from '../settings';
 
 const styles = theme => ({
   root: {
-    flex: '1 1 auto',
+    display: 'flex',
+    flexFlow: 'column',
+    height: '100%',
   },
   right: {
     textAlign: 'right',
@@ -52,11 +54,11 @@ class VolumeViewer extends React.Component {
     return (
       <div className={classes.root}>
         <Grid container spacing={24}>
-          <Grid item xs={6} className={classes.heading}>
-            <Typography variant="title"><Link to={url} className={classes.cardTitle}>{match.params.name}</Link></Typography>
+          <Grid item xs={6}>
+            <Typography className={classes.heading} variant="title"><Link to={url} className={classes.cardTitle}>{match.params.name}</Link></Typography>
           </Grid>
-          <Grid item xs={6} className={classes.heading}>
-            <Typography>Branch: {match.params.branch}, Commit: {match.params.commit}</Typography>
+          <Grid item xs={6} className={classes.right}>
+            <Typography className={classes.heading}>Branch: {match.params.branch}, Commit: {match.params.commit}</Typography>
           </Grid>
         </Grid>
         <Neuroglancer perspectiveZoom={80} viewerState={viewerState} />
