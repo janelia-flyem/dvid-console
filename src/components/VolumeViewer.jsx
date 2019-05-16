@@ -11,6 +11,7 @@ import { baseurl } from '../settings';
 
 const styles = theme => ({
   root: {
+    overflow: 'hidden',
     display: 'flex',
     flexFlow: 'column',
     height: '100%',
