@@ -1,8 +1,8 @@
 {
   "_dvid": {
-    "host": "emdata.janelia.org",
-    "port": 80,
-    "protocol": "http"
+    "host": "flyem.dvid.io",
+    "port": 443,
+    "protocol": "https"
   },
   "datatypeLabels": {
     "uint8blk": [
