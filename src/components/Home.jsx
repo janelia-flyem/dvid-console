@@ -4,7 +4,6 @@ import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import RepoList from './RepoList';
-import HomeHelp from './HomeHelp';
 
 const styles = theme => ({
   root: {
@@ -27,11 +26,8 @@ class Home extends React.Component {
           <Grid item xs={12}>
             <Typography variant="headline">Repositories</Typography>
           </Grid>
-          <Grid item sm={6}>
+          <Grid item sm={12} md={6}>
             <RepoList repos={repos} />
-          </Grid>
-          <Grid item sm={6}>
-            <HomeHelp />
           </Grid>
         </Grid>
       </div>

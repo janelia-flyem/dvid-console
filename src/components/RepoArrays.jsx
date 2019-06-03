@@ -187,15 +187,6 @@ class RepoArrays extends React.Component {
             <List>{content}</List>
             <Button
               className={classes.button}
-              onClick={this.handleShowGetArrays}
-              size="small"
-              variant="outlined"
-              color="primary"
-            >
-              Get arrays
-            </Button>
-            <Button
-              className={classes.button}
               onClick={this.handleViewSelected}
               disabled={viewEnabled}
               size="small"
