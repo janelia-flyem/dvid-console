@@ -1,3 +1,7 @@
 #neuroglancer-container {
   height: 100%;
 }
+
+.not_supported {
+  margin-left:2em;
+}

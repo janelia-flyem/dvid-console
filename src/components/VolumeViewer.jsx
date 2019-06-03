@@ -1,13 +1,15 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import qs from 'qs';
-import Neuroglancer from '@janelia-flyem/react-neuroglancer';
 import './VolumeViewer.css';
 import { baseurl } from '../settings';
+
+const Neuroglancer = React.lazy(() => import('@janelia-flyem/react-neuroglancer'));
+const gl = document.createElement('canvas').getContext('webgl2');
 
 const styles = theme => ({
   root: {
@@ -52,6 +54,16 @@ class VolumeViewer extends React.Component {
 
     const url = `/${match.params.name}/${match.params.branch}/${match.params.commit}`;
 
+    let viewer = <h3 className="not_supported">Neuroglancer is not supported in this browser. Please use a browser that <a href="https://caniuse.com/#feat=webgl2">supports webGL 2.</a></h3>;
+
+    if (gl) {
+      viewer = (
+        <Suspense fallback={<div>Loading...</div>}>
+          <Neuroglancer perspectiveZoom={80} viewerState={viewerState} />
+        </Suspense>
+      );
+    }
+
     return (
       <div className={classes.root}>
         <Grid container spacing={24}>
@@ -62,7 +74,7 @@ class VolumeViewer extends React.Component {
             <Typography className={classes.heading}>Branch: {match.params.branch}, Commit: {match.params.commit}</Typography>
           </Grid>
         </Grid>
-        <Neuroglancer perspectiveZoom={80} viewerState={viewerState} />
+        {viewer}
       </div>
     );
   }
