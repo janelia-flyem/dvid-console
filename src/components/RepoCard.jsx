@@ -47,6 +47,7 @@ class RepoCard extends React.Component {
     const date = parse(repo.Updated);
     const url = `/${repo.Alias}`;
     const link = <Link to={url} className={classes.cardTitle}>{repo.Alias}</Link>;
+    const AdapterLink = React.forwardRef((props, ref) => <Link innerRef={ref} to={url} {...props} />);
     const subheading = <p><span className="far fa-clock" /> Updated {distanceInWordsToNow(date, { addSuffix: true })}</p>;
 
     const Component = () => {
@@ -70,9 +71,9 @@ class RepoCard extends React.Component {
             variant="outlined"
             color="primary"
             className={classes.button}
-            onClick={this.handleClick}
+            component={AdapterLink}
           >
-            Access from Python
+            view repository
           </Button>
         </CardActions>
         <Collapse in={expanded} timeout="auto" unmountOnExit>
