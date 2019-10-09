@@ -221,7 +221,9 @@ export function loadRepoInfoFromAlias(alias) {
         dispatch(loadRepoInfo(repoIDs[0]));
         dispatch(loadRepoRestrictions(repoIDs[0]));
       } else {
-        dispatch(repoNotFound(alias));
+        // assuming the uuid was used instead of the name.
+        dispatch(loadRepoInfo(alias));
+        dispatch(loadRepoRestrictions(alias));
       }
     });
   };
