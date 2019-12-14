@@ -7,6 +7,8 @@ import List from "@material-ui/core/List";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
+import Switch from '@material-ui/core/Switch';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { withStyles } from "@material-ui/core/styles";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -50,7 +52,8 @@ class RepoArrays extends React.Component {
   state = {
     selectedInstances: [],
     showAll: false,
-    showGetArrays: false
+    showGetArrays: false,
+    sortByType: true
   };
 
   getAncestors() {
@@ -67,6 +70,10 @@ class RepoArrays extends React.Component {
     }
     return {};
   }
+
+  handleChange = name => event => {
+    this.setState({ [name]: event.target.checked });
+  };
 
   handleShowAll = () => {
     this.setState(state => ({ showAll: !state.showAll }));
@@ -121,21 +128,23 @@ class RepoArrays extends React.Component {
 
     const ancestors = this.getAncestors();
 
-    const { selectedInstances, showAll, showGetArrays } = this.state;
+    const { selectedInstances, showAll, showGetArrays, sortByType } = this.state;
     const content = Object.values(dataInstances)
+      .filter(instance => instance.Base.RepoUUID in ancestors)
+      .filter(instance => !restrictions.includes(instance.Base.Name))
       .sort((a, b) => {
-        const aType = a.Base.TypeName;
-        const bType = b.Base.TypeName;
-        // sort by the type...
-        if (aType < bType) return -1;
-        if (aType > bType) return 1;
+        if (sortByType) {
+          const aType = a.Base.TypeName;
+          const bType = b.Base.TypeName;
+          // sort by the type...
+          if (aType < bType) return -1;
+          if (aType > bType) return 1;
+        }
         // then sort by name.
         if (a.Base.Name > b.Base.Name) return 1;
         if (a.Base.Name < b.Base.Name) return -1;
         return 0;
       })
-      .filter(instance => instance.Base.RepoUUID in ancestors)
-      .filter(instance => !restrictions.includes(instance.Base.Name))
       .map(instance => {
         const { Base } = instance;
         // check if this instance is in the list of allowed instances.
@@ -173,15 +182,30 @@ class RepoArrays extends React.Component {
       <div>
         <Typography>
           <span className="fas fa-th-large" /> Data Types
-          <Button
-            className={classes.button}
-            size="small"
-            color="primary"
-            onClick={this.handleShowAll}
-          >
-            {showAll ? "Show Filtered" : "Show All"}
-          </Button>
         </Typography>
+        <FormControlLabel
+          control={
+            <Switch
+              checked={this.state.showAll}
+              onChange={this.handleChange('showAll')}
+              value="alpha"
+              color="primary"
+            />
+          }
+          label="Show Filtered"
+        />
+
+        <FormControlLabel
+          control={
+            <Switch
+              checked={this.state.sortByType}
+              onChange={this.handleChange('sortByType')}
+              value="alpha"
+              color="primary"
+            />
+          }
+          label="Sort by Type"
+        />
         <Card>
           <CardContent>
             <List>{content}</List>
