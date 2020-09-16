@@ -66,7 +66,7 @@ class VolumeViewer extends React.Component {
 
     return (
       <div className={classes.root}>
-        <Grid container spacing={24}>
+        <Grid container spacing={2}>
           <Grid item xs={6}>
             <Typography className={classes.heading} variant="title"><Link to={url} className={classes.cardTitle}>{match.params.name}</Link></Typography>
           </Grid>

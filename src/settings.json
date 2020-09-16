@@ -1,5 +1,5 @@
 {
-  "_dvid": {
+  "dvid": {
     "host": "flyem.dvid.io",
     "port": 443,
     "protocol": "https"

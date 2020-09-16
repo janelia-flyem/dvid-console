@@ -29,7 +29,7 @@ function getAncestorsForNode(node, nodeLookup, classes, ancestors = []) {
   // take node and push it onto ancestors list
   ancestors.push((
     <Paper key={node.UUID} className={classes.commit} elevation={1}>
-      <Grid container spacing={24}>
+      <Grid container spacing={2}>
         <Grid item sm={12} md={10}>
           <Typography variant="title">
             {!node.Locked

@@ -54,9 +54,9 @@ class ServerStats extends React.Component {
 
     return (
       <div className={classes.root}>
-        <Grid container spacing={24}>
+        <Grid container spacing={2}>
           <Grid item xs={12} sm={6} md={3}>
-            <Card>
+            <Card raised>
               <CardHeader
                 title="DVID CPU Cores"
                 avatar={
@@ -71,7 +71,7 @@ class ServerStats extends React.Component {
             </Card>
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
-            <Card>
+            <Card raised>
               <CardHeader
                 title="Respositories"
                 avatar={
@@ -86,7 +86,7 @@ class ServerStats extends React.Component {
             </Card>
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
-            <Card>
+            <Card raised>
               <CardHeader
                 title="Server Uptime"
                 avatar={
@@ -101,7 +101,7 @@ class ServerStats extends React.Component {
             </Card>
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
-            <Card>
+            <Card raised>
               <CardHeader
                 title="Version Nodes"
                 avatar={
@@ -116,7 +116,7 @@ class ServerStats extends React.Component {
             </Card>
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
-            <Card>
+            <Card raised>
               <CardHeader
                 title="DVID Version"
                 avatar={
@@ -131,7 +131,7 @@ class ServerStats extends React.Component {
             </Card>
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
-            <Card>
+            <Card raised>
               <CardHeader
                 title="Storage Backend"
                 avatar={
@@ -146,7 +146,7 @@ class ServerStats extends React.Component {
             </Card>
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
-            <Card>
+            <Card raised>
               <CardHeader
                 title="Datastore Version"
                 avatar={
@@ -161,7 +161,7 @@ class ServerStats extends React.Component {
             </Card>
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
-            <Card>
+            <Card raised>
               <CardHeader
                 title="Console Version"
                 avatar={

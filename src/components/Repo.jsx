@@ -50,7 +50,7 @@ class Repo extends React.Component {
     const url = `/${repoDetail.Alias}`;
     return (
       <div className={classes.root}>
-        <Grid container spacing={24}>
+        <Grid container spacing={2}>
           <Grid item sm={6}>
             <Typography variant="title"><Link to={url} className={classes.cardTitle}>{repoDetail.Alias}</Link></Typography>
           </Grid>

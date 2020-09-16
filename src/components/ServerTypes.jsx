@@ -34,9 +34,9 @@ class ServerTypes extends React.Component {
 
     return (
       <div className={classes.root}>
-        <Grid container spacing={24}>
+        <Grid container spacing={2}>
           <Grid item xs={12}>
-            <Card>
+            <Card raised>
               <CardHeader
                 title="Installed Data Types"
               />

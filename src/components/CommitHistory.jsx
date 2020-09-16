@@ -94,7 +94,7 @@ class CommitHistory extends React.Component {
     const selectedBranch = this.fetchSelected(match.params.branch);
     return (
       <div className={classes.root}>
-        <Grid container spacing={24}>
+        <Grid container spacing={2}>
           <Grid item xs={12}>
             Branch
             <Select
