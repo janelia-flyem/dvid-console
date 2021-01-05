@@ -1,6 +1,6 @@
 {
   "name": "dvid-console",
-  "version": "3.4.8",
+  "version": "3.4.9",
   "description": "Web console for DVID, a distributed, versioned image-oriented datastore.",
   "repository": {
     "type": "git",
