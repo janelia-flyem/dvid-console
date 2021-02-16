@@ -164,9 +164,9 @@ class ServerStore {
       // check to see if the branches data type is present
       // if yes, then grab the master uuid
       // else run the error callback.
-      self.api.node({
+      self.api.repo({
         uuid: opts.uuid,
-        endpoint: 'branches/key/master',
+        endpoint: 'branch-versions/master',
         callback: function(data) {
           if (opts.callback) {
             opts.callback(data);
