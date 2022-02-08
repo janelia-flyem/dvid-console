@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import Markdown from 'react-markdown';
+import ReactMarkdown from 'react-markdown';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
@@ -69,7 +69,7 @@ class ReadMe extends React.Component {
     const { classes } = this.props;
     let content = 'loading...';
     if (readme) {
-      content = <Markdown source={readme} />;
+      content = <ReactMarkdown children={readme} />;
     } else if (error) {
       content = "You don't have a readme yet. Create one and upload to the .files keyvalue.";
     }
