@@ -22,9 +22,9 @@ class Home extends React.Component {
     const { classes, repos } = this.props;
     return (
       <div className={classes.root}>
-        <Grid container spacing={24}>
+        <Grid container spacing={1}>
           <Grid item xs={12}>
-            <Typography variant="headline">Repositories</Typography>
+            <Typography variant="h2">Repositories</Typography>
           </Grid>
           <Grid item sm={12} md={6}>
             <RepoList repos={repos} />

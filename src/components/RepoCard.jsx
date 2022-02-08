@@ -66,7 +66,7 @@ class RepoCard extends React.Component {
         <CardContent>
           <Typography>{desc}</Typography>
         </CardContent>
-        <CardActions className={classes.actions} disableActionSpacing>
+        <CardActions className={classes.actions} >
           <Button
             variant="outlined"
             color="primary"

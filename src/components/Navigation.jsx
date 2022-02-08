@@ -54,7 +54,7 @@ class Navigation extends React.Component {
         <AppBar position="sticky" key="appbar">
           <Toolbar>
             <Button component={HomeLink} color="inherit">
-              <Typography variant="title" color="inherit">
+              <Typography color="inherit">
                 DVID
               </Typography>
             </Button>
