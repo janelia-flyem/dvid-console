@@ -14,8 +14,7 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import SyntaxHighlighter from "react-syntax-highlighter/prism";
-import { darcula } from "react-syntax-highlighter/styles/prism";
+import SyntaxHighlighter from "react-syntax-highlighter";
 import qs from "qs";
 import DataInstance from "./DataInstance";
 import settings from "../settings.json";
@@ -170,7 +169,7 @@ class RepoArrays extends React.Component {
         'my_array = repo.get_array("<array_name>")'
       ].join("\n");
       return (
-        <SyntaxHighlighter language="python" style={darcula}>
+        <SyntaxHighlighter language="python">
           {codeString}
         </SyntaxHighlighter>
       );

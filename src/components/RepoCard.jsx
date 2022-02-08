@@ -11,8 +11,7 @@ import distanceInWordsToNow from 'date-fns/distance_in_words_to_now';
 import parse from 'date-fns/parse';
 import { Link } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
-import SyntaxHighlighter from 'react-syntax-highlighter/prism';
-import { darcula } from 'react-syntax-highlighter/styles/prism';
+import SyntaxHighlighter from 'react-syntax-highlighter';
 
 const styles = theme => ({
   root: {
@@ -54,7 +53,7 @@ class RepoCard extends React.Component {
       const codeString = ['from diced import DicedStore',
         `store = DicedStore("${dataSource}")`,
         `repo = store.open_repo("${repo.Alias || '<data source>'}")`].join('\n');
-      return <SyntaxHighlighter language="python" style={darcula}>{codeString}</SyntaxHighlighter>;
+      return <SyntaxHighlighter language="python">{codeString}</SyntaxHighlighter>;
     };
 
     return (

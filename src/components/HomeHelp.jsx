@@ -1,19 +1,18 @@
 import React from 'react';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
-import SyntaxHighlighter from 'react-syntax-highlighter/prism';
-import { darcula } from 'react-syntax-highlighter/styles/prism';
+import SyntaxHighlighter from "react-syntax-highlighter";
 
 const DataSourceComponent = () => {
   const codeString = 'gs://flyem-public-connectome';
-  return <SyntaxHighlighter language="python" style={darcula}>{codeString}</SyntaxHighlighter>;
+  return <SyntaxHighlighter language="python">{codeString}</SyntaxHighlighter>;
 };
 
 const ImportComponent = () => {
   const codeString = [
     'from diced import DicedStore',
     'store = DicedStore("<data source>")'].join('\n');
-  return <SyntaxHighlighter language="python" style={darcula}>{codeString}</SyntaxHighlighter>;
+  return <SyntaxHighlighter language="python">{codeString}</SyntaxHighlighter>;
 };
 
 const FetchComponent = () => {
@@ -22,7 +21,7 @@ const FetchComponent = () => {
     'repo = store.open_repo("<reponame>")',
     '# get array',
     'my_array = repo.get_array("<array_name>")'].join('\n');
-  return <SyntaxHighlighter language="python" style={darcula}>{codeString}</SyntaxHighlighter>;
+  return <SyntaxHighlighter language="python">{codeString}</SyntaxHighlighter>;
 };
 
 class HomeHelp extends React.Component {
