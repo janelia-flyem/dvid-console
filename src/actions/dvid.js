@@ -163,7 +163,6 @@ export function loadStatus() {
 export const LOADING_REPO_INFO = 'LOADING_REPO_INFO';
 export const LOADED_REPO_INFO = 'LOADED_REPO_INFO';
 export const LOAD_REPO_INFO_ERROR = 'LOAD_REPO_INFO_ERROR';
-export const LOAD_REPO_NOT_FOUND = 'LOAD_REPO_NOT_FOUND';
 
 function loadingRepoInfo(name) {
   return {
@@ -183,13 +182,6 @@ function loadRepoInfoError(error) {
   return {
     type: LOAD_REPO_INFO_ERROR,
     error,
-  };
-}
-
-function repoNotFound(name) {
-  return {
-    type: LOAD_REPO_NOT_FOUND,
-    name,
   };
 }
 
