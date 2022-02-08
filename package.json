@@ -62,7 +62,7 @@
   },
   "devDependencies": {
     "react-app-rewired": "^2.1.8",
-    "react-scripts": "^3.4.3",
+    "react-scripts": "^4.0.3",
     "svg-inline-loader": "^0.8.2"
   }
 }

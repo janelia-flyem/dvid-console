@@ -4,7 +4,7 @@ import Chip from '@material-ui/core/Chip';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Checkbox from '@material-ui/core/Checkbox';
-import { datatypeLabels, labelProperties } from '../settings.json';
+import settings from '../settings.json';
 
 class DataInstance extends React.Component {
   state = {
@@ -15,7 +15,7 @@ class DataInstance extends React.Component {
     const { instance, addInstance, deleteInstance } = this.props;
     const { checked } = this.state;
 
-    if (datatypeLabels[instance.Base.TypeName]) {
+    if (settings.datatypeLabels[instance.Base.TypeName]) {
       if (!checked) {
         addInstance(instance.Base.Name);
       } else {
@@ -32,9 +32,9 @@ class DataInstance extends React.Component {
     let labels = null;
     let checkbox = '';
 
-    if (datatypeLabels[instance.Base.TypeName]) {
-      labels = datatypeLabels[instance.Base.TypeName].map((label) => {
-        const { color } = labelProperties[label];
+    if (settings.datatypeLabels[instance.Base.TypeName]) {
+      labels = settings.datatypeLabels[instance.Base.TypeName].map((label) => {
+        const { color } = settings.labelProperties[label];
 
         const style = {
           background: color,
