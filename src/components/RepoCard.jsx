@@ -7,8 +7,7 @@ import CardActions from '@material-ui/core/CardActions';
 import Collapse from '@material-ui/core/Collapse';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import distanceInWordsToNow from 'date-fns/distance_in_words_to_now';
-import parse from 'date-fns/parse';
+import { formatDistanceToNow, parseISO } from 'date-fns';
 import { Link } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import SyntaxHighlighter from 'react-syntax-highlighter';
@@ -43,11 +42,11 @@ class RepoCard extends React.Component {
     const { classes, repo, dataSource } = this.props;
     const { expanded } = this.state;
     const desc = repo.Description;
-    const date = parse(repo.Updated);
+    const date = parseISO(repo.Updated);
     const url = `/${repo.Alias}`;
     const link = <Link to={url} className={classes.cardTitle}>{repo.Alias}</Link>;
     const AdapterLink = React.forwardRef((props, ref) => <Link innerRef={ref} to={url} {...props} />);
-    const subheading = <p><span className="far fa-clock" /> Updated {distanceInWordsToNow(date, { addSuffix: true })}</p>;
+    const subheading = <p><span className="far fa-clock" /> Updated {formatDistanceToNow(date, { addSuffix: true })}</p>;
 
     const Component = () => {
       const codeString = ['from diced import DicedStore',

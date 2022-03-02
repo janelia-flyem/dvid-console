@@ -5,7 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import Tooltip from '@material-ui/core/Tooltip';
 import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/core/styles';
-import distanceInWordsToNow from 'date-fns/distance_in_words_to_now';
+import { formatDistanceToNow } from 'date-fns';
 import format from 'date-fns/format';
 
 const styles = theme => ({
@@ -37,10 +37,10 @@ function getAncestorsForNode(node, nodeLookup, classes, ancestors = []) {
             }
             {node.Note}
           </Typography>
-          <Tooltip title={distanceInWordsToNow(node.Created, { addSuffix: true })} placement="top-start">
+          <Tooltip title={formatDistanceToNow(node.Created, { addSuffix: true })} placement="top-start">
             <Typography>Created: {format(node.Created, 'MMM M, YYYY, h:m a')}</Typography>
           </Tooltip>
-          <Tooltip title={distanceInWordsToNow(node.Updated, { addSuffix: true })} placement="top-start">
+          <Tooltip title={formatDistanceToNow(node.Updated, { addSuffix: true })} placement="top-start">
             <Typography>Updated: {format(node.Updated, 'MMM M, YYYY, h:m a')}</Typography>
           </Tooltip>
         </Grid>
