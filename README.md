@@ -1,53 +1,70 @@
-dvid-console [![Picture](https://raw.github.com/janelia-flyem/janelia-flyem.github.com/master/images/jfrc_grey_180x40.png)](http://www.janelia.org)
-=============
+# Getting Started with Create React App
 
-Web console for [DVID](https://github.com/janelia-flyem/dvid), a distributed, versioned
-image-oriented datastore.  The console allows administration of a DVID server without the need to install
-additional tools.
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-This code can be used with DVID in two ways:
-* Specify the repo location using the `-webclient` option with the DVID `serve`command.
-* Compile the entire repository into gzipped data that is included in dvid executable.  This
-allows a single DVID executable to have an embedded console and is the default way that DVID
-is built.
+## Available Scripts
 
-Console simplification
-===========
-As of the version 3 release, the console has been simplified to streamline the information
-shown. For those wishing to see all the information that was presented before the change,
-such as the complete DAG diagram, please use the [older 2.x release](https://github.com/janelia-flyem/dvid-console/releases/tag/v2.1.4).
+In the project directory, you can run:
 
-Usage
-==============
+### `npm start`
 
-##### Quick Install
-*When you want to use the latest release of the console without making any changes.*
-* Make sure you have [DVID](https://github.com/janelia-flyem/dvid) installed and configured
-* Download the dvid-console-&lt;version&gt;.tar.gz file from the [latest release] (https://github.com/janelia-flyem/dvid-console/releases/latest)
-* Unpack it
+Runs the app in the development mode.\
+Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-  ```bash
-    tar -zxvf dvid-console-<version>.tar.gz
-  ```
-* Make sure to set the `webClient` in `[server]` section of the TOML file when starting the DVID server:
+The page will reload when you make changes.\
+You may also see any lint errors in the console.
 
-  `dvid -verbose serve /path/to/config.toml`
+### `npm test`
 
-##### For Developers
-*When you want to use the bleeding edge or make your own modifications*
-* Clone the repository
-* Make sure you have [node and npm](https://nodejs.org/) installed.
-* Install all the dependencies with npm
+Launches the test runner in the interactive watch mode.\
+See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-  ```bash 
-  cd /into/the/repository/clone
-  npm install
-  ```
-* build the console
+### `npm run build`
 
-  ```bash
-  npm run build
-  ```
-* Make sure to set the `webClient` in `[server]` section of the TOML file when starting the DVID server  
-  
-  
+Builds the app for production to the `build` folder.\
+It correctly bundles React in production mode and optimizes the build for the best performance.
+
+The build is minified and the filenames include the hashes.\
+Your app is ready to be deployed!
+
+See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+
+### `npm run eject`
+
+**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+
+If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+
+Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+
+You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+
+## Learn More
+
+You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+
+To learn React, check out the [React documentation](https://reactjs.org/).
+
+### Code Splitting
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+
+### Analyzing the Bundle Size
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+
+### Making a Progressive Web App
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+
+### Advanced Configuration
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+
+### Deployment
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+
+### `npm run build` fails to minify
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
