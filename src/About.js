@@ -1,16 +1,12 @@
+import Typography from "@mui/material/Typography";
 import "./About.css";
 
 export default function About() {
   return (
     <div className="aboutPage">
-      <a href="https://github.com/janelia-flyem/dvid">
-        <img
-          className="dvidBanner"
-          src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png"
-          alt="Fork me on GitHub"
-        />
-      </a>
-      <h3>Welcome to DVID</h3>
+      <Typography variant="h4" component="div" sx={{ flexGrow: 1 }}>
+        Welcome to DVID
+      </Typography>
 
       <p>
         DVID documentation can be found on{" "}
@@ -22,7 +18,9 @@ export default function About() {
         .
       </p>
 
-      <h4>HTTP API</h4>
+      <Typography variant="h5" component="div" sx={{ flexGrow: 1 }}>
+      HTTP API
+      </Typography>
 
       <p>
         Each data type within DVID exposes commands and an HTTP API allowing
@@ -32,7 +30,9 @@ export default function About() {
         review this server&apos;s current API.
       </p>
 
-      <h3>Licensing</h3>
+      <Typography variant="h5" component="div" sx={{ flexGrow: 1 }}>
+      Licensing
+      </Typography>
       <p>
         DVID is released under the{" "}
         <a href="https://www.janelia.org/open-science/software-licensing">
