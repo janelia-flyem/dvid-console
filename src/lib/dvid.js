@@ -1,7 +1,7 @@
 import DVID from "dvid";
 
 const api = new DVID({
-  host: "emdata.janelia.org",
+  host: "emdata5.janelia.org",
   port: "443",
   protocol: "https",
   username: "dvidconsole",
@@ -22,4 +22,8 @@ export function serverTypes() {
 
 export function serverCompiledTypes() {
   return api.serverCompiledTypes();
+}
+
+export function serverLoad() {
+  return api.load();
 }
