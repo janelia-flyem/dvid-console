@@ -1,8 +1,8 @@
 import { useQuery } from "react-query";
-import Grid from '@mui/material/Grid';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import CardHeader from '@mui/material/CardHeader';
+import Grid from "@mui/material/Grid";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import CardHeader from "@mui/material/CardHeader";
 import { serverCompiledTypes } from "./lib/dvid";
 
 export default function ServerTypes() {
@@ -30,15 +30,13 @@ export default function ServerTypes() {
   });
 
   return (
-    <Grid container spacing={2}>
-      <Grid item xs={12}>
-        <Card raised>
-          <CardHeader title="Installed Data Types" />
-          <CardContent>
-            <ul>{typeList}</ul>
-          </CardContent>
-        </Card>
-      </Grid>
+    <Grid item xs={12}>
+      <Card>
+        <CardHeader title="Installed Data Types" />
+        <CardContent>
+          <ul>{typeList}</ul>
+        </CardContent>
+      </Card>
     </Grid>
   );
 }

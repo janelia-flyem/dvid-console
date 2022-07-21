@@ -1,4 +1,5 @@
 import Typography from "@mui/material/Typography";
+import Grid from "@mui/material/Grid";
 import { useQuery } from "react-query";
 import { getRepos } from "./lib/dvid";
 import ServerStats from "./ServerStats";
@@ -19,9 +20,11 @@ export default function Admin() {
   return (
     <div style={{ padding: "1em" }}>
       <Typography variant="h4">Server Stats</Typography>
-      <ServerStats repos={data}/>
-      <ServerStatus/>
-      <ServerTypes/>
+    	<Grid container spacing={2}>
+				<ServerStats repos={data}/>
+				<ServerStatus/>
+				<ServerTypes/>
+			</Grid>
     </div>
   );
 }

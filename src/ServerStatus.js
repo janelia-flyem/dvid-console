@@ -98,80 +98,78 @@ export default function ServerStatus() {
     });
   }, loadInterval);
   return (
-    <Grid container spacing={2}>
-      <Grid item xs={12}>
-        <Card raised>
-          <CardHeader title="Monitoring" />
-          <CardContent>
-            <div className="usageChart" />
-            <ResponsiveContainer width="90%" height={300}>
-              <LineChart
-                data={data}
-                margin={{
-                  top: 5,
-                  right: 30,
-                  left: 20,
-                  bottom: 5,
-                }}
-              >
-                <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                <XAxis dataKey="name" />
-                <YAxis ticks={[25, 50, 75, 100]} />
-                <Legend />
-                <Line
-                  type="monotone"
-                  dataKey="key bytes read"
-                  stroke="#8884d8"
-                  isAnimationActive={false}
-                  dot={false}
-                />
-                <Line
-                  type="monotone"
-                  dataKey="key bytes written"
-                  stroke="#8856a7"
-                  isAnimationActive={false}
-                  dot={false}
-                />
-                <Line
-                  type="monotone"
-                  dataKey="value bytes read"
-                  stroke="#43a2ca"
-                  isAnimationActive={false}
-                  dot={false}
-                />
-                <Line
-                  type="monotone"
-                  dataKey="value bytes written"
-                  stroke="#a8ddb5"
-                  isAnimationActive={false}
-                  dot={false}
-                />
-                <Line
-                  type="monotone"
-                  dataKey="file bytes read"
-                  stroke="#f03b20"
-                  isAnimationActive={false}
-                  dot={false}
-                />
-                <Line
-                  type="monotone"
-                  dataKey="file bytes written"
-                  stroke="#feb24c"
-                  isAnimationActive={false}
-                  dot={false}
-                />
-                <Line
-                  type="monotone"
-                  dataKey="handlers active"
-                  stroke="#cccccc"
-                  isAnimationActive={false}
-                  dot={false}
-                />
-              </LineChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
-      </Grid>
+    <Grid item xs={12}>
+      <Card>
+        <CardHeader title="Monitoring" />
+        <CardContent>
+          <div className="usageChart" />
+          <ResponsiveContainer width="90%" height={300}>
+            <LineChart
+              data={data}
+              margin={{
+                top: 5,
+                right: 30,
+                left: 20,
+                bottom: 5,
+              }}
+            >
+              <CartesianGrid strokeDasharray="3 3" vertical={false} />
+              <XAxis dataKey="name" />
+              <YAxis ticks={[25, 50, 75, 100]} />
+              <Legend />
+              <Line
+                type="monotone"
+                dataKey="key bytes read"
+                stroke="#8884d8"
+                isAnimationActive={false}
+                dot={false}
+              />
+              <Line
+                type="monotone"
+                dataKey="key bytes written"
+                stroke="#8856a7"
+                isAnimationActive={false}
+                dot={false}
+              />
+              <Line
+                type="monotone"
+                dataKey="value bytes read"
+                stroke="#43a2ca"
+                isAnimationActive={false}
+                dot={false}
+              />
+              <Line
+                type="monotone"
+                dataKey="value bytes written"
+                stroke="#a8ddb5"
+                isAnimationActive={false}
+                dot={false}
+              />
+              <Line
+                type="monotone"
+                dataKey="file bytes read"
+                stroke="#f03b20"
+                isAnimationActive={false}
+                dot={false}
+              />
+              <Line
+                type="monotone"
+                dataKey="file bytes written"
+                stroke="#feb24c"
+                isAnimationActive={false}
+                dot={false}
+              />
+              <Line
+                type="monotone"
+                dataKey="handlers active"
+                stroke="#cccccc"
+                isAnimationActive={false}
+                dot={false}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </CardContent>
+      </Card>
     </Grid>
   );
 }
