@@ -1,6 +1,6 @@
-import dvid from "dvid";
+import DVID from "dvid";
 
-const api = dvid.connect({
+const api = new DVID({
   host: "emdata.janelia.org",
   port: "443",
   protocol: "https",
@@ -9,14 +9,17 @@ const api = dvid.connect({
 });
 
 export function getRepos() {
-  return new Promise((resolve, reject) => {
-    api.reposInfo({
-      callback: (data) => {
-        resolve(data);
-      },
-      error: (err) => {
-        reject(err);
-      },
-    });
-  });
+  return api.reposInfo();
+}
+
+export function serverInfo() {
+  return api.serverInfo();
+}
+
+export function serverTypes() {
+  return api.serverTypes();
+}
+
+export function serverCompiledTypes() {
+  return api.serverCompiledTypes();
 }
