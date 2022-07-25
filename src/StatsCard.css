@@ -1,3 +1,11 @@
 .statsCard {
-  color:red;
+	max-height: 10em;
+	color: #555;
+}
+
+.statsCard .MuiCardContent-root {
+	text-align: center;
+}
+.statsCard .MuiCardHeader-root {
+	background: #eee;
 }

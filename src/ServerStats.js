@@ -1,7 +1,6 @@
 import { useQuery } from "react-query";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHardDrive, faCodeBranch, faMicrochip, faFolderTree, faClock } from "@fortawesome/free-solid-svg-icons";
-import Grid from "@mui/material/Grid";
 import StatsCard from "./StatsCard";
 import { serverInfo } from "./lib/dvid";
 
