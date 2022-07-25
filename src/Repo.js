@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useQuery } from "react-query";
 import Grid from "@mui/material/Grid";
 import { repoInfo } from "./lib/dvid";
+import RepoMeta from "./RepoMeta";
 import RepoLog from "./RepoLog";
 
 function getFullUUIDinRepo(repo, shortuuid) {
@@ -43,6 +44,7 @@ export default function Repo() {
   return (
     <div style={{ padding: "1em" }}>
       <Grid container spacing={2}>
+        <RepoMeta repo={data} currentUUID={fullRepoId} />
         <RepoLog log={data.Log} uuid={fullRepoId} />
       </Grid>
     </div>
