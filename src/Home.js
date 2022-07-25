@@ -8,6 +8,8 @@ import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { getRepos } from "./lib/dvid";
+import MasterLink from "./MasterLink";
+
 import "./Home.css";
 
 export default function Home() {
@@ -39,7 +41,7 @@ export default function Home() {
         <TableBody>
           {Object.values(data).sort((a,b) => a.Alias.localeCompare(b.Alias, 'en', { numeric: true })).map((repo) => (
             <TableRow key={repo.Root}>
-              <TableCell><Link to={`/repo/${repo.Root}`}>{repo.Alias}</Link></TableCell>
+              <TableCell><MasterLink rootUUID={repo.Root} alias={repo.Alias} /></TableCell>
               <TableCell>{repo.Description}</TableCell>
               <TableCell><Link to={`/repo/${repo.Root}`}>{repo.Root}</Link></TableCell>
               <TableCell>{format(new Date(repo.Updated), 'MMM do y, h:mm:ss aaaa')}</TableCell>
