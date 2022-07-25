@@ -1,0 +1,17 @@
+.repoLog tr {
+  border-bottom: 1px solid #777;
+}
+
+.repoLog td {
+  padding: 0.3em 1em;
+}
+
+.repoLog tr.odd {
+  background: #eee;
+}
+
+.repoLog .MuiCardContent-root {
+  overflow: scroll;
+  resize:vertical;
+  height: 10em;
+}
