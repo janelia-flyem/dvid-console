@@ -27,3 +27,16 @@ export function serverCompiledTypes() {
 export function serverLoad() {
   return api.load();
 }
+
+export function repoInfo(options) {
+	return api.repo(options);
+}
+
+export function masterUUID(rootUUID) {
+  return api.node({uuid: rootUUID, endpoint: 'branches/key/master'});
+}
+
+export function getDefaultInstances(uuid) {
+  return api.node({uuid, endpoint: 'default_instances/key/data'});
+}
+
