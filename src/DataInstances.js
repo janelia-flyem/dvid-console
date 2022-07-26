@@ -3,6 +3,7 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import DataInstanceList from "./DataInstanceList";
+import DataInstanceAdd from "./DataInstanceAdd";
 
 export default function DataInstances({ uuid, instances, dag }) {
   const [nodeRestrict, setNodeRestrict] = useState(true);
@@ -79,9 +80,7 @@ export default function DataInstances({ uuid, instances, dag }) {
         <Typography variant="h5">Data Instances</Typography>
       </Grid>
       <Grid item xs={12} sm={3} sx={{ textAlign: "right" }}>
-        <Button variant="outlined" size="small">
-          Add Data Instance
-        </Button>
+        <DataInstanceAdd uuid={uuid} dag={dag} />
       </Grid>
       <Grid item xs={12} md={3}>
         <p>
