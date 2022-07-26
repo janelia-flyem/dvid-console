@@ -8,7 +8,11 @@ import "./RepoLog.css";
 
 export default function RepoLog({ log, uuid }) {
 
-  const logDuration = formatDistance(new Date(log[0].split(/\s(.+)/)[0]), new Date(log[log.length -1].split(/\s(.+)/)[0]));
+	let logDuration = '0 days';
+
+	if (log.length > 0) {
+	  logDuration = formatDistance(new Date(log[0].split(/\s(.+)/)[0]), new Date(log[log.length -1].split(/\s(.+)/)[0]));
+	}
 
 
   return (
