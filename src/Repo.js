@@ -5,6 +5,7 @@ import Grid from "@mui/material/Grid";
 import { repoInfo } from "./lib/dvid";
 import RepoMeta from "./RepoMeta";
 import RepoLog from "./RepoLog";
+import DataInstances from "./DataInstances";
 
 function getFullUUIDinRepo(repo, shortuuid) {
   if (repo === null) {
@@ -21,7 +22,7 @@ function getFullUUIDinRepo(repo, shortuuid) {
 
 export default function Repo() {
   const { repoId } = useParams();
-  const [fullRepoId, setFullRepoId] = useState(repoId);
+  const [fullRepoId, setFullRepoId] = useState(null);
   const { isLoading, isError, data, error } = useQuery(
     ["repoInfo", repoId],
     () => repoInfo({ uuid: repoId, endpoint: "info" })
@@ -33,7 +34,7 @@ export default function Repo() {
     }
   }, [repoId, data]);
 
-  if (isLoading) {
+  if (isLoading || !fullRepoId) {
     return <p>Loading</p>;
   }
 
@@ -46,6 +47,7 @@ export default function Repo() {
       <Grid container spacing={2}>
         <RepoMeta repo={data} currentUUID={fullRepoId} />
         <RepoLog log={data.Log} uuid={fullRepoId} />
+        <DataInstances uuid={fullRepoId} instances={data.DataInstances} dag={data.DAG} />
       </Grid>
     </div>
   );

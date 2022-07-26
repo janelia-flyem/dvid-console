@@ -1,0 +1,60 @@
+.label {
+  background-color: #666666;
+  color: #fff;
+  font-size: 75%;
+  border-radius: 3px;
+  padding: 0.2em 0.6em 0.3em;
+}
+
+.lbl-grayscale8 {
+  background-color: #666699;
+  color: #fff;
+}
+.lbl-imagetile {
+  background-color: #006400;
+  color: #fff;
+}
+.lbl-keyvalue {
+  background-color: #993300;
+  color: #fff;
+}
+.lbl-labelblk {
+  background-color: #202f9f;
+  color: #fff;
+}
+.lbl-labelgraph {
+  background-color: #339999;
+  color: #fff;
+}
+.lbl-labelmap {
+  background-color: #330066;
+  color: #fff;
+}
+.lbl-labelvol {
+  background-color: #daa520;
+  color: #fff;
+}
+.lbl-labels64 {
+  background-color: #3333cc;
+  color: #fff;
+}
+.lbl-multiscale2d {
+  background-color: #9933cc;
+  color: #fff;
+}
+.lbl-rgba8 {
+  background-color: #660066;
+  color: #fff;
+}
+.lbl-roi {
+  background-color: #46b933;
+  color: #fff;
+}
+.lbl-uint8blk {
+  background-color: #ff6722;
+  color: #fff;
+}
+
+.instanceType, .imgSource, .labelSource {
+  text-align: center;
+}
