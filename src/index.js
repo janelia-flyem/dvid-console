@@ -6,7 +6,7 @@ import Repo from "./Repo";
 import Admin from "./Admin";
 import About from "./About";
 import reportWebVitals from "./reportWebVitals";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { HashRouter, Routes, Route } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
  import { ReactQueryDevtools } from 'react-query/devtools';
 import "./index.css";
@@ -18,7 +18,7 @@ const queryClient = new QueryClient();
 root.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-    <BrowserRouter>
+    <HashRouter>
       <Routes>
         <Route path="/" element={<Navigation />}>
           <Route index element={<Home />} />
@@ -27,7 +27,7 @@ root.render(
           <Route path="about" element={<About />} />
         </Route>
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
      <ReactQueryDevtools initialIsOpen={false} />
   </QueryClientProvider>
   </React.StrictMode>
