@@ -3,9 +3,7 @@ import { useState, useEffect } from "react";
 import { useQuery } from "react-query";
 import Grid from "@mui/material/Grid";
 import { repoInfo } from "./lib/dvid";
-import RepoMeta from "./RepoMeta";
-import RepoLog from "./RepoLog";
-import DataInstances from "./DataInstances";
+import RepoMasterLoad from "./RepoMasterLoad";
 
 function getFullUUIDinRepo(repo, shortuuid) {
   if (repo === null) {
@@ -35,7 +33,7 @@ export default function Repo() {
   }, [repoId, data]);
 
   if (isLoading || !fullRepoId) {
-    return <p>Loading</p>;
+    return <p>Loading Repo</p>;
   }
 
   if (isError) {
@@ -45,9 +43,7 @@ export default function Repo() {
   return (
     <div style={{ padding: "1em" }}>
       <Grid container spacing={2}>
-        <RepoMeta repo={data} currentUUID={fullRepoId} />
-        <RepoLog log={data.Log} uuid={fullRepoId} />
-        <DataInstances uuid={fullRepoId} instances={data.DataInstances} dag={data.DAG} />
+        <RepoMasterLoad repoId={fullRepoId} repoInfo={data} />
       </Grid>
     </div>
   );

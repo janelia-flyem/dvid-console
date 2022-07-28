@@ -8,6 +8,15 @@ const api = new DVID({
   application: "dvidconsole",
 });
 
+/*
+  const api = new DVID({
+  host: "http://localhost",
+  port: "9000",
+  username: "dvidconsole",
+  application: "dvidconsole",
+});
+*/
+
 export function getRepos() {
   return api.reposInfo();
 }
