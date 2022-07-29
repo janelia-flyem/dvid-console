@@ -4,27 +4,6 @@ text {
   font-size: 14px;
 }
 
-.node rect {
-  stroke: #333;
-  fill: #fff;
-  stroke-width: 1.5px;
-}
-
-.edgePath path {
-  stroke: #333;
-  stroke-width: 1.5px;
-}
-
-g.current > rect {
-  stroke: #efd968;
-  fill: #fcf8e3;
-}
-
-g.master > rect {
-  fill: #8bc34a;
-  stroke: #689732;
-}
-
 div.dagTooltip {
   position:absolute;
   border: 1px solid #333;
