@@ -12,6 +12,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import dagreD3 from "dagre-d3";
 import * as d3 from "d3";
+import DAGHelp from "./DAGHelp";
 
 import "./RepoDAG.css";
 
@@ -314,7 +315,7 @@ export default function RepoDAG({ dag, uuid, masterUUID }) {
   return (
     <Grid item xs={12}>
       <Typography variant="h5">Version History</Typography>
-      <Card variant="outlined">
+      <Card variant="outlined" className="DAGContainer">
         <div className="DAGControls">
           <Tooltip title="Scroll to master node">
             <IconButton onClick={handleScrollToMaster}>
@@ -344,6 +345,7 @@ export default function RepoDAG({ dag, uuid, masterUUID }) {
               <FontAwesomeIcon icon={faDownload} size="sm" />
             </IconButton>
           </Tooltip>
+          <DAGHelp />
         </div>
         <div ref={DAGImage}></div>
       </Card>
