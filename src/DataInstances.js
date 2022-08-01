@@ -1,14 +1,25 @@
-import { useState } from "react";
+import { useState, forwardRef } from "react";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
 import DataInstanceList from "./DataInstanceList";
 import DataInstanceAdd from "./DataInstanceAdd";
 
+const Alert = forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
 export default function DataInstances({ uuid, instances, dag }) {
   const [nodeRestrict, setNodeRestrict] = useState(true);
+  const [open, setOpen] = useState(false);
   const [imageSource, setImageSource] = useState();
   const [labelSource, setLabelSource] = useState();
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   function restrictionHandler() {
     setNodeRestrict((prevState) => !prevState);
@@ -26,6 +37,7 @@ export default function DataInstances({ uuid, instances, dag }) {
     let segLayer = "";
     // grab image source selection
     if (!imageSource) {
+      setOpen(true);
       // throw error stating 'Please select an image source from the table below.');
       return;
     }
@@ -118,6 +130,16 @@ export default function DataInstances({ uuid, instances, dag }) {
           onLabelSelect={handleLabelSelect}
         />
       </Grid>
+      <Snackbar
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+        open={open}
+        autoHideDuration={6000}
+        onClose={handleClose}
+      >
+        <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
+          Please select an image source to enable neuroglancer.
+        </Alert>
+      </Snackbar>
     </>
   );
 }
