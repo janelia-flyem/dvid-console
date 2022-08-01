@@ -1,11 +1,11 @@
 import DVID from "dvid";
 
 const api = new DVID({
-  host: "emdata5.janelia.org",
-  port: "443",
-  protocol: "https",
-  username: "dvidconsole",
-  application: "dvidconsole",
+  host: process.env.REACT_APP_HOSTNAME,
+  port: process.env.REACT_APP_PORT,
+  protocol: process.env.REACT_APP_PROTOCOL,
+  username: process.env.REACT_APP_USERNAME,
+  application: process.env.REACT_APP_APPLICATION,
 });
 
 /*

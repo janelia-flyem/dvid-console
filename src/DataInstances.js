@@ -14,19 +14,19 @@ export default function DataInstances({ uuid, instances, dag }) {
     setNodeRestrict((prevState) => !prevState);
   }
 
-	function handleImageSelect(event) {
-		setImageSource(event.target.value);
-	}
+  function handleImageSelect(event) {
+    setImageSource(event.target.value);
+  }
 
-	function handleLabelSelect(event) {
-		setLabelSource(event.target.value);
-	}
+  function handleLabelSelect(event) {
+    setLabelSource(event.target.value);
+  }
 
   function handleNeuroglancer(event) {
     let segLayer = "";
     // grab image source selection
     if (!imageSource) {
-      // throw error stating 'Please select a image source from the table below.');
+      // throw error stating 'Please select an image source from the table below.');
       return;
     }
 
@@ -39,7 +39,9 @@ export default function DataInstances({ uuid, instances, dag }) {
         "_%27" +
         cleanedLabelSource +
         "%27:{%27type%27:%27segmentation%27_%27source%27:%27dvid://" +
-        window.location.hostname +
+        (process.env.REACT_APP_PROTOCOL || window.location.protocol) +
+        "://" +
+        (process.env.REACT_APP_HOSTNAME || window.location.hostname) +
         "/" +
         uuid +
         "/" +
@@ -53,7 +55,9 @@ export default function DataInstances({ uuid, instances, dag }) {
       "%27" +
       cleanedImageSource +
       "%27:{%27type%27:%27image%27_%27source%27:%27dvid://" +
-      window.location.hostname +
+      (process.env.REACT_APP_PROTOCOL || window.location.protocol) +
+      "://" +
+      (process.env.REACT_APP_HOSTNAME || window.location.hostname) +
       "/" +
       uuid +
       "/" +
@@ -64,14 +68,16 @@ export default function DataInstances({ uuid, instances, dag }) {
       "%27perspectiveOrientation%27:[-0.12320884317159653_0.21754156053066254_-0.009492455050349236_0.9681965708732605]_%27perspectiveZoom%27:64";
 
     const glancerUrl =
-      "/neuroglancer/#!{%27layers%27:{" +
+      "https://clio-ng.janelia.org/#!{%27layers%27:{" +
       imageLayer +
       segLayer +
       "}_" +
       perspective +
       "}";
 
-    window.location.href = glancerUrl;
+    console.log(glancerUrl);
+
+    // window.location.href = glancerUrl;
   }
 
   return (
@@ -108,8 +114,8 @@ export default function DataInstances({ uuid, instances, dag }) {
           instances={instances}
           dag={dag}
           nodeRestrict={nodeRestrict}
-					onImageSelect={handleImageSelect}
-					onLabelSelect={handleLabelSelect}
+          onImageSelect={handleImageSelect}
+          onLabelSelect={handleLabelSelect}
         />
       </Grid>
     </>

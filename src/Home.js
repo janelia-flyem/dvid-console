@@ -20,7 +20,7 @@ export default function Home() {
   }
 
   if (isError) {
-    return <p>Error Loading: {error}</p>;
+    return <p>Error Loading repo info from the server @ /repos/info: {error.message}</p>;
   }
 
   return (
