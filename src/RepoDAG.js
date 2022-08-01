@@ -73,7 +73,7 @@ function createNode(node, dagGraph, uuid, masterUUID) {
   }
 
   dagGraph.setNode(version, {
-    label: `${version}: ${node.UUID.substr(0, 5)} ${node.Locked ? "L" : "O"}`,
+    label: `${version}: ${node.UUID.substr(0, 5)}`,
     class: nodeclass,
     rx: 5,
     ry: 5,
@@ -246,6 +246,29 @@ function initGraph(ref, dag, uuid, masterUUID, tooltipRef) {
 
   // render the DAG nodes to the transformable group.
   render(transformGroup, g);
+
+  // add lock icon to all locked nodes.
+  transformGroup
+    .selectAll("g.node.type-locked")
+    .append("path")
+    // this path specifies the lock icon as taken from font awesome
+    .attr(
+      "d",
+      "M80 192V144C80 64.47 144.5 0 224 0C303.5 0 368 64.47 368 144V192H384C419.3 192 448 220.7 448 256V448C448 483.3 419.3 512 384 512H64C28.65 512 0 483.3 0 448V256C0 220.7 28.65 192 64 192H80zM144 192H304V144C304 99.82 268.2 64 224 64C179.8 64 144 99.82 144 144V192z"
+    )
+    .attr("transform", "scale(0.025) translate(-1500,-1400)");
+
+  // add unlock icon to all unlocked nodes.
+  transformGroup
+    .selectAll("g.node.type-unlocked")
+    .append("path")
+    // this path specifies the unlock icon as taken from font awesome
+    .attr(
+      "d",
+      "M352 192H384C419.3 192 448 220.7 448 256V448C448 483.3 419.3 512 384 512H64C28.65 512 0 483.3 0 448V256C0 220.7 28.65 192 64 192H288V144C288 64.47 352.5 0 432 0C511.5 0 576 64.47 576 144V192C576 209.7 561.7 224 544 224C526.3 224 512 209.7 512 192V144C512 99.82 476.2 64 432 64C387.8 64 352 99.82 352 144V192z"
+      // "M352 192H384C419.3 192 448 220.7 448 256V448C448 483.3 419.3 512 384 512H64C28.65 512 0 483.3 0 448V256C0 220.7 28.65 192 64 192H304V128C304 57.31 361.3 0 432 0C502.7 0 560 57.31 560 128V200C560 213.3 549.3 224 536 224C522.7 224 512 213.3 512 200V128C512 83.82 476.2 48 432 48C387.8 48 352 83.82 352 128V192zM48 256V448C48 456.8 55.16 464 64 464H384C392.8 464 400 456.8 400 448V256C400 247.2 392.8 240 384 240H64C55.16 240 48 247.2 48 256z"
+    )
+    .attr("transform", "scale(0.025) translate(-1500,-1400)");
 
   attachEvents(transformGroup.selectAll("g.node"), tooltipRef, dag);
 
