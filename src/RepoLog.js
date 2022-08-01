@@ -2,30 +2,55 @@ import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import CardContent from "@mui/material/CardContent";
 import Grid from "@mui/material/Grid";
+import Button from "@mui/material/Button";
 import { format, formatDistance } from "date-fns";
 
 import "./RepoLog.css";
 
-export default function RepoLog({ log, uuid }) {
+export default function RepoLog({ log, uuid, selectedNode, onClose }) {
+  if (selectedNode) {
+    log = selectedNode.Log;
+  }
 
-	let logDuration = '0 days';
+  const handleClose = () => {
+    onClose(null);
+  };
 
-	if (log.length > 0) {
-	  logDuration = formatDistance(new Date(log[0].split(/\s(.+)/)[0]), new Date(log[log.length -1].split(/\s(.+)/)[0]));
-	}
+  let logDuration = "0 days";
 
+  if (log.length > 0) {
+    logDuration = formatDistance(
+      new Date(log[0].split(/\s(.+)/)[0]),
+      new Date(log[log.length - 1].split(/\s(.+)/)[0])
+    );
+  }
 
   return (
     <Grid item xs={12}>
       <Card className="repoLog">
         <CardHeader
-          title="Repo Log:"
+          title={
+            selectedNode ? (
+              <>
+                <span>Node Log for {selectedNode.UUID}:</span>{" "}
+                <Button onClick={handleClose} variant="outlined" size="small">restore repo log</Button>
+              </>
+            ) : (
+              "Repo Log:"
+            )
+          }
           titleTypographyProps={{ variant: "p" }}
           sx={{ background: "#eee" }}
-        action={<><span>{log.length} entries covering {logDuration} </span></>}
+          action={
+            <>
+              <span>
+                {log.length} entries covering {logDuration}{" "}
+              </span>
+            </>
+          }
         />
         <CardContent>
-          <table>
+          <table style={{ width: "100%" }}>
             <tbody>
               {log
                 .slice()

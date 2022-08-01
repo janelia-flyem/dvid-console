@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
 import IconButton from "@mui/material/IconButton";
@@ -13,6 +13,7 @@ import {
 import dagreD3 from "dagre-d3";
 import * as d3 from "d3";
 import DAGHelp from "./DAGHelp";
+import RepoDAGBranchSelect from "./RepoDAGBranchSelect";
 
 import "./RepoDAG.css";
 
@@ -107,17 +108,23 @@ function drawEdgeBackToRoot(currentNode, dagGraph, dag) {
   }
 }
 
-function attachEvents(nodes, tooltipRef, dag) {
+function attachEvents(nodes, tooltipRef, dag, onNodeMouseOver) {
   nodes
     .on("mouseenter", (id) => {
-      const note = Object.values(dag.Nodes).filter(
+
+      const node = Object.values(dag.Nodes).filter(
         (node) => node.VersionID === parseInt(id)
-      )[0].Note;
-      d3.select(tooltipRef)
-        .html(note)
-        .style("left", d3.event.pageX + 30 + "px")
-        .style("top", d3.event.pageY - 30 + "px")
-        .style("opacity", 1);
+      )[0];
+
+      if (node){
+        onNodeMouseOver(node);
+        const note = node.Note;
+        d3.select(tooltipRef)
+          .html(note)
+          .style("left", d3.event.pageX + 30 + "px")
+          .style("top", d3.event.pageY - 30 + "px")
+          .style("opacity", 1);
+      }
     })
     .on("mousemove", () => {
       d3.select(tooltipRef)
@@ -197,7 +204,7 @@ function scrollToNode(
   }
 }
 
-function initGraph(ref, dag, uuid, masterUUID, tooltipRef) {
+function initGraph(ref, dag, uuid, masterUUID, tooltipRef, selectedBranch, onNodeMouseOver) {
   // Create the DAG graph
   var g = new dagreD3.graphlib.Graph({
     compound: true,
@@ -208,7 +215,10 @@ function initGraph(ref, dag, uuid, masterUUID, tooltipRef) {
       return {};
     });
 
-  const nodes = dag.Nodes;
+  let nodes = dag.Nodes;
+  /* if (selectedBranch !== "show_all") {
+    nodes = Object.fromEntries(Object.entries(dag.Nodes).filter(([,value]) => value.Branch === selectedBranch));
+  } */
 
   Object.values(nodes).forEach((node) => {
     createNode(node, g, uuid, masterUUID);
@@ -270,7 +280,7 @@ function initGraph(ref, dag, uuid, masterUUID, tooltipRef) {
     )
     .attr("transform", "scale(0.025) translate(-1500,-1400)");
 
-  attachEvents(transformGroup.selectAll("g.node"), tooltipRef, dag);
+  attachEvents(transformGroup.selectAll("g.node"), tooltipRef, dag, onNodeMouseOver);
 
   // center the DAG on current selected node, master node or most
   // recently created node.
@@ -278,7 +288,8 @@ function initGraph(ref, dag, uuid, masterUUID, tooltipRef) {
   return [svg, transformGroup, zoom, g];
 }
 
-export default function RepoDAG({ dag, uuid, masterUUID }) {
+export default function RepoDAG({ dag, uuid, masterUUID, onNodeMouseOver }) {
+  const [selectedBranch, setSelectedBranch] = useState("show_all");
   const DAGImage = useRef(null);
   const DAGTooltip = useRef(null);
   const graphData = useRef();
@@ -289,10 +300,12 @@ export default function RepoDAG({ dag, uuid, masterUUID }) {
       dag,
       uuid,
       masterUUID,
-      DAGTooltip.current
+      DAGTooltip.current,
+      selectedBranch,
+      onNodeMouseOver
     );
     graphData.current = graph;
-  }, [dag, uuid, DAGImage, masterUUID]);
+  }, [dag, uuid, DAGImage, masterUUID, selectedBranch]);
 
   const handleScrollToMaster = () => {
     scrollToNode(
@@ -339,6 +352,11 @@ export default function RepoDAG({ dag, uuid, masterUUID }) {
     <Grid item xs={12}>
       <Typography variant="h5">Version History</Typography>
       <Card variant="outlined" className="DAGContainer">
+        {/* <RepoDAGBranchSelect
+          nodes={dag.Nodes}
+          branch={selectedBranch}
+          onBranchChange={setSelectedBranch}
+        /> */}
         <div className="DAGControls">
           <Tooltip title="Scroll to master node">
             <IconButton onClick={handleScrollToMaster}>
