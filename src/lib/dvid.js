@@ -41,6 +41,10 @@ export function repoInfo(options) {
 	return api.repo(options);
 }
 
+export function createRepo(options) {
+  return api.createRepo(options);
+}
+
 export function masterUUID(rootUUID) {
   return api.node({uuid: rootUUID, endpoint: 'branches/key/master'});
 }
