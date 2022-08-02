@@ -35,61 +35,40 @@ export default function DataInstances({ uuid, instances, dag }) {
 
   function handleNeuroglancer(event) {
     let segLayer = "";
-    // grab image source selection
+
     if (!imageSource) {
+      // open the error alert
       setOpen(true);
-      // throw error stating 'Please select an image source from the table below.');
       return;
     }
-
     const cleanedImageSource = imageSource.replace("*", "");
+
+    // generate a new url with the choices made and ...
+    // redirect the browser
+    const imageLayer = {
+      type: "image",
+      source: `dvid://${process.env.REACT_APP_PROTOCOL || window.location.protocol}://${process.env.REACT_APP_HOSTNAME || window.location.hostname}/${uuid}/${cleanedImageSource}`,
+      name: cleanedImageSource
+    };
+
+    const layerObj = {layers: [imageLayer]};
 
     // grab label source selection
     if (labelSource) {
       const cleanedLabelSource = labelSource.replace("*", "");
-      segLayer =
-        "_%27" +
-        cleanedLabelSource +
-        "%27:{%27type%27:%27segmentation%27_%27source%27:%27dvid://" +
-        (process.env.REACT_APP_PROTOCOL || window.location.protocol) +
-        "://" +
-        (process.env.REACT_APP_HOSTNAME || window.location.hostname) +
-        "/" +
-        uuid +
-        "/" +
-        cleanedLabelSource +
-        "%27}";
+      segLayer = {
+        type: "segmentation",
+        source: `dvid://${process.env.REACT_APP_PROTOCOL || window.location.protocol}://${process.env.REACT_APP_HOSTNAME || window.location.hostname}/${uuid}/${cleanedLabelSource}`,
+        name: cleanedLabelSource
+      }
+      layerObj.layers.push(segLayer);
     }
 
-    // generate a new url with the choices made and ...
-    // redirect the browser
-    const imageLayer =
-      "%27" +
-      cleanedImageSource +
-      "%27:{%27type%27:%27image%27_%27source%27:%27dvid://" +
-      (process.env.REACT_APP_PROTOCOL || window.location.protocol) +
-      "://" +
-      (process.env.REACT_APP_HOSTNAME || window.location.hostname) +
-      "/" +
-      uuid +
-      "/" +
-      cleanedImageSource +
-      "%27}";
+    const urlParams = encodeURIComponent(JSON.stringify(layerObj));
 
-    var perspective =
-      "%27perspectiveOrientation%27:[-0.12320884317159653_0.21754156053066254_-0.009492455050349236_0.9681965708732605]_%27perspectiveZoom%27:64";
+    const glancerUrl = `https://clio-ng.janelia.org/#!${urlParams}`;
 
-    const glancerUrl =
-      "https://clio-ng.janelia.org/#!{%27layers%27:{" +
-      imageLayer +
-      segLayer +
-      "}_" +
-      perspective +
-      "}";
-
-    console.log(glancerUrl);
-
-    // window.location.href = glancerUrl;
+    window.open(glancerUrl, '_blank').focus();
   }
 
   return (
