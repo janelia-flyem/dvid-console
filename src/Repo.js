@@ -32,12 +32,16 @@ export default function Repo() {
     }
   }, [repoId, data]);
 
-  if (isLoading || !fullRepoId) {
+  if (isLoading) {
     return <p>Loading Repo</p>;
   }
 
   if (isError) {
     return <p>Error Loading: {error.message}</p>;
+  }
+
+  if (!fullRepoId) {
+    return <p>Loading Repo Id</p>;
   }
 
   return (
