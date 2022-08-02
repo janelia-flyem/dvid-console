@@ -9,8 +9,8 @@ import { masterUUID } from "./lib/dvid";
 export default function RepoMasterLoad({ repoId, repoInfo }) {
   const [selectedNode, setSelectedNode] = useState();
   const { isLoading, data } = useQuery(
-    ["masterUUID", repoId],
-    () => masterUUID(repoId),
+    ["masterUUID", repoInfo.DAG.Root],
+    () => masterUUID(repoInfo.DAG.Root),
     { retry: false }
   );
 
