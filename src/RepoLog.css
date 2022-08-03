@@ -15,3 +15,7 @@
   resize:vertical;
   height: 10em;
 }
+
+.repoLog .MuiCardHeader-root {
+  height: 22px;
+}

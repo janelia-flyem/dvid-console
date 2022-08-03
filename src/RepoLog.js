@@ -33,7 +33,14 @@ export default function RepoLog({ log, uuid, selectedNode, onClose }) {
             selectedNode ? (
               <>
                 <span>Node Log for {selectedNode.UUID}:</span>{" "}
-                <Button onClick={handleClose} variant="outlined" size="small">restore repo log</Button>
+                <Button
+                  onClick={handleClose}
+                  variant="outlined"
+                  size="small"
+                  className="restoreButton"
+                >
+                  restore repo log
+                </Button>
               </>
             ) : (
               "Repo Log:"
