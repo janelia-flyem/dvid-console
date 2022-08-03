@@ -14,6 +14,40 @@ import CreateRepo from "./CreateRepo";
 
 import "./Home.css";
 
+function neuroglancerLink(repo) {
+
+  // look into the data instances. If there is one with an image type
+  const filteredInstances = Object.values(repo.DataInstances).filter(instance => ["uint8blk", "grayscale8", "multiscale2d", "imageimage"].includes(instance.Base.TypeName))
+
+  // then use it to generate the neuroglancer link
+  if (filteredInstances.length > 0) {
+    // try and find a grayscale instance and use that first
+    let selectedInstances = filteredInstances.filter(instance => instance.Base.Name.match(/^grayscale$/));
+    // try and find any other type of grayscale* instance
+    if (selectedInstances.length < 1) {
+      selectedInstances = filteredInstances.filter(instance => instance.Base.Name.match(/^grayscale/));
+    }
+    // use what is left
+    if (selectedInstances.length < 1) {
+      selectedInstances = filteredInstances;
+    }
+
+    const imageLayer = {
+      type: "image",
+      source: `dvid://${process.env.REACT_APP_PROTOCOL || window.location.protocol}://${process.env.REACT_APP_HOSTNAME || window.location.hostname}/${repo.Root}/${selectedInstances[0].Base.Name}`,
+      name: selectedInstances[0].Base.Name
+    };
+
+    const layerObj = {layers: [imageLayer]};
+    const urlParams = encodeURIComponent(JSON.stringify(layerObj));
+
+    const linkUrl = `https://clio-ng.janelia.org/#!${urlParams}`;
+    return <a target="_blank" rel="noreferrer noopener" href={linkUrl}>View volumetric data</a>;
+  }
+  // if not, then return no link.
+  return "";
+}
+
 export default function Home() {
   const [searchParams] = useSearchParams();
   const { isLoading, isError, data, error } = useQuery("repoList", getRepos);
@@ -72,7 +106,7 @@ export default function Home() {
                     {format(new Date(repo.Updated), "MMM do y, h:mm:ss aaaa")}
                   </TableCell>
                   <TableCell>
-                    <a href="">View volumetric data</a>
+                    {neuroglancerLink(repo)}
                   </TableCell>
                 </TableRow>
               ))}

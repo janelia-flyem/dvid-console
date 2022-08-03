@@ -13,7 +13,19 @@ export default function DataInstance({
   const type = instance.Base.TypeName;
   const label_class = `label lbl-${type}`;
   let name = instance.Base.Name;
-  let name_url = `/api/node/${uuid}/${name}/`;
+
+  let urlBase = '';
+  if (process.env.REACT_APP_HOSTNAME) {
+    const protocol = process.env.REACT_APP_PROTOCOL || "https";
+    urlBase = `${protocol}://${process.env.REACT_APP_HOSTNAME}`;
+    if (process.env.REACT_APP_PORT) {
+      urlBase = `${urlBase}:${process.env.REACT_APP_PORT}`;
+    }
+  }
+
+
+  let name_url = `${urlBase}/api/node/${uuid}/${name}/`;
+
   let info = "information";
   let masterMarker = "";
   if (isParent) {
@@ -33,8 +45,10 @@ export default function DataInstance({
     name_url += "info";
   }
 
+  name_url = `${name_url}?u=${process.env.REACT_APP_USERNAME || "dvidconsole"}&app=${process.env.REACT_APP_APPLICATION || "dvidconsole"}`;
+
   const name_tooltip = `Display ${info}`;
-  const type_url = `/api/node/${uuid}/${name}/help`;
+  const type_url = `${urlBase}/api/node/${uuid}/${name}/help`;
   const type_tooltip = `Display ${type} help`;
 
   if (

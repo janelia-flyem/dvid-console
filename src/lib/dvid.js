@@ -4,8 +4,8 @@ const api = new DVID({
   host: process.env.REACT_APP_HOSTNAME,
   port: process.env.REACT_APP_PORT,
   protocol: process.env.REACT_APP_PROTOCOL,
-  username: process.env.REACT_APP_USERNAME,
-  application: process.env.REACT_APP_APPLICATION,
+  username: process.env.REACT_APP_USERNAME || "dvidconsole",
+  application: process.env.REACT_APP_APPLICATION || "dvidconsole",
 });
 
 /*
