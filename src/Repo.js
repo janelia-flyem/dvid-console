@@ -23,7 +23,31 @@ export default function Repo() {
   const [fullRepoId, setFullRepoId] = useState(null);
   const { isLoading, isError, data, error } = useQuery(
     ["repoInfo", repoId],
-    () => repoInfo({ uuid: repoId, endpoint: "info" })
+    () => repoInfo({ uuid: repoId, endpoint: "info" }),
+    {
+      placeholderData: {
+        Alias: "loading",
+        Description: "loading",
+        Root: repoId,
+        DataInstances: {},
+        DAG: {
+          Root: repoId,
+          Nodes: {
+            [repoId]: {
+              Note: "loading",
+              UUID: "Loading",
+              Children: [],
+              Log: [],
+              Parents: [],
+              VersionID: 1
+            }
+          }
+        },
+        Created: "1900-10-11",
+        Updated: "1900-10-11",
+        Log:[]
+      },
+    }
   );
 
   useEffect(() => {

@@ -26,13 +26,15 @@ function dataInstancesForNode(instances, chosenNode, dagNodes, nodeRestrict) {
   var ancestors = {};
   // work back from the chosen node and add all the ancestors to one list.
   function add_ancestors(node) {
-    if (byUUIDLookUp.hasOwnProperty(node.UUID)) {
-      ancestors[node.UUID] = true;
-      // check for parents array
-      if (node.Parents.length > 0) {
-        for (let nodeParent of node.Parents) {
-          var parentUUID = byIdLookUp[nodeParent];
-          add_ancestors(dagNodes[parentUUID]);
+    if (node && node.UUID) {
+      if (byUUIDLookUp.hasOwnProperty(node.UUID)) {
+        ancestors[node.UUID] = true;
+        // check for parents array
+        if (node.Parents.length > 0) {
+          for (let nodeParent of node.Parents) {
+            var parentUUID = byIdLookUp[nodeParent];
+            add_ancestors(dagNodes[parentUUID]);
+          }
         }
       }
     }
@@ -124,8 +126,8 @@ export default function DataInstanceList({
         isParent={isParent}
         uuid={uuid}
         show={false}
-				onImageSelect={onImageSelect}
-				onLabelSelect={onLabelSelect}
+        onImageSelect={onImageSelect}
+        onLabelSelect={onLabelSelect}
       />
     );
   });
