@@ -46,7 +46,7 @@ export function createRepo(options) {
 }
 
 export function masterUUID(rootUUID) {
-  return api.node({uuid: rootUUID, endpoint: 'branches/key/master'});
+  return api.repo({uuid: rootUUID, endpoint: 'branch-versions/master'});
 }
 
 export function getDefaultInstances(uuid) {
