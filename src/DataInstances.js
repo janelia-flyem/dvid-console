@@ -43,11 +43,13 @@ export default function DataInstances({ uuid, instances, dag }) {
     }
     const cleanedImageSource = imageSource.replace("*", "");
 
+    // need to make sure the protocol is in the format 'https?', so strip trailing ':'.
+    const protocol = process.env.REACT_APP_PROTOCOL || window.location.protocol.replace(':','');
     // generate a new url with the choices made and ...
     // redirect the browser
     const imageLayer = {
       type: "image",
-      source: `dvid://${process.env.REACT_APP_PROTOCOL || window.location.protocol}://${process.env.REACT_APP_HOSTNAME || window.location.hostname}/${uuid}/${cleanedImageSource}`,
+      source: `dvid://${protocol}://${process.env.REACT_APP_HOSTNAME || window.location.hostname}/${uuid}/${cleanedImageSource}`,
       name: cleanedImageSource
     };
 
