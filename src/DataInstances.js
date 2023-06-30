@@ -75,11 +75,8 @@ export default function DataInstances({ uuid, instances, dag }) {
 
   return (
     <>
-      <Grid item xs={12} sm={9}>
+      <Grid item xs={12} sm={12}>
         <Typography variant="h5">Data Instances</Typography>
-      </Grid>
-      <Grid item xs={12} sm={3} sx={{ textAlign: "right" }}>
-        <DataInstanceAdd uuid={uuid} dag={dag} />
       </Grid>
       <Grid item xs={12} md={3}>
         <p>
