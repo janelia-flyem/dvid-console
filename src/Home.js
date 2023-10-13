@@ -32,9 +32,13 @@ function neuroglancerLink(repo) {
       selectedInstances = filteredInstances;
     }
 
+    const protocol = process.env.REACT_APP_PROTOCOL || window.location.protocol.replace(':','');
+    const portNumber = process.env.REACT_APP_PORT || window.location.port || null;
+    const port = portNumber ? `:${portNumber}`: '';
+
     const imageLayer = {
       type: "image",
-      source: `dvid://${process.env.REACT_APP_PROTOCOL || window.location.protocol}://${process.env.REACT_APP_HOSTNAME || window.location.hostname}/${repo.Root}/${selectedInstances[0].Base.Name}`,
+      source: `dvid://${protocol}://${process.env.REACT_APP_HOSTNAME || window.location.hostname}${port}/${repo.Root}/${selectedInstances[0].Base.Name}`,
       name: selectedInstances[0].Base.Name
     };
 

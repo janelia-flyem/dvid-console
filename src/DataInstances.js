@@ -47,9 +47,11 @@ export default function DataInstances({ uuid, instances, dag }) {
     const protocol = process.env.REACT_APP_PROTOCOL || window.location.protocol.replace(':','');
     // generate a new url with the choices made and ...
     // redirect the browser
+    const portNumber = process.env.REACT_APP_PORT || window.location.port || null;
+    const port = portNumber ? `:${portNumber}`: '';
     const imageLayer = {
       type: "image",
-      source: `dvid://${protocol}://${process.env.REACT_APP_HOSTNAME || window.location.hostname}/${uuid}/${cleanedImageSource}`,
+      source: `dvid://${protocol}://${process.env.REACT_APP_HOSTNAME || window.location.hostname}${port}/${uuid}/${cleanedImageSource}`,
       name: cleanedImageSource
     };
 
@@ -60,7 +62,7 @@ export default function DataInstances({ uuid, instances, dag }) {
       const cleanedLabelSource = labelSource.replace("*", "");
       segLayer = {
         type: "segmentation",
-        source: `dvid://${process.env.REACT_APP_PROTOCOL || window.location.protocol}://${process.env.REACT_APP_HOSTNAME || window.location.hostname}/${uuid}/${cleanedLabelSource}`,
+        source: `dvid://${protocol}://${process.env.REACT_APP_HOSTNAME || window.location.hostname}${port}/${uuid}/${cleanedLabelSource}`,
         name: cleanedLabelSource
       }
       layerObj.layers.push(segLayer);
@@ -68,8 +70,7 @@ export default function DataInstances({ uuid, instances, dag }) {
 
     const urlParams = encodeURIComponent(JSON.stringify(layerObj));
 
-    const glancerUrl = `https://clio-ng.janelia.org/#!${urlParams}`;
-
+    const glancerUrl = `${protocol}://clio-ng.janelia.org/#!${urlParams}`;
     window.open(glancerUrl, '_blank').focus();
   }
 
