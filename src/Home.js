@@ -11,6 +11,7 @@ import Grid from "@mui/material/Grid";
 import { getRepos } from "./lib/dvid";
 import MasterLink from "./MasterLink";
 import CreateRepo from "./CreateRepo";
+import { neuroglancerUrl } from "./lib/neuroglancer";
 
 import "./Home.css";
 
@@ -32,20 +33,7 @@ function neuroglancerLink(repo) {
       selectedInstances = filteredInstances;
     }
 
-    const protocol = process.env.REACT_APP_PROTOCOL || window.location.protocol.replace(':','');
-    const portNumber = process.env.REACT_APP_PORT || window.location.port || null;
-    const port = portNumber ? `:${portNumber}`: '';
-
-    const imageLayer = {
-      type: "image",
-      source: `dvid://${protocol}://${process.env.REACT_APP_HOSTNAME || window.location.hostname}${port}/${repo.Root}/${selectedInstances[0].Base.Name}`,
-      name: selectedInstances[0].Base.Name
-    };
-
-    const layerObj = {layers: [imageLayer]};
-    const urlParams = encodeURIComponent(JSON.stringify(layerObj));
-
-    const linkUrl = `https://clio-ng.janelia.org/#!${urlParams}`;
+    const linkUrl = neuroglancerUrl(repo.Root, selectedInstances[0].Base.Name);
     return <a target="_blank" rel="noreferrer noopener" href={linkUrl}>View volumetric data</a>;
   }
   // if not, then return no link.

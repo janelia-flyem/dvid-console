@@ -5,7 +5,7 @@ import Grid from "@mui/material/Grid";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import DataInstanceList from "./DataInstanceList";
-import DataInstanceAdd from "./DataInstanceAdd";
+import { neuroglancerUrl } from "./lib/neuroglancer";
 
 const Alert = forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -34,43 +34,12 @@ export default function DataInstances({ uuid, instances, dag }) {
   }
 
   function handleNeuroglancer(event) {
-    let segLayer = "";
-
     if (!imageSource) {
       // open the error alert
       setOpen(true);
       return;
     }
-    const cleanedImageSource = imageSource.replace("*", "");
-
-    // need to make sure the protocol is in the format 'https?', so strip trailing ':'.
-    const protocol = process.env.REACT_APP_PROTOCOL || window.location.protocol.replace(':','');
-    // generate a new url with the choices made and ...
-    // redirect the browser
-    const portNumber = process.env.REACT_APP_PORT || window.location.port || null;
-    const port = portNumber ? `:${portNumber}`: '';
-    const imageLayer = {
-      type: "image",
-      source: `dvid://${protocol}://${process.env.REACT_APP_HOSTNAME || window.location.hostname}${port}/${uuid}/${cleanedImageSource}`,
-      name: cleanedImageSource
-    };
-
-    const layerObj = {layers: [imageLayer]};
-
-    // grab label source selection
-    if (labelSource) {
-      const cleanedLabelSource = labelSource.replace("*", "");
-      segLayer = {
-        type: "segmentation",
-        source: `dvid://${protocol}://${process.env.REACT_APP_HOSTNAME || window.location.hostname}${port}/${uuid}/${cleanedLabelSource}`,
-        name: cleanedLabelSource
-      }
-      layerObj.layers.push(segLayer);
-    }
-
-    const urlParams = encodeURIComponent(JSON.stringify(layerObj));
-
-    const glancerUrl = `${protocol}://clio-ng.janelia.org/#!${urlParams}`;
+    const glancerUrl = neuroglancerUrl(uuid, imageSource, labelSource);
     window.open(glancerUrl, '_blank').focus();
   }
 
