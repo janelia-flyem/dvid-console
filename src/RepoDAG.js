@@ -74,7 +74,7 @@ function createNode(node, dagGraph, uuid, masterUUID) {
   }
 
   dagGraph.setNode(version, {
-    label: `${version}: ${node.UUID.substr(0, 5)}`,
+    label: `${version}: ${node.UUID.substr(0, 8)}`,
     class: nodeclass,
     rx: 5,
     ry: 5,
