@@ -73,8 +73,10 @@ function createNode(node, dagGraph, uuid, masterUUID) {
     nodeStyle = `fill: ${currentFill}; stroke: ${currentStroke}; stroke-width: 1.5px`;
   }
 
+  const label = (/^[a-zA-Z0-9]*$/.test(node.UUID) && node.UUID.length >= 32) ? node.UUID.substr(0, 8) : node.UUID;
+
   dagGraph.setNode(version, {
-    label: `${version}: ${node.UUID.substr(0, 11)}`,
+    label: `${version}: ${label}`,
     class: nodeclass,
     rx: 5,
     ry: 5,
